@@ -1,0 +1,54 @@
+{
+  "project_info": {
+    "project_number": "900355893748",
+    "project_id": "johar-basket",
+    "storage_bucket": "johar-basket.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:900355893748:android:68441b4fe8292112cf71a1",
+        "android_client_info": {
+          "package_name": "com.example.johar"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "900355893748-3phg5r9gft3f2og8nr7g18fp80hrbr1e.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.johar",
+            "certificate_hash": "41dd3638fb552c37a6fd4eded7e3d6161e1507ee"
+          }
+        },
+        {
+          "client_id": "900355893748-c7k8aahi0huc275u4eivjsvuu6te437o.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDxJL9FezfsEQMisUZXorhbLl00N2xuXag"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "900355893748-c7k8aahi0huc275u4eivjsvuu6te437o.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "900355893748-k9g9rm1hp23qtjbsav28vm0bthb7tcqm.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.johar.RunnerTests"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
