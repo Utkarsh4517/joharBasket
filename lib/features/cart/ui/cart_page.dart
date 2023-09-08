@@ -31,6 +31,7 @@ class _CartPageState extends State<CartPage> {
   bool? isDeliver;
   dynamic subTotal = 0;
   dynamic gst = 0;
+  dynamic priceWithoutDiscount = 0;
   @override
   void initState() {
     cartBloc.add(CartInitialEvent());
@@ -43,10 +44,12 @@ class _CartPageState extends State<CartPage> {
   fetchSubtotalAndGST() async {
     dynamic sub = await CartRepo.calculateSubTotal();
     dynamic gst1 = await CartRepo.calculateGst();
+    dynamic prc = await CartRepo.calculateTotalWithoutDiscount();
     if (mounted) {
       setState(() {
         subTotal = sub;
         gst = gst1;
+        priceWithoutDiscount = prc;
       });
     }
   }
@@ -100,6 +103,7 @@ class _CartPageState extends State<CartPage> {
           fetchSubtotalAndGST();
           setState(() {
             subTotal = state.sum;
+            priceWithoutDiscount = state.sumWithoutDiscount;
           });
         } else if (state is CartPlacingOrderLoadingState) {
           showDialog(
@@ -270,8 +274,33 @@ class _CartPageState extends State<CartPage> {
                             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                             children: [
                               // total
+                              Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                children: [
+                                  const SmallTextBody(text: 'Total'),
+                                  SmallTextBody(
+                                      text: '₹ $priceWithoutDiscount'),
+                                ],
+                              ),
 
                               // discount
+
+                              Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                children: [
+                                  const SmallTextBody(
+                                    text: 'Total Savings',
+                                    color: Colors.green,
+                                  ),
+                                  SmallTextBody(
+                                    text:
+                                        '₹ ${priceWithoutDiscount - subTotal}',
+                                    color: Colors.green,
+                                  ),
+                                ],
+                              ),
 
                               Row(
                                 mainAxisAlignment:
@@ -281,14 +310,14 @@ class _CartPageState extends State<CartPage> {
                                   SmallTextBody(text: '₹ $subTotal'),
                                 ],
                               ),
-                              Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
-                                children: [
-                                  const SmallTextBody(text: 'GST (included)'),
-                                  SmallTextBody(text: '₹ $gst'),
-                                ],
-                              ),
+                              // Row(
+                              //   mainAxisAlignment:
+                              //       MainAxisAlignment.spaceBetween,
+                              //   children: [
+                              //     const SmallTextBody(text: 'GST (included)'),
+                              //     SmallTextBody(text: '₹ $gst'),
+                              //   ],
+                              // ),
                               Row(
                                 mainAxisAlignment:
                                     MainAxisAlignment.spaceBetween,

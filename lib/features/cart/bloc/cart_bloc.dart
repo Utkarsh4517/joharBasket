@@ -36,9 +36,13 @@ class CartBloc extends Bloc<CartEvent, CartState> {
   FutureOr<void> cartBillRefreshEvent(
       CartBillRefreshEvent event, Emitter<CartState> emit) async {
     final sum = await CartRepo.calculateSubTotal();
+    final sumWithoutDiscount = await CartRepo.calculateTotalWithoutDiscount();
     print('bill refresh');
 
-    emit(CartBillRefreshState(sum: sum));
+    emit(CartBillRefreshState(
+      sum: sum,
+      sumWithoutDiscount: sumWithoutDiscount,
+    ));
   }
 
   FutureOr<void> cartProductQuantityIncreaseEvent(

@@ -107,6 +107,23 @@ class CartRepo {
     return sum;
   }
 
+    static Future<dynamic> calculateTotalWithoutDiscount() async {
+    dynamic sum = 0;
+    CollectionReference collectionReference = FirebaseFirestore.instance
+        .collection('users')
+        .doc(FirebaseAuth.instance.currentUser!.uid)
+        .collection('cart');
+
+    QuerySnapshot querySnapshot = await collectionReference.get();
+
+    for (var document in querySnapshot.docs) {
+      dynamic price = document['price'] ?? 0.0;
+      dynamic nos = document['nos'] ?? 0.0;
+      sum += (price * nos);
+    }
+    return sum;
+  }
+
   static Future<dynamic> calculateGst() async {
     dynamic sum = 0;
     CollectionReference collectionReference = FirebaseFirestore.instance

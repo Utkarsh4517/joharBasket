@@ -44,8 +44,10 @@ class CartProductDeletedState extends CartActionState {
 
 class CartBillRefreshState extends CartActionState {
   final dynamic sum;
+  final dynamic sumWithoutDiscount;
   CartBillRefreshState({
     required this.sum,
+    required this.sumWithoutDiscount,
   });
 }
 

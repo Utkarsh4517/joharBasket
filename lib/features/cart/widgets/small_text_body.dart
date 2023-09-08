@@ -4,8 +4,10 @@ import 'package:johar/constants/dimensions.dart';
 
 class SmallTextBody extends StatelessWidget {
   final String text;
+  final Color color;
   const SmallTextBody({
     required this.text,
+    this.color = Colors.black,
     super.key,
   });
 
@@ -14,7 +16,7 @@ class SmallTextBody extends StatelessWidget {
     return Text(
       text,
       style: GoogleFonts.publicSans(
-        color: Colors.black,
+        color: color,
         fontWeight: FontWeight.bold,
         fontSize: getScreenWidth(context) * 0.03,
       ),
