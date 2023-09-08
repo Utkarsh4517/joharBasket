@@ -33,9 +33,11 @@ class _ProfileProductCardState extends State<ProfileProductCard> {
     final inStockController = TextEditingController();
     final priceController = TextEditingController();
     final gstController = TextEditingController();
+    final sizeController = TextEditingController();
     bool toggle = state.product.isFeatured;
     String radioValue = 'grocery';
     nameController.text = productDataModel.name;
+    sizeController.text = productDataModel.size!;
     descriptionController.text = productDataModel.description;
     inStockController.text = productDataModel.inStock.toString();
     priceController.text = productDataModel.price.toString();
@@ -131,6 +133,7 @@ class _ProfileProductCardState extends State<ProfileProductCard> {
               GestureDetector(
                 onTap: () => profileBloc.add(ProductUpdateDetailsClickedEvent(
                   product: productDataModel,
+                  size: sizeController.text.toString(),
                   description: descriptionController.text,
                   gst: double.parse(gstController.text),
                   inStock: double.parse(inStockController.text),

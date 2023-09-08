@@ -25,6 +25,7 @@ class CartRepo {
       }
       return products;
     } catch (e) {
+      print(e.toString());
       return [];
     }
   }
@@ -247,6 +248,7 @@ class CartRepo {
         'inStock': product.inStock,
         'description': product.description,
         'gst': product.gst,
+        'size': product.size,
       });
     }
 
@@ -262,6 +264,7 @@ class CartRepo {
         'inStock': product.inStock,
         'description': product.description,
         'gst': product.gst,
+        'size': product.size,
       });
     }
 

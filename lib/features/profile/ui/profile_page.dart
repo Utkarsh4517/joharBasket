@@ -28,6 +28,7 @@ class _ProfilePageState extends State<ProfilePage> {
   final inStockController = TextEditingController();
   final priceController = TextEditingController();
   final gstController = TextEditingController();
+  final sizeController = TextEditingController();
 
   final ProfileBloc profileBloc = ProfileBloc();
   int _selectedIndex = 0;
@@ -39,6 +40,7 @@ class _ProfilePageState extends State<ProfilePage> {
     inStockController.dispose();
     priceController.dispose();
     gstController.dispose();
+    sizeController.dispose();
     super.dispose();
   }
 
@@ -120,6 +122,10 @@ class _ProfilePageState extends State<ProfilePage> {
                           DetailsTextField(
                               controller: nameController,
                               label: 'Complete Product Name'),
+
+                          DetailsTextField(
+                              controller: sizeController,
+                              label: 'Product Size,'),
                           DetailsTextField(
                               controller: descriptionController,
                               label: 'Product Description'),
@@ -219,6 +225,7 @@ class _ProfilePageState extends State<ProfilePage> {
                                   category: 'grocery',
                                   isFeatured: toggle,
                                   productId: productid,
+                                  size: sizeController.text.toString(),
                                 ));
                                 showSuccessMessage();
                                 Navigator.pop(context);
@@ -261,5 +268,4 @@ class _ProfilePageState extends State<ProfilePage> {
       ),
     );
   }
-
 }

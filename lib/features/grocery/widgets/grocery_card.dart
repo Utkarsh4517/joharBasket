@@ -18,6 +18,7 @@ class GroceryCard extends StatelessWidget {
   final ProductDataModel groceryUiDataModel;
   final String description;
   final dynamic gst;
+  final String size;
 
   const GroceryCard({
     required this.gst,
@@ -30,6 +31,7 @@ class GroceryCard extends StatelessWidget {
     required this.isFeatured,
     required this.description,
     required this.groceryUiDataModel,
+    required this.size,
     this.nos,
     super.key,
   });
@@ -97,6 +99,15 @@ class GroceryCard extends StatelessWidget {
                         children: [
                           Text(
                             name,
+                            maxLines: 2,
+                            overflow: TextOverflow.ellipsis,
+                            style: GoogleFonts.publicSans(
+                                color: Colors.black,
+                                fontWeight: FontWeight.w900,
+                                fontSize: getScreenWidth(context) * 0.035),
+                          ),
+                          Text(
+                            size,
                             maxLines: 2,
                             overflow: TextOverflow.ellipsis,
                             style: GoogleFonts.publicSans(

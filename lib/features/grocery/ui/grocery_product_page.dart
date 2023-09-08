@@ -205,6 +205,7 @@ class _GroceryProductPageState extends State<GroceryProductPage> {
                   ],
                 ),
                 ProductHeadText(text: widget.grocery.name),
+                ProductHeadText(text: widget.grocery.size!),
                 SizedBox(height: getScreenWidth(context) * 0.05),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,

@@ -60,13 +60,15 @@ class ProfileBloc extends Bloc<ProfileEvent, ProfileState> {
       ProductUpdateDetailsClickedEvent event,
       Emitter<ProfileState> emit) async {
     await ProfileRepo.updateProductDetails(
-        productDataModel: event.product,
-        inStock: event.inStock,
-        name: event.name,
-        isFeatured: event.isFeatred,
-        description: event.description,
-        price: event.price,
-        gst: event.gst);
+      productDataModel: event.product,
+      inStock: event.inStock,
+      name: event.name,
+      isFeatured: event.isFeatred,
+      description: event.description,
+      price: event.price,
+      gst: event.gst,
+      size: event.size,
+    );
     emit(ProductDetailsUpdatedState());
   }
 

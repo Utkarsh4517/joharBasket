@@ -81,6 +81,7 @@ class ProfileRepo {
           nos: 0,
           description: data['description'],
           inStock: data['inStock'],
+          size: data['size'],
         );
       }).toList();
     });
@@ -95,6 +96,7 @@ class ProfileRepo {
     required String description,
     required double price,
     required double gst,
+    required String size,
   }) async {
     final document = FirebaseFirestore.instance
         .collection('grocery')
@@ -107,6 +109,7 @@ class ProfileRepo {
       'description': description,
       'price': price,
       'gst': gst,
+      'size': size,
     });
   }
 
@@ -569,6 +572,7 @@ class ProfileRepo {
         return [];
       }
     } catch (e) {
+      print(e.toString());
       return [];
     }
   }

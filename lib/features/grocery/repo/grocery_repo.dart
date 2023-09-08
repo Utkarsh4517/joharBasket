@@ -50,6 +50,7 @@ class GroceryRepo {
         'inStock': grocery.inStock,
         'description': grocery.description,
         'gst': grocery.gst,
+        'size': grocery.size,
       });
     }
   }
@@ -78,6 +79,7 @@ class GroceryRepo {
         'inStock': grocery.inStock,
         'description': grocery.description,
         'gst': grocery.gst,
+        'size': grocery.size,
       });
     }
   }

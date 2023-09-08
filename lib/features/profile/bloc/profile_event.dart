@@ -18,6 +18,7 @@ class AddProductClickedEvent extends ProfileEvent {
   final String category;
   final String productId;
   final bool isFeatured;
+  final String size;
   AddProductClickedEvent({
     required this.name,
     required this.description,
@@ -28,6 +29,7 @@ class AddProductClickedEvent extends ProfileEvent {
     required this.category,
     required this.productId,
     required this.isFeatured,
+    required this.size,
   });
 }
 
@@ -53,6 +55,7 @@ class ProductUpdateDetailsClickedEvent extends ProfileEvent {
   final String description;
   final double price;
   final double gst;
+  final String size;
   ProductUpdateDetailsClickedEvent({
     required this.product,
     required this.inStock,
@@ -61,6 +64,7 @@ class ProductUpdateDetailsClickedEvent extends ProfileEvent {
     required this.description,
     required this.price,
     required this.gst,
+    required this.size,
   });
 }
 
