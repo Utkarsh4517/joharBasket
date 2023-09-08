@@ -39,9 +39,11 @@ class CartBillRefreshEvent extends CartEvent {}
 class CartPagePlaceOrderClickedEvent extends CartEvent {
   final List<ProductDataModel> products;
   final String amount;
+  final dynamic gst;
   CartPagePlaceOrderClickedEvent({
     required this.amount,
     required this.products,
+    required this.gst,
   });
 }
 

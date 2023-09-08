@@ -474,6 +474,7 @@ class ProfileRepo {
     });
   }
 
+
   // fetch number of delivered orders
   static Future<int> getDeliveredOrdersLength() async {
     DocumentReference documentReference =
@@ -532,6 +533,35 @@ class ProfileRepo {
             .then((DocumentSnapshot document) {
           if (document.exists) {
             double amount = double.parse(document.get('amount'));
+            totalAmount += amount;
+          }
+        });
+        await amounFieldReference;
+      }
+      return totalAmount;
+    } else {
+      return 0;
+    }
+  }
+
+    // fetch total sales
+  static Future<dynamic> getTotalGST() async {
+    double totalAmount = 0;
+    DocumentReference documentReference =
+        FirebaseFirestore.instance.collection('orders').doc('pastOrderList');
+    final doc = await documentReference.get();
+    if (doc.exists) {
+      final List<dynamic> pastOrdersList = doc.get('pastOrdersList');
+      for (String orderId in pastOrdersList) {
+        var amounFieldReference = FirebaseFirestore.instance
+            .collection('orders')
+            .doc('pastOrders')
+            .collection(orderId)
+            .doc('orderDetails')
+            .get()
+            .then((DocumentSnapshot document) {
+          if (document.exists) {
+            double amount = double.parse(document.get('gst'));
             totalAmount += amount;
           }
         });

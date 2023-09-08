@@ -513,10 +513,14 @@ class _CartPageState extends State<CartPage> {
                         else if (isDeliver != null && isDeliver == true)
                           GestureDetector(
                             onTap: () {
-                              cartBloc.add(CartPagePlaceOrderClickedEvent(
+                              cartBloc.add(
+                                CartPagePlaceOrderClickedEvent(
                                   products: successState.products,
+                                  gst: '$gst',
                                   amount:
-                                      '${subTotal + (subTotal < 999 ? 49 : 0)}'));
+                                      '${subTotal + (subTotal < 999 ? 49 : 0)}',
+                                ),
+                              );
                             },
                             child: Container(
                               alignment: Alignment.center,

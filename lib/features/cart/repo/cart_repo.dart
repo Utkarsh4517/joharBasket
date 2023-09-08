@@ -236,7 +236,7 @@ class CartRepo {
 
   // add cart products to order
   static Future<void> addProductsToOrder(
-      List<ProductDataModel> products, String amount) async {
+      List<ProductDataModel> products, String amount, String gst) async {
     var uuid = const Uuid();
     final orderId = uuid.v1();
     print(orderId);
@@ -305,6 +305,7 @@ class CartRepo {
         'pincode': userDocumentSnapshot['pincode'],
         'address': userDocumentSnapshot['address'],
         'amount': amount,
+        'gst': gst
       });
 
       await adminOrderCollectionRef.doc('orderDetails').set({
@@ -318,6 +319,7 @@ class CartRepo {
         'pincode': userDocumentSnapshot['pincode'],
         'address': userDocumentSnapshot['address'],
         'amount': amount,
+        'gst': gst,
       });
     }
 

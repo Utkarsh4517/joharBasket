@@ -85,7 +85,7 @@ class _OrderProductCardState extends State<OrderProductCard> {
                   vertical: getScreenWidth(context) * 0.01,
                 ),
                 child: Text(
-                  '₹ ${widget.price} x ${widget.nos}',
+                  '₹ ${widget.discountedPrice} x ${widget.nos}',
                   style: GoogleFonts.publicSans(
                     color: Colors.green,
                     fontWeight: FontWeight.w800,

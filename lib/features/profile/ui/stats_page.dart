@@ -22,6 +22,7 @@ class _ProfileStatsPageState extends State<ProfileStatsPage> {
   dynamic pendingOrders = 0;
   dynamic cancelledOrders = 0;
   dynamic totalAmount = 0;
+  dynamic gstCollected = 0;
 
   @override
   void initState() {
@@ -40,12 +41,14 @@ class _ProfileStatsPageState extends State<ProfileStatsPage> {
     final pendingOrdersLength = await ProfileRepo.getPendingOrdersLength();
     final cancelledOrdersLength = await ProfileRepo.getCancelledOrdersLength();
     final amount = await ProfileRepo.getTotalSales();
+    final gst = await ProfileRepo.getTotalGST();
     if (mounted) {
       setState(() {
         deliveredOrders = deliveredOrdersLength;
         pendingOrders = pendingOrdersLength;
         cancelledOrders = cancelledOrdersLength;
         totalAmount = amount;
+        gstCollected = gst;
       });
     }
   }
@@ -93,6 +96,15 @@ class _ProfileStatsPageState extends State<ProfileStatsPage> {
                                 text: 'Total Cancelled Orders!',
                                 color: Colors.red,
                                 data: '$cancelledOrders'),
+                                StatsCard(
+                                text: 'Total Orders!',
+                                color: Colors.green,
+                                data: '${pendingOrders + cancelledOrders + deliveredOrders}'),
+                                StatsCard(
+                                text: 'Total GST',
+                                color: Colors.blue,
+                                data: '₹${gstCollected.toString()}',
+                                sizeFactor: 0.06),
                           ],
                         ),
                         Container(
