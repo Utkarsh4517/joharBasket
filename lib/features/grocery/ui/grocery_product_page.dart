@@ -1,4 +1,5 @@
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -66,7 +67,7 @@ class _GroceryProductPageState extends State<GroceryProductPage> {
         if (state is GroceryAddToCartButtonClickedState) {
           ScaffoldMessenger.of(context).showSnackBar(
               const SnackBar(content: Text('Product added to cart')));
-        }
+        } else if (state is ProductOptionChangedState) {}
       },
       builder: (context, state) {
         return Scaffold(
@@ -321,6 +322,151 @@ class _GroceryProductPageState extends State<GroceryProductPage> {
                           fontSize: getScreenWidth(context) * 0.04),
                     ),
                   ),
+
+                // different size optionss
+                // list view
+                StreamBuilder<QuerySnapshot>(
+                  stream: FirebaseFirestore.instance
+                      .collection('grocery')
+                      .where('name', isEqualTo: widget.grocery.name)
+                      .snapshots(),
+                  builder: (context, snapshot) {
+                    if (!snapshot.hasData) {
+                      return const CircularProgressIndicator();
+                    }
+
+                    final optionProducts = snapshot.data!.docs
+                        .map((doc) => ProductDataModel.fromMap(
+                            doc.data() as Map<String, dynamic>))
+                        .toList();
+
+                    return SizedBox(
+                      height:
+                          optionProducts.length * 0.3 * getScreenWidth(context),
+                      child: ListView.builder(
+                        scrollDirection: Axis.horizontal,
+                        itemCount: optionProducts.length,
+                        itemBuilder: (context, index) {
+                          final optionProduct = optionProducts[index];
+                          return GestureDetector(
+                            onTap: () {
+                              groceryBloc.add(GroceryCardClickedEvent(
+                                  clickedGrocery: optionProduct));
+                              Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) => GroceryProductPage(
+                                            grocery: optionProduct,
+                                          )));
+                            },
+                            child: Container(
+                              width: getScreenWidth(context) * 0.3,
+                              height: getScreenWidth(context) * 0.4,
+                              margin: EdgeInsets.symmetric(
+                                  horizontal: getScreenWidth(context) * 0.04,
+                                  vertical: getScreenWidth(context) * 0.1),
+                              decoration: BoxDecoration(
+                                  border: Border.all(
+                                    color: Colors.black,
+                                    width: 2,
+                                  ),
+                                  borderRadius: BorderRadius.circular(15)),
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Container(
+                                    padding: EdgeInsets.all(
+                                        getScreenWidth(context) * 0.02),
+                                    width: getScreenWidth(context) * 0.3,
+                                    decoration: const BoxDecoration(
+                                        color: greyColor,
+                                        borderRadius: BorderRadius.only(
+                                            topLeft: Radius.circular(13),
+                                            topRight: Radius.circular(13))),
+                                    child: Text(
+                                      optionProduct.size.toString(),
+                                      style: GoogleFonts.publicSans(
+                                          color: Colors.black,
+                                          fontWeight: FontWeight.w700),
+                                    ),
+                                  ),
+                                  Container(
+                                    padding: EdgeInsets.all(
+                                        getScreenWidth(context) * 0.02),
+                                    child: Text('₹ ${optionProduct.price}'),
+                                  ),
+                                  Container(
+                                    padding: EdgeInsets.symmetric(
+                                        horizontal:
+                                            getScreenWidth(context) * 0.02),
+                                    child: Text('₹ ${optionProduct.price}'),
+                                  ),
+                                  // in stock or out of stock
+                                  if (optionProduct.inStock > 10)
+                                    Container(
+                                      padding: EdgeInsets.all(
+                                          getScreenWidth(context) * 0.02),
+                                      child: const Text(
+                                        'In Stock',
+                                        style: TextStyle(color: Colors.green),
+                                      ),
+                                    ),
+                                  if (optionProduct.inStock < 10 &&
+                                      optionProduct.inStock > 0)
+                                    Container(
+                                      padding: EdgeInsets.all(
+                                          getScreenWidth(context) * 0.02),
+                                      child: const Text(
+                                        'Only few left!!',
+                                        style:
+                                            TextStyle(color: Colors.redAccent),
+                                      ),
+                                    ),
+                                  if (optionProduct.inStock == 0)
+                                    Container(
+                                      padding: EdgeInsets.all(
+                                          getScreenWidth(context) * 0.02),
+                                      child: const Text(
+                                        'Out of stock',
+                                        style: TextStyle(color: Colors.red),
+                                      ),
+                                    ),
+
+                                  // Add to cart button
+                                  GestureDetector(
+                                    onTap: () => groceryBloc.add(
+                                        GroceryProductPageAddToCardClickedEvent(
+                                            addToCartGrocery: optionProduct,
+                                            quantity: quantity)),
+                                    child: Container(
+                                      padding: EdgeInsets.symmetric(
+                                          vertical:
+                                              getScreenWidth(context) * 0.0163),
+                                      alignment: Alignment.bottomCenter,
+                                      width: getScreenWidth(context) * 0.3,
+                                      decoration: const BoxDecoration(
+                                          gradient: linerGrd,
+                                          borderRadius: BorderRadius.only(
+                                              bottomLeft: Radius.circular(13),
+                                              bottomRight:
+                                                  Radius.circular(13))),
+                                      child: Text(
+                                        'Add to cart',
+                                        style: GoogleFonts.publicSans(
+                                            color: Colors.white),
+                                      ),
+                                    ),
+                                  )
+                                ],
+                              ),
+                            ),
+                          );
+                        },
+                      ),
+                    );
+                  },
+                ),
+                SizedBox(height: getScreenWidth(context) * 0.1),
               ],
             ),
           ),

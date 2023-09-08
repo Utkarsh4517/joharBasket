@@ -29,4 +29,11 @@ class GroceryProductPageAddToCardClickedEvent extends GroceryEvent {
   });
 }
 
+class ProductOptionClickedEvent extends GroceryEvent {
+  final ProductDataModel selectedProductOption;
+  ProductOptionClickedEvent({
+    required this.selectedProductOption,
+  });
+}
+
 

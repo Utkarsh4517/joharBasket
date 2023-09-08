@@ -30,3 +30,9 @@ class GroceryAddToCartButtonClickedState extends GroceryActionState {}
 
 class GroceryIconAnimationState extends GroceryState {}
 
+class ProductOptionChangedState extends GroceryActionState {
+  final ProductDataModel productDataModel;
+  ProductOptionChangedState({
+    required this.productDataModel,
+  });
+}

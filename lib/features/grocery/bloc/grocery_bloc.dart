@@ -18,7 +18,7 @@ class GroceryBloc extends Bloc<GroceryEvent, GroceryState> {
     on<GroceryCardCartButtonClickedEvent>(groceryCardCartButtonClickedEvent);
     on<GroceryProductPageAddToCardClickedEvent>(
         groceryProductPageAddToCartClickedEvent);
-        
+    on<ProductOptionClickedEvent>(productOptionClickedEvent);
   }
 
   FutureOr<void> groceryInitialEvent(
@@ -55,4 +55,10 @@ class GroceryBloc extends Bloc<GroceryEvent, GroceryState> {
         event.addToCartGrocery, event.quantity);
     emit(GroceryAddToCartButtonClickedState());
   }
+
+  FutureOr<void> productOptionClickedEvent(
+      ProductOptionClickedEvent event, Emitter<GroceryState> emit) {
+        print('clicked option is of ${event.selectedProductOption.size}');
+        emit(ProductOptionChangedState(productDataModel: event.selectedProductOption));
+      }
 }
