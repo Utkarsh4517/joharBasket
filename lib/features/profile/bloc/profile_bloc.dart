@@ -48,6 +48,8 @@ class ProfileBloc extends Bloc<ProfileEvent, ProfileState> {
       gst: event.gst,
       isFeatured: event.isFeatured,
       productId: event.productId,
+      size: event.size,
+      discountedPrice: event.discountedPrice
     );
   }
 

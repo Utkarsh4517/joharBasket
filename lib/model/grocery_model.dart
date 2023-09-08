@@ -12,6 +12,7 @@ class ProductDataModel {
   final dynamic price;
   final dynamic gst;
   final String? size;
+  final dynamic discountedPrice;
   ProductDataModel({
     required this.gst,
     required this.imageUrl,
@@ -23,6 +24,7 @@ class ProductDataModel {
     required this.description,
     required this.inStock,
     required this.size,
+    required this.discountedPrice,
   });
 
   Map<String, dynamic> toMap() {
@@ -37,6 +39,7 @@ class ProductDataModel {
       'price': price,
       'gst': gst,
       'size': size,
+      'discountedPrice': discountedPrice,
     };
   }
 
@@ -51,11 +54,13 @@ class ProductDataModel {
       description: map['description'] as String,
       price: map['price'] as dynamic,
       gst: map['gst'] as dynamic,
-      size: map['size'] as String,
+      size: map['size'] != null ? map['size'] as String : null,
+      discountedPrice: map['discountedPrice'] as dynamic,
     );
   }
 
   String toJson() => json.encode(toMap());
 
-  factory ProductDataModel.fromJson(String source) => ProductDataModel.fromMap(json.decode(source) as Map<String, dynamic>);
+  factory ProductDataModel.fromJson(String source) =>
+      ProductDataModel.fromMap(json.decode(source) as Map<String, dynamic>);
 }

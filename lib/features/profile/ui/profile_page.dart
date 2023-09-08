@@ -29,6 +29,7 @@ class _ProfilePageState extends State<ProfilePage> {
   final priceController = TextEditingController();
   final gstController = TextEditingController();
   final sizeController = TextEditingController();
+  final discountedPriceController = TextEditingController();
 
   final ProfileBloc profileBloc = ProfileBloc();
   int _selectedIndex = 0;
@@ -41,6 +42,7 @@ class _ProfilePageState extends State<ProfilePage> {
     priceController.dispose();
     gstController.dispose();
     sizeController.dispose();
+    discountedPriceController.dispose();
     super.dispose();
   }
 
@@ -135,6 +137,9 @@ class _ProfilePageState extends State<ProfilePage> {
                           DetailsTextField(
                               controller: priceController,
                               label: 'Price including gst'),
+                           DetailsTextField(
+                              controller: discountedPriceController,
+                              label: 'Price after discount'),
                           DetailsTextField(
                               controller: gstController,
                               label: 'GST in Rs on this product'),
@@ -222,6 +227,7 @@ class _ProfilePageState extends State<ProfilePage> {
                                   inStock: double.parse(inStockController.text),
                                   price: double.parse(priceController.text),
                                   gst: double.parse(gstController.text),
+                                  discountedPrice: double.parse(discountedPriceController.text),
                                   category: 'grocery',
                                   isFeatured: toggle,
                                   productId: productid,

@@ -42,7 +42,12 @@ class CartProductDeletedState extends CartActionState {
   });
 }
 
-class CartBillRefreshState extends CartActionState {}
+class CartBillRefreshState extends CartActionState {
+  final dynamic sum;
+  CartBillRefreshState({
+    required this.sum,
+  });
+}
 
 class CartPagePlaceOrderSuccessfulState extends CartActionState{}
 
@@ -53,3 +58,5 @@ class CartPlacingOrderLoadingState extends CartActionState {}
 class CartPageUserDetailsUpdatedSuccessState extends CartActionState {}
 
 class VerifyQuantityState extends CartActionState {}
+
+class BillRefreshEverySecondState extends CartActionState {}

@@ -49,6 +49,8 @@ class ProfileRepo {
     required double gst,
     required bool isFeatured,
     required String productId,
+    required String size,
+    required dynamic discountedPrice,
   }) async {
     DocumentReference documentReference =
         FirebaseFirestore.instance.collection(collectionName).doc(productId);
@@ -61,6 +63,8 @@ class ProfileRepo {
       'description': description,
       'price': price,
       'gst': gst,
+      'size': size,
+      'discountedPrice': discountedPrice
     };
     documentReference.set(product);
   }
@@ -82,6 +86,7 @@ class ProfileRepo {
           description: data['description'],
           inStock: data['inStock'],
           size: data['size'],
+          discountedPrice: data['discountedPrice'],
         );
       }).toList();
     });
@@ -600,7 +605,7 @@ class ProfileRepo {
   }
 
   // fetch username of delivered order
-    static Future<String> fetchUsernameDelivered(String orderId) async {
+  static Future<String> fetchUsernameDelivered(String orderId) async {
     DocumentSnapshot documentSnapshot = await FirebaseFirestore.instance
         .collection('orders')
         .doc('pastOrders')
@@ -610,5 +615,4 @@ class ProfileRepo {
     String name = documentSnapshot['userName'];
     return name;
   }
-
 }

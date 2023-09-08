@@ -100,7 +100,7 @@ class CartRepo {
     QuerySnapshot querySnapshot = await collectionReference.get();
 
     for (var document in querySnapshot.docs) {
-      dynamic price = document['price'] ?? 0.0;
+      dynamic price = document['discountedPrice'] ?? 0.0;
       dynamic nos = document['nos'] ?? 0.0;
       sum += (price * nos);
     }
@@ -249,6 +249,7 @@ class CartRepo {
         'description': product.description,
         'gst': product.gst,
         'size': product.size,
+        'discountedPrice': product.discountedPrice,
       });
     }
 
@@ -265,6 +266,7 @@ class CartRepo {
         'description': product.description,
         'gst': product.gst,
         'size': product.size,
+        'discountedPrice': product.discountedPrice
       });
     }
 

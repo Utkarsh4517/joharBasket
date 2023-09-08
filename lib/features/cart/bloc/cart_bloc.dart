@@ -13,10 +13,11 @@ part 'cart_state.dart';
 class CartBloc extends Bloc<CartEvent, CartState> {
   CartBloc() : super(CartInitial()) {
     on<CartInitialEvent>(cartInitialEvent);
+    on<CartBillRefreshEvent>(cartBillRefreshEvent);
     on<CartProductQuantityIncreaseEvent>(cartProductQuantityIncreaseEvent);
     on<CartProductQuantityDecreaseEvent>(cartProductQuantityDecreaseEvent);
     on<CartRemoveProductEvent>(cartRemoveProductEvent);
-    on<CartBillRefreshEvent>(cartBillRefreshEvent);
+
     on<CartPagePlaceOrderClickedEvent>(cartPagePlaceOrderClickedEvent);
     on<CartPageUpdateDetailsClickedEvent>(cartPageUpdateDetailsClickedEvent);
   }
@@ -30,6 +31,14 @@ class CartBloc extends Bloc<CartEvent, CartState> {
     } else if (products.isNotEmpty) {
       emit(CartLoadedSuccessState(products: products));
     }
+  }
+
+  FutureOr<void> cartBillRefreshEvent(
+      CartBillRefreshEvent event, Emitter<CartState> emit) async {
+    final sum = await CartRepo.calculateSubTotal();
+    print('bill refresh');
+
+    emit(CartBillRefreshState(sum: sum));
   }
 
   FutureOr<void> cartProductQuantityIncreaseEvent(
@@ -49,12 +58,6 @@ class CartBloc extends Bloc<CartEvent, CartState> {
     await CartRepo.deleteProduct(event.product);
     emit(CartProductDeletedState(product: event.product));
     print('product deleted');
-  }
-
-  FutureOr<void> cartBillRefreshEvent(
-      CartBillRefreshEvent event, Emitter<CartState> emit) {
-    print('bill refresh');
-    emit(CartBillRefreshState());
   }
 
   FutureOr<void> cartPagePlaceOrderClickedEvent(

@@ -82,19 +82,44 @@ class _GroceryProductPageState extends State<GroceryProductPage> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: [
-                    Text(
-                      'Price',
-                      style: GoogleFonts.publicSans(
-                        color: greyColor,
-                        fontWeight: FontWeight.w800,
-                      ),
+                    Row(
+                      crossAxisAlignment: CrossAxisAlignment.end,
+                      children: [
+                        Text(
+                          'Price     ',
+                          style: GoogleFonts.publicSans(
+                            color: greyColor,
+                            fontWeight: FontWeight.w800,
+                          ),
+                        ),
+                        Text(
+                          'Save ₹${widget.grocery.price - widget.grocery.discountedPrice}',
+                          style: TextStyle(
+                              fontWeight: FontWeight.bold,
+                              fontSize: getScreenWidth(context) * 0.03,
+                              color: Colors.green),
+                        ),
+                      ],
                     ),
-                    Text(
-                      '₹ ${widget.grocery.price}',
-                      style: GoogleFonts.publicSans(
-                          color: Colors.black,
-                          fontWeight: FontWeight.w900,
-                          fontSize: getScreenWidth(context) * 0.06),
+                    Row(
+                      crossAxisAlignment: CrossAxisAlignment.end,
+                      children: [
+                        Text(
+                          '₹ ${widget.grocery.discountedPrice}  ',
+                          style: GoogleFonts.publicSans(
+                              color: Colors.black,
+                              fontWeight: FontWeight.w900,
+                              fontSize: getScreenWidth(context) * 0.06),
+                        ),
+                        Text(
+                          '₹ ${widget.grocery.price}',
+                          style: GoogleFonts.publicSans(
+                              color: Colors.black,
+                              fontWeight: FontWeight.w100,
+                              fontSize: getScreenWidth(context) * 0.05,
+                              decoration: TextDecoration.lineThrough),
+                        ),
+                      ],
                     ),
                   ],
                 ),
@@ -348,6 +373,9 @@ class _GroceryProductPageState extends State<GroceryProductPage> {
                         itemCount: optionProducts.length,
                         itemBuilder: (context, index) {
                           final optionProduct = optionProducts[index];
+                          final discount = optionProduct.price -
+                              optionProduct.discountedPrice;
+
                           return GestureDetector(
                             onTap: () {
                               groceryBloc.add(GroceryCardClickedEvent(
@@ -364,7 +392,7 @@ class _GroceryProductPageState extends State<GroceryProductPage> {
                               height: getScreenWidth(context) * 0.4,
                               margin: EdgeInsets.symmetric(
                                   horizontal: getScreenWidth(context) * 0.04,
-                                  vertical: getScreenWidth(context) * 0.1),
+                                  vertical: getScreenWidth(context) * 0.073),
                               decoration: BoxDecoration(
                                   border: Border.all(
                                     color: Colors.black,
@@ -392,14 +420,42 @@ class _GroceryProductPageState extends State<GroceryProductPage> {
                                   ),
                                   Container(
                                     padding: EdgeInsets.all(
-                                        getScreenWidth(context) * 0.02),
-                                    child: Text('₹ ${optionProduct.price}'),
+                                        getScreenWidth(context) * 0.01),
+                                    child: Text(
+                                      '₹ ${optionProduct.discountedPrice}',
+                                      style: TextStyle(
+                                          fontWeight: FontWeight.bold,
+                                          fontSize:
+                                              getScreenWidth(context) * 0.04),
+                                    ),
                                   ),
                                   Container(
                                     padding: EdgeInsets.symmetric(
                                         horizontal:
-                                            getScreenWidth(context) * 0.02),
-                                    child: Text('₹ ${optionProduct.price}'),
+                                            getScreenWidth(context) * 0.01),
+                                    child: Row(
+                                      children: [
+                                        const Text('MRP '),
+                                        Text(
+                                          '₹ ${optionProduct.price}',
+                                          style: const TextStyle(
+                                              decoration:
+                                                  TextDecoration.lineThrough),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                  Container(
+                                    padding: EdgeInsets.all(
+                                        getScreenWidth(context) * 0.01),
+                                    child: Text(
+                                      'Save ₹$discount',
+                                      style: TextStyle(
+                                          fontWeight: FontWeight.bold,
+                                          fontSize:
+                                              getScreenWidth(context) * 0.03,
+                                          color: Colors.green),
+                                    ),
                                   ),
                                   // in stock or out of stock
                                   if (optionProduct.inStock > 10)

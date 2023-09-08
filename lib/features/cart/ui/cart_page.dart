@@ -31,12 +31,12 @@ class _CartPageState extends State<CartPage> {
   bool? isDeliver;
   dynamic subTotal = 0;
   dynamic gst = 0;
-
   @override
   void initState() {
     cartBloc.add(CartInitialEvent());
     fetchSubtotalAndGST();
     fetchUserDetails();
+
     super.initState();
   }
 
@@ -97,9 +97,12 @@ class _CartPageState extends State<CartPage> {
       listener: (context, state) {
         if (state is CartBillRefreshState) {
           fetchSubtotalAndGST();
+          fetchSubtotalAndGST();
+          setState(() {
+            subTotal = state.sum;
+          });
         } else if (state is CartPlacingOrderLoadingState) {
           showDialog(
-            
               context: context,
               builder: (context) {
                 return AlertDialog(
@@ -123,6 +126,8 @@ class _CartPageState extends State<CartPage> {
           ScaffoldMessenger.of(context).showSnackBar(
               const SnackBar(content: Text('User Details Updated!')));
           fetchUserDetails();
+        } else if (state is BillRefreshEverySecondState) {
+          fetchSubtotalAndGST();
         }
       },
       builder: (context, state) {
@@ -200,6 +205,9 @@ class _CartPageState extends State<CartPage> {
                                   cartBloc.add(CartBillRefreshEvent());
                                 },
                                 child: CartCard(
+                                  size: successState.products[index].size!,
+                                  discountedPrice: successState
+                                      .products[index].discountedPrice,
                                   bloc: cartBloc,
                                   gst: successState.products[index].gst,
                                   name: successState.products[index].name,
@@ -261,6 +269,10 @@ class _CartPageState extends State<CartPage> {
                           child: Column(
                             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                             children: [
+                              // total
+
+                              // discount
+
                               Row(
                                 mainAxisAlignment:
                                     MainAxisAlignment.spaceBetween,
@@ -472,7 +484,6 @@ class _CartPageState extends State<CartPage> {
                         else if (isDeliver != null && isDeliver == true)
                           GestureDetector(
                             onTap: () {
-                              
                               cartBloc.add(CartPagePlaceOrderClickedEvent(
                                   products: successState.products,
                                   amount:

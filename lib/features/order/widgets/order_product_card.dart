@@ -17,6 +17,8 @@ class OrderProductCard extends StatefulWidget {
   final ProductDataModel productDataModel;
   final String description;
   final dynamic gst;
+  final String size;
+  final dynamic discountedPrice;
 
   const OrderProductCard({
     required this.orderBloc,
@@ -28,6 +30,8 @@ class OrderProductCard extends StatefulWidget {
     required this.isFeatured,
     required this.description,
     required this.productDataModel,
+    required this.size,
+    required this.discountedPrice,
     required this.nos,
     required this.gst,
     super.key,

@@ -22,8 +22,11 @@ class CartCard extends StatefulWidget {
   final ProductDataModel productDataModel;
   final String description;
   final dynamic gst;
+  final dynamic discountedPrice;
+  final String size;
   const CartCard({
     required this.gst,
+    required this.size,
     required this.bloc,
     required this.name,
     required this.imageUrl,
@@ -34,6 +37,7 @@ class CartCard extends StatefulWidget {
     required this.description,
     required this.productDataModel,
     required this.nos,
+    required this.discountedPrice,
     super.key,
   });
 
@@ -133,15 +137,40 @@ class _CartCardState extends State<CartCard> {
                 ),
               ),
               Container(
+                width: getScreenWidth(context) * 0.425,
                 alignment: Alignment.topLeft,
                 child: Text(
-                  '₹ ${widget.price}',
+                  widget.size,
+                  overflow: TextOverflow.ellipsis,
                   style: GoogleFonts.publicSans(
-                    color: Colors.green,
-                    fontWeight: FontWeight.w800,
-                    fontSize: getScreenWidth(context) * 0.04,
-                  ),
+                      color: Colors.black, fontWeight: FontWeight.normal),
                 ),
+              ),
+              Row(
+                children: [
+                  Container(
+                    alignment: Alignment.topLeft,
+                    child: Text(
+                      '₹ ${widget.discountedPrice}   ',
+                      style: GoogleFonts.publicSans(
+                        color: Colors.green,
+                        fontWeight: FontWeight.w800,
+                        fontSize: getScreenWidth(context) * 0.04,
+                      ),
+                    ),
+                  ),
+                  Container(
+                    alignment: Alignment.topLeft,
+                    child: Text(
+                      '₹ ${widget.price}',
+                      style: GoogleFonts.publicSans(
+                          color: Colors.black,
+                          fontWeight: FontWeight.w200,
+                          fontSize: getScreenWidth(context) * 0.03,
+                          decoration: TextDecoration.lineThrough),
+                    ),
+                  ),
+                ],
               ),
             ],
           ),
@@ -152,9 +181,12 @@ class _CartCardState extends State<CartCard> {
               if (quantity != null && quantity >= 2)
                 GestureDetector(
                   onTap: () {
+                    widget.bloc.add(CartBillRefreshEvent());
+
                     widget.bloc.add(CartProductQuantityDecreaseEvent(
                         product: widget.productDataModel));
                     fetchQuantity();
+                    widget.bloc.add(CartBillRefreshEvent());
                     widget.bloc.add(CartBillRefreshEvent());
                   },
                   child: Container(
@@ -206,9 +238,12 @@ class _CartCardState extends State<CartCard> {
               GestureDetector(
                 onTap: () async {
                   if (quantity < productQuantity) {
+                    widget.bloc.add(CartBillRefreshEvent());
+
                     widget.bloc.add(CartProductQuantityIncreaseEvent(
                         product: widget.productDataModel));
                     fetchQuantity();
+                    widget.bloc.add(CartBillRefreshEvent());
                     widget.bloc.add(CartBillRefreshEvent());
                   }
                 },

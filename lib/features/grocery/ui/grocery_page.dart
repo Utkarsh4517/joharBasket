@@ -102,6 +102,7 @@ class _GroceryPageState extends State<GroceryPage>
                             if (successState.products[index].isFeatured ==
                                 true) {
                               return GroceryCard(
+                                discountedPrice: successState.products[index].discountedPrice,
                                 size: successState.products[index].size!,
                                 bloc: groceryBloc,
                                 gst: successState.products[index].gst,
@@ -149,6 +150,7 @@ class _GroceryPageState extends State<GroceryPage>
                           itemCount: successState.products.length,
                           itemBuilder: (context, index) {
                             return GroceryCardSmall(
+                              discountedPrice: successState.products[index].discountedPrice,
                               size: successState.products[index].size!,
                               bloc: groceryBloc,
                               gst: successState.products[index].gst,

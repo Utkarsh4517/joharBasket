@@ -34,10 +34,13 @@ class _ProfileProductCardState extends State<ProfileProductCard> {
     final priceController = TextEditingController();
     final gstController = TextEditingController();
     final sizeController = TextEditingController();
+    final discountedPriceController = TextEditingController();
     bool toggle = state.product.isFeatured;
     String radioValue = 'grocery';
     nameController.text = productDataModel.name;
     sizeController.text = productDataModel.size!;
+    discountedPriceController.text =
+        productDataModel.discountedPrice.toString();
     descriptionController.text = productDataModel.description;
     inStockController.text = productDataModel.inStock.toString();
     priceController.text = productDataModel.price.toString();
@@ -66,6 +69,8 @@ class _ProfileProductCardState extends State<ProfileProductCard> {
                   controller: inStockController, label: 'Current stock'),
               DetailsTextField(
                   controller: priceController, label: 'Price including gst'),
+              DetailsTextField(
+                  controller: discountedPriceController, label: 'Price after discount'),
               DetailsTextField(
                   controller: gstController,
                   label: 'GST in Rs on this product'),

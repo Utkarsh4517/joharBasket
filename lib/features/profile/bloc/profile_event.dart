@@ -19,6 +19,7 @@ class AddProductClickedEvent extends ProfileEvent {
   final String productId;
   final bool isFeatured;
   final String size;
+  final dynamic discountedPrice;
   AddProductClickedEvent({
     required this.name,
     required this.description,
@@ -30,6 +31,7 @@ class AddProductClickedEvent extends ProfileEvent {
     required this.productId,
     required this.isFeatured,
     required this.size,
+    required this.discountedPrice,
   });
 }
 

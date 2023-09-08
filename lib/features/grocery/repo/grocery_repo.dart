@@ -51,6 +51,7 @@ class GroceryRepo {
         'description': grocery.description,
         'gst': grocery.gst,
         'size': grocery.size,
+        'discountedPrice': grocery.discountedPrice,
       });
     }
   }
@@ -80,6 +81,7 @@ class GroceryRepo {
         'description': grocery.description,
         'gst': grocery.gst,
         'size': grocery.size,
+        'discountedPrice': grocery.discountedPrice,
       });
     }
   }

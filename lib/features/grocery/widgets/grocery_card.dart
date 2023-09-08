@@ -19,7 +19,7 @@ class GroceryCard extends StatelessWidget {
   final String description;
   final dynamic gst;
   final String size;
-
+  final dynamic discountedPrice;
   const GroceryCard({
     required this.gst,
     required this.bloc,
@@ -32,6 +32,7 @@ class GroceryCard extends StatelessWidget {
     required this.description,
     required this.groceryUiDataModel,
     required this.size,
+    required this.discountedPrice,
     this.nos,
     super.key,
   });
@@ -117,7 +118,7 @@ class GroceryCard extends StatelessWidget {
                           ),
                           SizedBox(height: getScreenWidth(context) * 0.02),
                           Text(
-                            '₹ $price',
+                            '₹ $discountedPrice',
                             style: GoogleFonts.publicSans(
                                 color: const Color(0xff57C373),
                                 fontWeight: FontWeight.w900,

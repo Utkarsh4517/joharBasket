@@ -59,3 +59,5 @@ class CartPageUpdateDetailsClickedEvent extends CartEvent {
     required this.address,
   });
 }
+
+class RefreshBillSummeryEverySecondEvent extends CartEvent {}

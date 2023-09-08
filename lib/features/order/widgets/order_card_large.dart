@@ -86,6 +86,8 @@ class _OrderCardLargeState extends State<OrderCardLarge> {
                 itemCount: widget.successState.orders[widget.indexU].length,
                 itemBuilder: (context, index) {
                   return OrderProductCard(
+                    size: widget.successState.orders[widget.indexU][index].size!,
+                    discountedPrice: widget.successState.orders[widget.indexU][index].discountedPrice,
                     orderBloc: widget.bloc,
                     gst: widget.successState.orders[widget.indexU][index].gst,
                     name: widget.successState.orders[widget.indexU][index].name,
