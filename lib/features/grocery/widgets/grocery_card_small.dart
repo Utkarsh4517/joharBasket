@@ -53,7 +53,7 @@ class GroceryCardSmall extends StatelessWidget {
     return Container(
       margin: EdgeInsets.symmetric(
           horizontal: getScreenWidth(context) * 0.05,
-          vertical: getScreenWidth(context) * 0.015),
+          vertical: getScreenWidth(context) * 0.01),
       child: Card(
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
         color: Colors.white,
@@ -76,7 +76,7 @@ class GroceryCardSmall extends StatelessWidget {
                     child: ClipRRect(
                       child: CachedNetworkImage(
                         imageUrl: imageUrl,
-                        width: getScreenWidth(context) * 0.2,
+                        width: getScreenWidth(context) * 0.18,
                         fit: BoxFit.cover,
                         placeholder: (context, url) =>
                             const CircularProgressIndicator(),
@@ -85,6 +85,7 @@ class GroceryCardSmall extends StatelessWidget {
                   ),
                 ],
               ),
+              const SizedBox(height: 10),
               Row(
                 crossAxisAlignment: CrossAxisAlignment.end,
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -107,7 +108,7 @@ class GroceryCardSmall extends StatelessWidget {
                             style: GoogleFonts.publicSans(
                                 color: Colors.black,
                                 fontWeight: FontWeight.w900,
-                                fontSize: getScreenWidth(context) * 0.028),
+                                fontSize: getScreenWidth(context) * 0.025),
                           ),
                           Text(
                             size,

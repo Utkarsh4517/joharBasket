@@ -5,28 +5,28 @@ import 'package:johar/constants/dimensions.dart';
 import 'package:johar/features/grocery/bloc/grocery_bloc.dart';
 import 'package:johar/features/grocery/widgets/grocery_card.dart';
 import 'package:johar/features/grocery/widgets/grocery_card_small.dart';
-import 'package:johar/features/grocery/widgets/topbar.dart';
 import 'package:johar/shared/search_textfield.dart';
 
-class StationaryPage extends StatefulWidget {
-  const StationaryPage({super.key});
+class CosmeticsPage extends StatefulWidget {
+  const CosmeticsPage({super.key});
 
   @override
-  State<StationaryPage> createState() => _StationaryPageState();
+  State<CosmeticsPage> createState() => _CosmeticsPageState();
 }
 
-class _StationaryPageState extends State<StationaryPage>
+class _CosmeticsPageState extends State<CosmeticsPage>
     with AutomaticKeepAliveClientMixin {
   @override
   bool get wantKeepAlive => true;
 
   @override
   void initState() {
-    groceryBloc.add(StationaryInitialEvent());
+    groceryBloc.add(CosmeticInitialEvent());
     super.initState();
   }
 
   final GroceryBloc groceryBloc = GroceryBloc();
+
   @override
   Widget build(BuildContext context) {
     super.build(context);
@@ -34,20 +34,15 @@ class _StationaryPageState extends State<StationaryPage>
       bloc: groceryBloc,
       listenWhen: (previous, current) => current is GroceryActionState,
       buildWhen: (previous, current) => current is! GroceryActionState,
-      listener: (context, state) {
-        if (state is GroceryAddToCartButtonClickedState) {
-          ScaffoldMessenger.of(context).showSnackBar(
-              const SnackBar(content: Text('Product added to cart')));
-        }
-      },
+      listener: (context, state) {},
       builder: (context, state) {
         switch (state.runtimeType) {
-          case StationaryLoadingState:
+          case CosmeticLoadingState:
             return const Center(
               child: CircularProgressIndicator(),
             );
-          case StationaryLoadedSuccessState:
-            final successState = state as StationaryLoadedSuccessState;
+          case CosmeticLoadedSuccessState:
+            final successState = state as CosmeticLoadedSuccessState;
 
             return Scaffold(
               backgroundColor: const Color.fromARGB(255, 248, 248, 248),
@@ -63,7 +58,7 @@ class _StationaryPageState extends State<StationaryPage>
 
                       Container(
                         margin: EdgeInsets.all(getScreenWidth(context) * 0.06),
-                        child: Text('Featured Stationary Products',
+                        child: Text('Featured Cosmetic Products',
                             style: GoogleFonts.publicSans(
                                 color: Colors.black,
                                 fontWeight: FontWeight.w800,
@@ -107,7 +102,7 @@ class _StationaryPageState extends State<StationaryPage>
 
                       Container(
                         margin: EdgeInsets.all(getScreenWidth(context) * 0.06),
-                        child: Text('Shop Stationaries',
+                        child: Text('Shop Cosmetics',
                             style: GoogleFonts.publicSans(
                                 color: Colors.black,
                                 fontWeight: FontWeight.w800,

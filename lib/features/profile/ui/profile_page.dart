@@ -6,6 +6,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:google_nav_bar/google_nav_bar.dart';
 import 'package:johar/constants/dimensions.dart';
 import 'package:johar/features/auth/widgets/details_text_field.dart';
+import 'package:johar/features/cart/widgets/small_text_body.dart';
 import 'package:johar/features/profile/bloc/profile_bloc.dart';
 import 'package:johar/features/profile/repo/profile_repo.dart';
 import 'package:johar/features/profile/ui/orders_page.dart';
@@ -51,7 +52,7 @@ class _ProfilePageState extends State<ProfilePage> {
   @override
   Widget build(BuildContext context) {
     bool toggle = false;
-    // bool isImageUploaded = false;
+    bool isImageUploaded = false;
 
     const List<Widget> pages = <Widget>[
       ProfileProductPage(),
@@ -59,7 +60,7 @@ class _ProfilePageState extends State<ProfilePage> {
       ProfileOrderPage(),
     ];
 
-    // String radioValue = 'grocery';
+    String radioValue = 'grocery';
     return BlocConsumer<ProfileBloc, ProfileState>(
       bloc: profileBloc,
       listenWhen: (previous, current) => current is ProfileActionState,
@@ -171,47 +172,61 @@ class _ProfilePageState extends State<ProfilePage> {
                               ],
                             ),
                           ),
-                          // Container(
-                          //   decoration: BoxDecoration(
-                          //       color: Colors.white,
-                          //       borderRadius: BorderRadius.circular(15)),
-                          //   margin:
-                          //       EdgeInsets.all(getScreenWidth(context) * 0.06),
-                          //   padding:
-                          //       EdgeInsets.all(getScreenWidth(context) * 0.02),
-                          //   child: Column(
-                          //     children: [
-                          //       RadioListTile(
-                          //         controlAffinity:
-                          //             ListTileControlAffinity.trailing,
-                          //         activeColor: Colors.green,
-                          //         value: 'grocery',
-                          //         groupValue: radioValue,
-                          //         onChanged: (value) {
-                          //           setState(() {
-                          //             radioValue = value.toString();
-                          //           });
-                          //         },
-                          //         title: const SmallTextBody(
-                          //             text: 'Grocery Product'),
-                          //       ),
-                          //       RadioListTile(
-                          //         controlAffinity:
-                          //             ListTileControlAffinity.trailing,
-                          //         activeColor: Colors.green,
-                          //         value: 'stationary',
-                          //         groupValue: radioValue,
-                          //         onChanged: (value) {
-                          //           setState(() {
-                          //             radioValue = value.toString();
-                          //           });
-                          //         },
-                          //         title: const SmallTextBody(
-                          //             text: 'Stationary Product'),
-                          //       )
-                          //     ],
-                          //   ),
-                          // ),
+                          Container(
+                            decoration: BoxDecoration(
+                                color: Colors.white,
+                                borderRadius: BorderRadius.circular(15)),
+                            margin:
+                                EdgeInsets.all(getScreenWidth(context) * 0.06),
+                            padding:
+                                EdgeInsets.all(getScreenWidth(context) * 0.02),
+                            child: Column(
+                              children: [
+                                RadioListTile(
+                                  controlAffinity:
+                                      ListTileControlAffinity.trailing,
+                                  activeColor: Colors.green,
+                                  value: 'grocery',
+                                  groupValue: radioValue,
+                                  onChanged: (value) {
+                                    setState(() {
+                                      radioValue = value.toString();
+                                    });
+                                  },
+                                  title: const SmallTextBody(
+                                      text: 'Grocery Product'),
+                                ),
+                                RadioListTile(
+                                  controlAffinity:
+                                      ListTileControlAffinity.trailing,
+                                  activeColor: Colors.green,
+                                  value: 'stationary',
+                                  groupValue: radioValue,
+                                  onChanged: (value) {
+                                    setState(() {
+                                      radioValue = value.toString();
+                                    });
+                                  },
+                                  title: const SmallTextBody(
+                                      text: 'Stationary Product'),
+                                ),
+                                RadioListTile(
+                                  controlAffinity:
+                                      ListTileControlAffinity.trailing,
+                                  activeColor: Colors.green,
+                                  value: 'cosmetics',
+                                  groupValue: radioValue,
+                                  onChanged: (value) {
+                                    setState(() {
+                                      radioValue = value.toString();
+                                    });
+                                  },
+                                  title: const SmallTextBody(
+                                      text: 'Cosmetic Product'),
+                                ),
+                              ],
+                            ),
+                          ),
 
                           // Image  uploader
                           OutlinedButton(
@@ -228,7 +243,7 @@ class _ProfilePageState extends State<ProfilePage> {
                                   price: double.parse(priceController.text),
                                   gst: double.parse(gstController.text),
                                   discountedPrice: double.parse(discountedPriceController.text),
-                                  category: 'grocery',
+                                  category: radioValue,
                                   isFeatured: toggle,
                                   productId: productid,
                                   size: sizeController.text.toString(),

@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:johar/constants/dimensions.dart';
 import 'package:johar/features/cart/ui/cart_page.dart';
+import 'package:johar/features/cosmetics/ui/cosmetics_page.dart';
 import 'package:johar/features/grocery/ui/grocery_page.dart';
 import 'package:johar/features/nav_bar/bloc/nav_bar_bloc.dart';
 import 'package:johar/features/order/ui/order_page.dart';
@@ -50,7 +51,7 @@ class _NavBarState extends State<NavBar> {
     const List<Widget> bottomNavScreen = <Widget>[
       GroceryPage(),
       StationaryPage(),
-      StationaryPage(),
+      CosmeticsPage(),
       CartPage(),
       OrderPage(),
     ];

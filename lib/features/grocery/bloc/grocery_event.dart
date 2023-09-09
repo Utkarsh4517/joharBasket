@@ -6,6 +6,10 @@ sealed class GroceryEvent {}
 
 class GroceryInitialEvent extends GroceryEvent {}
 
+class StationaryInitialEvent extends GroceryEvent {}
+
+class CosmeticInitialEvent extends GroceryEvent {}
+
 class GroceryCardClickedEvent extends GroceryEvent {
   final ProductDataModel clickedGrocery;
   GroceryCardClickedEvent({

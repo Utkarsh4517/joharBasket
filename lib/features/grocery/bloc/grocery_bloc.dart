@@ -14,6 +14,8 @@ part 'grocery_state.dart';
 class GroceryBloc extends Bloc<GroceryEvent, GroceryState> {
   GroceryBloc() : super(GroceryInitial()) {
     on<GroceryInitialEvent>(groceryInitialEvent);
+    on<StationaryInitialEvent>(stationaryInitialEvent);
+    on<CosmeticInitialEvent>(cosmeticInitialEvent);
     on<GroceryCardClickedEvent>(groceryCardClickedEvent);
     on<GroceryCardCartButtonClickedEvent>(groceryCardCartButtonClickedEvent);
     on<GroceryProductPageAddToCardClickedEvent>(
@@ -58,7 +60,22 @@ class GroceryBloc extends Bloc<GroceryEvent, GroceryState> {
 
   FutureOr<void> productOptionClickedEvent(
       ProductOptionClickedEvent event, Emitter<GroceryState> emit) {
-        print('clicked option is of ${event.selectedProductOption.size}');
-        emit(ProductOptionChangedState(productDataModel: event.selectedProductOption));
-      }
+    print('clicked option is of ${event.selectedProductOption.size}');
+    emit(ProductOptionChangedState(
+        productDataModel: event.selectedProductOption));
+  }
+
+  FutureOr<void> stationaryInitialEvent(
+      StationaryInitialEvent event, Emitter<GroceryState> emit) async {
+    emit(StationaryLoadingState());
+    List<ProductDataModel> stationaries = await GroceryRepo.fetchStationaries();
+    emit(StationaryLoadedSuccessState(products: stationaries));
+  }
+
+  FutureOr<void> cosmeticInitialEvent(
+      CosmeticInitialEvent event, Emitter<GroceryState> emit) async {
+    emit(CosmeticLoadingState());
+    List<ProductDataModel> cosmetics = await GroceryRepo.fetchCosmetics();
+    emit(CosmeticLoadedSuccessState(products: cosmetics));
+  }
 }

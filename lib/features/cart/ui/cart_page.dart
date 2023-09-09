@@ -12,6 +12,7 @@ import 'package:johar/features/cart/widgets/cart_card.dart';
 import 'package:johar/features/cart/widgets/small_text_body.dart';
 import 'package:johar/shared/button.dart';
 import 'package:lottie/lottie.dart';
+// import 'package:razorpay_flutter/razorpay_flutter.dart';
 
 class CartPage extends StatefulWidget {
   const CartPage({super.key});
@@ -21,6 +22,10 @@ class CartPage extends StatefulWidget {
 }
 
 class _CartPageState extends State<CartPage> {
+  // razor pay instance
+
+  // var _razorpay = Razorpay();
+
   final CartBloc cartBloc = CartBloc();
   final firstNameController = TextEditingController();
   final lastNameController = TextEditingController();
@@ -37,9 +42,24 @@ class _CartPageState extends State<CartPage> {
     cartBloc.add(CartInitialEvent());
     fetchSubtotalAndGST();
     fetchUserDetails();
+    // _razorpay.on(Razorpay.EVENT_PAYMENT_SUCCESS, _handlePaymentSuccess);
+    // _razorpay.on(Razorpay.EVENT_PAYMENT_ERROR, _handlePaymentError);
+    // _razorpay.on(Razorpay.EVENT_EXTERNAL_WALLET, _handleExternalWallet);
 
     super.initState();
   }
+
+  // void _handlePaymentSuccess(PaymentSuccessResponse response) {
+  //   // Do something when payment succeeds
+  // }
+
+  // void _handlePaymentError(PaymentFailureResponse response) {
+  //   // Do something when payment fails
+  // }
+
+  // void _handleExternalWallet(ExternalWalletResponse response) {
+  //   // Do something when an external wallet was selected
+  // }
 
   fetchSubtotalAndGST() async {
     dynamic sub = await CartRepo.calculateSubTotal();
@@ -86,6 +106,7 @@ class _CartPageState extends State<CartPage> {
     pincodeController.dispose();
     addressController.dispose();
     mobileController.dispose();
+    // _razorpay.clear();
     super.dispose();
   }
 
@@ -513,14 +534,16 @@ class _CartPageState extends State<CartPage> {
                         else if (isDeliver != null && isDeliver == true)
                           GestureDetector(
                             onTap: () {
-                              cartBloc.add(
-                                CartPagePlaceOrderClickedEvent(
-                                  products: successState.products,
-                                  gst: '$gst',
-                                  amount:
-                                      '${subTotal + (subTotal < 999 ? 49 : 0)}',
-                                ),
-                              );
+                              if (radioValue == 'cod') {
+                                cartBloc.add(
+                                  CartPagePlaceOrderClickedEvent(
+                                    products: successState.products,
+                                    gst: '$gst',
+                                    amount:
+                                        '${subTotal + (subTotal < 999 ? 49 : 0)}',
+                                  ),
+                                );
+                              }
                             },
                             child: Container(
                               alignment: Alignment.center,

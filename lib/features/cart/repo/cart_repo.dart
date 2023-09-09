@@ -236,6 +236,7 @@ class CartRepo {
 
   // add cart products to order
   static Future<void> addProductsToOrder(
+
       List<ProductDataModel> products, String amount, String gst) async {
     var uuid = const Uuid();
     final orderId = uuid.v1();
@@ -283,7 +284,7 @@ class CartRepo {
         'description': product.description,
         'gst': product.gst,
         'size': product.size,
-        'discountedPrice': product.discountedPrice
+        'discountedPrice': product.discountedPrice,
       });
     }
 
@@ -305,7 +306,9 @@ class CartRepo {
         'pincode': userDocumentSnapshot['pincode'],
         'address': userDocumentSnapshot['address'],
         'amount': amount,
-        'gst': gst
+        'gst': gst,
+        'orderTime': FieldValue.serverTimestamp()
+
       });
 
       await adminOrderCollectionRef.doc('orderDetails').set({
@@ -320,6 +323,9 @@ class CartRepo {
         'address': userDocumentSnapshot['address'],
         'amount': amount,
         'gst': gst,
+        'orderTime': FieldValue.serverTimestamp()
+        
+
       });
     }
 

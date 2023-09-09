@@ -23,6 +23,46 @@ class GroceryRepo {
     }
   }
 
+    static Future<List<ProductDataModel>> fetchStationaries() async {
+    List<ProductDataModel> stationaries = [];
+
+    try {
+      QuerySnapshot querySnapshot =
+          await FirebaseFirestore.instance.collection('stationary').get();
+
+      for (QueryDocumentSnapshot documentSnapshot in querySnapshot.docs) {
+        Map<String, dynamic> data =
+            documentSnapshot.data() as Map<String, dynamic>;
+        ProductDataModel stationary = ProductDataModel.fromMap(data);
+        stationaries.add(stationary);
+      }
+
+      return stationaries;
+    } catch (e) {
+      return [];
+    }
+  }
+
+      static Future<List<ProductDataModel>> fetchCosmetics() async {
+    List<ProductDataModel> cosmetics = [];
+
+    try {
+      QuerySnapshot querySnapshot =
+          await FirebaseFirestore.instance.collection('cosmetics').get();
+
+      for (QueryDocumentSnapshot documentSnapshot in querySnapshot.docs) {
+        Map<String, dynamic> data =
+            documentSnapshot.data() as Map<String, dynamic>;
+        ProductDataModel cosmetic = ProductDataModel.fromMap(data);
+        cosmetics.add(cosmetic);
+      }
+
+      return cosmetics;
+    } catch (e) {
+      return [];
+    }
+  }
+
   // add grocery to cart
   static Future<void> addGroceryToCartFromGroceryPage(
       ProductDataModel grocery) async {

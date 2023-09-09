@@ -10,9 +10,27 @@ final class GroceryInitial extends GroceryState {}
 
 class GroceryLoadingState extends GroceryState {}
 
+class StationaryLoadingState extends GroceryState {}
+
+class CosmeticLoadingState extends GroceryState {}
+
 class GroceryLoadedSuccessState extends GroceryState {
   final List<ProductDataModel> products;
   GroceryLoadedSuccessState({
+    required this.products,
+  });
+}
+
+class StationaryLoadedSuccessState extends GroceryState {
+  final List<ProductDataModel> products;
+  StationaryLoadedSuccessState({
+    required this.products,
+  });
+}
+
+class CosmeticLoadedSuccessState extends GroceryState {
+  final List<ProductDataModel> products;
+  CosmeticLoadedSuccessState({
     required this.products,
   });
 }

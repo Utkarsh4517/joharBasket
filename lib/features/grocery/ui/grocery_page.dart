@@ -86,7 +86,7 @@ class _GroceryPageState extends State<GroceryPage>
 
                       Container(
                         margin: EdgeInsets.all(getScreenWidth(context) * 0.06),
-                        child: Text('Featured Products',
+                        child: Text('Featured Groceries',
                             style: GoogleFonts.publicSans(
                                 color: Colors.black,
                                 fontWeight: FontWeight.w800,
@@ -130,7 +130,7 @@ class _GroceryPageState extends State<GroceryPage>
 
                       Container(
                         margin: EdgeInsets.all(getScreenWidth(context) * 0.06),
-                        child: Text('Shop Products',
+                        child: Text('Shop Groceries',
                             style: GoogleFonts.publicSans(
                                 color: Colors.black,
                                 fontWeight: FontWeight.w800,
