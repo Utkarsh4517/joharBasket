@@ -52,7 +52,6 @@ class _ProfilePageState extends State<ProfilePage> {
   @override
   Widget build(BuildContext context) {
     bool toggle = false;
-    bool isImageUploaded = false;
 
     const List<Widget> pages = <Widget>[
       ProfileProductPage(),

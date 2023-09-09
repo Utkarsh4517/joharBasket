@@ -7,6 +7,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:johar/constants/colors.dart';
 import 'package:johar/constants/dimensions.dart';
 import 'package:johar/features/cart/ui/cart_page.dart';
+import 'package:johar/features/cart/widgets/small_text_body.dart';
 import 'package:johar/features/grocery/bloc/grocery_bloc.dart';
 import 'package:johar/model/grocery_model.dart';
 import 'package:johar/shared/button.dart';
@@ -350,6 +351,12 @@ class _GroceryProductPageState extends State<GroceryProductPage> {
 
                 // different size optionss
                 // list view
+                Padding(
+                  padding:  EdgeInsets.all(getScreenWidth(context) * 0.06).copyWith(bottom: 0),
+                  child: const SmallTextBody(
+                    text: 'Packaging Options',
+                  ),
+                ),
                 StreamBuilder<QuerySnapshot>(
                   stream: FirebaseFirestore.instance
                       .collection('grocery')
@@ -364,162 +371,165 @@ class _GroceryProductPageState extends State<GroceryProductPage> {
                         .map((doc) => ProductDataModel.fromMap(
                             doc.data() as Map<String, dynamic>))
                         .toList();
+                    if (optionProducts.length > 1) {
+                      return SizedBox(
+                        height: 0.6 * getScreenWidth(context),
+                        child: ListView.builder(
+                          scrollDirection: Axis.horizontal,
+                          itemCount: optionProducts.length,
+                          itemBuilder: (context, index) {
+                            final optionProduct = optionProducts[index];
+                            final discount = optionProduct.price -
+                                optionProduct.discountedPrice;
 
-                    return SizedBox(
-                      height:
-                          optionProducts.length * 0.3 * getScreenWidth(context),
-                      child: ListView.builder(
-                        scrollDirection: Axis.horizontal,
-                        itemCount: optionProducts.length,
-                        itemBuilder: (context, index) {
-                          final optionProduct = optionProducts[index];
-                          final discount = optionProduct.price -
-                              optionProduct.discountedPrice;
-
-                          return GestureDetector(
-                            onTap: () {
-                              groceryBloc.add(GroceryCardClickedEvent(
-                                  clickedGrocery: optionProduct));
-                              Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                      builder: (context) => GroceryProductPage(
-                                            grocery: optionProduct,
-                                          )));
-                            },
-                            child: Container(
-                              width: getScreenWidth(context) * 0.3,
-                              height: getScreenWidth(context) * 0.4,
-                              margin: EdgeInsets.symmetric(
-                                  horizontal: getScreenWidth(context) * 0.04,
-                                  vertical: getScreenWidth(context) * 0.073),
-                              decoration: BoxDecoration(
-                                  border: Border.all(
-                                    color: Colors.black,
-                                    width: 2,
-                                  ),
-                                  borderRadius: BorderRadius.circular(15)),
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Container(
-                                    padding: EdgeInsets.all(
-                                        getScreenWidth(context) * 0.02),
-                                    width: getScreenWidth(context) * 0.3,
-                                    decoration: const BoxDecoration(
-                                        color: greyColor,
-                                        borderRadius: BorderRadius.only(
-                                            topLeft: Radius.circular(13),
-                                            topRight: Radius.circular(13))),
-                                    child: Text(
-                                      optionProduct.size.toString(),
-                                      style: GoogleFonts.publicSans(
-                                          color: Colors.black,
-                                          fontWeight: FontWeight.w700),
+                            return GestureDetector(
+                              onTap: () {
+                                groceryBloc.add(GroceryCardClickedEvent(
+                                    clickedGrocery: optionProduct));
+                                Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (context) =>
+                                            GroceryProductPage(
+                                              grocery: optionProduct,
+                                            )));
+                              },
+                              child: Container(
+                                width: getScreenWidth(context) * 0.3,
+                                height: getScreenWidth(context) * 0.4,
+                                margin: EdgeInsets.symmetric(
+                                    horizontal: getScreenWidth(context) * 0.04,
+                                    vertical: getScreenWidth(context) * 0.073),
+                                decoration: BoxDecoration(
+                                    border: Border.all(
+                                      color: Colors.black,
+                                      width: 2,
                                     ),
-                                  ),
-                                  Container(
-                                    padding: EdgeInsets.all(
-                                        getScreenWidth(context) * 0.01),
-                                    child: Text(
-                                      '₹ ${optionProduct.discountedPrice}',
-                                      style: TextStyle(
-                                          fontWeight: FontWeight.bold,
-                                          fontSize:
-                                              getScreenWidth(context) * 0.04),
-                                    ),
-                                  ),
-                                  Container(
-                                    padding: EdgeInsets.symmetric(
-                                        horizontal:
-                                            getScreenWidth(context) * 0.01),
-                                    child: Row(
-                                      children: [
-                                        const Text('MRP '),
-                                        Text(
-                                          '₹ ${optionProduct.price}',
-                                          style: const TextStyle(
-                                              decoration:
-                                                  TextDecoration.lineThrough),
-                                        ),
-                                      ],
-                                    ),
-                                  ),
-                                  Container(
-                                    padding: EdgeInsets.all(
-                                        getScreenWidth(context) * 0.01),
-                                    child: Text(
-                                      'Save ₹$discount',
-                                      style: TextStyle(
-                                          fontWeight: FontWeight.bold,
-                                          fontSize:
-                                              getScreenWidth(context) * 0.03,
-                                          color: Colors.green),
-                                    ),
-                                  ),
-                                  // in stock or out of stock
-                                  if (optionProduct.inStock > 10)
+                                    borderRadius: BorderRadius.circular(15)),
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
                                     Container(
                                       padding: EdgeInsets.all(
                                           getScreenWidth(context) * 0.02),
-                                      child: const Text(
-                                        'In Stock',
-                                        style: TextStyle(color: Colors.green),
-                                      ),
-                                    ),
-                                  if (optionProduct.inStock < 10 &&
-                                      optionProduct.inStock > 0)
-                                    Container(
-                                      padding: EdgeInsets.all(
-                                          getScreenWidth(context) * 0.02),
-                                      child: const Text(
-                                        'Only few left!!',
-                                        style:
-                                            TextStyle(color: Colors.redAccent),
-                                      ),
-                                    ),
-                                  if (optionProduct.inStock == 0)
-                                    Container(
-                                      padding: EdgeInsets.all(
-                                          getScreenWidth(context) * 0.02),
-                                      child: const Text(
-                                        'Out of stock',
-                                        style: TextStyle(color: Colors.red),
-                                      ),
-                                    ),
-
-                                  // Add to cart button
-                                  GestureDetector(
-                                    onTap: () => groceryBloc.add(
-                                        GroceryProductPageAddToCardClickedEvent(
-                                            addToCartGrocery: optionProduct,
-                                            quantity: quantity)),
-                                    child: Container(
-                                      padding: EdgeInsets.symmetric(
-                                          vertical:
-                                              getScreenWidth(context) * 0.0163),
-                                      alignment: Alignment.bottomCenter,
                                       width: getScreenWidth(context) * 0.3,
                                       decoration: const BoxDecoration(
-                                          gradient: linerGrd,
+                                          color: greyColor,
                                           borderRadius: BorderRadius.only(
-                                              bottomLeft: Radius.circular(13),
-                                              bottomRight:
-                                                  Radius.circular(13))),
+                                              topLeft: Radius.circular(13),
+                                              topRight: Radius.circular(13))),
                                       child: Text(
-                                        'Add to cart',
+                                        optionProduct.size.toString(),
                                         style: GoogleFonts.publicSans(
-                                            color: Colors.white),
+                                            color: Colors.black,
+                                            fontWeight: FontWeight.w700),
                                       ),
                                     ),
-                                  )
-                                ],
+                                    Container(
+                                      padding: EdgeInsets.all(
+                                          getScreenWidth(context) * 0.01),
+                                      child: Text(
+                                        '₹ ${optionProduct.discountedPrice}',
+                                        style: TextStyle(
+                                            fontWeight: FontWeight.bold,
+                                            fontSize:
+                                                getScreenWidth(context) * 0.04),
+                                      ),
+                                    ),
+                                    Container(
+                                      padding: EdgeInsets.symmetric(
+                                          horizontal:
+                                              getScreenWidth(context) * 0.01),
+                                      child: Row(
+                                        children: [
+                                          const Text('MRP '),
+                                          Text(
+                                            '₹ ${optionProduct.price}',
+                                            style: const TextStyle(
+                                                decoration:
+                                                    TextDecoration.lineThrough),
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                    Container(
+                                      padding: EdgeInsets.all(
+                                          getScreenWidth(context) * 0.01),
+                                      child: Text(
+                                        'Save ₹$discount',
+                                        style: TextStyle(
+                                            fontWeight: FontWeight.bold,
+                                            fontSize:
+                                                getScreenWidth(context) * 0.03,
+                                            color: Colors.green),
+                                      ),
+                                    ),
+                                    // in stock or out of stock
+                                    if (optionProduct.inStock > 10)
+                                      Container(
+                                        padding: EdgeInsets.all(
+                                            getScreenWidth(context) * 0.02),
+                                        child: const Text(
+                                          'In Stock',
+                                          style: TextStyle(color: Colors.green),
+                                        ),
+                                      ),
+                                    if (optionProduct.inStock < 10 &&
+                                        optionProduct.inStock > 0)
+                                      Container(
+                                        padding: EdgeInsets.all(
+                                            getScreenWidth(context) * 0.02),
+                                        child: const Text(
+                                          'Only few left!!',
+                                          style: TextStyle(
+                                              color: Colors.redAccent),
+                                        ),
+                                      ),
+                                    if (optionProduct.inStock == 0)
+                                      Container(
+                                        padding: EdgeInsets.all(
+                                            getScreenWidth(context) * 0.02),
+                                        child: const Text(
+                                          'Out of stock',
+                                          style: TextStyle(color: Colors.red),
+                                        ),
+                                      ),
+
+                                    // Add to cart button
+                                    GestureDetector(
+                                      onTap: () => groceryBloc.add(
+                                          GroceryProductPageAddToCardClickedEvent(
+                                              addToCartGrocery: optionProduct,
+                                              quantity: quantity)),
+                                      child: Container(
+                                        padding: EdgeInsets.symmetric(
+                                            vertical: getScreenWidth(context) *
+                                                0.0163),
+                                        alignment: Alignment.bottomCenter,
+                                        width: getScreenWidth(context) * 0.3,
+                                        decoration: const BoxDecoration(
+                                            gradient: linerGrd,
+                                            borderRadius: BorderRadius.only(
+                                                bottomLeft: Radius.circular(13),
+                                                bottomRight:
+                                                    Radius.circular(13))),
+                                        child: Text(
+                                          'Add to cart',
+                                          style: GoogleFonts.publicSans(
+                                              color: Colors.white),
+                                        ),
+                                      ),
+                                    )
+                                  ],
+                                ),
                               ),
-                            ),
-                          );
-                        },
-                      ),
-                    );
+                            );
+                          },
+                        ),
+                      );
+                    } else {
+                      return const SizedBox();
+                    }
                   },
                 ),
                 SizedBox(height: getScreenWidth(context) * 0.1),
