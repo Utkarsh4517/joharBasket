@@ -60,6 +60,7 @@ class _GroceryProductPageState extends State<GroceryProductPage> {
 
   @override
   Widget build(BuildContext context) {
+    bool isPackagingOptions = false;
     return BlocConsumer<GroceryBloc, GroceryState>(
       bloc: groceryBloc,
       listenWhen: (previous, current) => current is GroceryActionState,
@@ -351,10 +352,14 @@ class _GroceryProductPageState extends State<GroceryProductPage> {
 
                 // different size optionss
                 // list view
-                Padding(
-                  padding:  EdgeInsets.all(getScreenWidth(context) * 0.06).copyWith(bottom: 0),
-                  child: const SmallTextBody(
-                    text: 'Packaging Options',
+                Visibility(
+                  visible: isPackagingOptions,
+                  child: Padding(
+                    padding: EdgeInsets.all(getScreenWidth(context) * 0.06)
+                        .copyWith(bottom: 0),
+                    child: const SmallTextBody(
+                      text: 'Packaging Options',
+                    ),
                   ),
                 ),
                 StreamBuilder<QuerySnapshot>(
@@ -371,6 +376,7 @@ class _GroceryProductPageState extends State<GroceryProductPage> {
                         .map((doc) => ProductDataModel.fromMap(
                             doc.data() as Map<String, dynamic>))
                         .toList();
+
                     if (optionProducts.length > 1) {
                       return SizedBox(
                         height: 0.6 * getScreenWidth(context),
@@ -414,7 +420,7 @@ class _GroceryProductPageState extends State<GroceryProductPage> {
                                           getScreenWidth(context) * 0.02),
                                       width: getScreenWidth(context) * 0.3,
                                       decoration: const BoxDecoration(
-                                          color: greyColor,
+                                          color: Color.fromARGB(255, 216, 216, 216),
                                           borderRadius: BorderRadius.only(
                                               topLeft: Radius.circular(13),
                                               topRight: Radius.circular(13))),
@@ -454,7 +460,7 @@ class _GroceryProductPageState extends State<GroceryProductPage> {
                                     ),
                                     Container(
                                       padding: EdgeInsets.all(
-                                          getScreenWidth(context) * 0.01),
+                                          getScreenWidth(context) * 0.01).copyWith(bottom: getScreenWidth(context) * 0.004),
                                       child: Text(
                                         'Save ₹$discount',
                                         style: TextStyle(

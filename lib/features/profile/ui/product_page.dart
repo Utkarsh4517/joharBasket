@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:johar/constants/dimensions.dart';
+import 'package:johar/features/cart/widgets/small_text_body.dart';
 import 'package:johar/features/profile/bloc/profile_bloc.dart';
 import 'package:johar/features/profile/repo/profile_repo.dart';
 import 'package:johar/features/profile/widgets/profile_product_card.dart';
@@ -19,6 +20,10 @@ class ProfileProductPageState extends State<ProfileProductPage> {
   @override
   Widget build(BuildContext context) {
     Stream<List<ProductDataModel>> productStream = ProfileRepo.getProducts();
+    Stream<List<ProductDataModel>> stationaryStream =
+        ProfileRepo.getStationaryProducts();
+    Stream<List<ProductDataModel>> cosmeticStream =
+        ProfileRepo.getCosmeticProducts();
     return Scaffold(
         backgroundColor: const Color.fromARGB(255, 248, 248, 248),
         body: SafeArea(
@@ -38,13 +43,67 @@ class ProfileProductPageState extends State<ProfileProductPage> {
                   ),
                 ),
               ),
-              const SearchTextField(),
+              // const SearchTextField(),
               // product card
-
+              Padding(
+                padding: EdgeInsets.symmetric(
+                    horizontal: getScreenWidth(context) * 0.06),
+                child: const SmallTextBody(text: 'Groceries'),
+              ),
               SizedBox(
                 height: getScreenheight(context) * 0.5,
                 child: StreamBuilder(
                     stream: productStream,
+                    builder: (context, snapshot) {
+                      if (snapshot.hasData) {
+                        List<ProductDataModel> products = snapshot.data!;
+                        return ListView.builder(
+                            itemCount: products.length,
+                            itemBuilder: (context, index) {
+                              ProductDataModel product = products[index];
+                              return ProfileProductCard(
+                                product: product,
+                              );
+                            });
+                      } else if (snapshot.hasError) {}
+                      return Container();
+                    }),
+              ),
+              Padding(
+                padding: EdgeInsets.symmetric(
+                    horizontal: getScreenWidth(context) * 0.06,
+                    vertical: getScreenWidth(context) * 0.04),
+                child: const SmallTextBody(text: 'Stationery'),
+              ),
+              SizedBox(
+                height: getScreenheight(context) * 0.5,
+                child: StreamBuilder(
+                    stream: stationaryStream,
+                    builder: (context, snapshot) {
+                      if (snapshot.hasData) {
+                        List<ProductDataModel> products = snapshot.data!;
+                        return ListView.builder(
+                            itemCount: products.length,
+                            itemBuilder: (context, index) {
+                              ProductDataModel product = products[index];
+                              return ProfileProductCard(
+                                product: product,
+                              );
+                            });
+                      } else if (snapshot.hasError) {}
+                      return Container();
+                    }),
+              ),
+              Padding(
+                padding: EdgeInsets.symmetric(
+                    horizontal: getScreenWidth(context) * 0.06,
+                    vertical: getScreenWidth(context) * 0.04),
+                child: const SmallTextBody(text: 'Cosmetics'),
+              ),
+              SizedBox(
+                height: getScreenheight(context) * 0.5,
+                child: StreamBuilder(
+                    stream: cosmeticStream,
                     builder: (context, snapshot) {
                       if (snapshot.hasData) {
                         List<ProductDataModel> products = snapshot.data!;

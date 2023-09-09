@@ -92,6 +92,50 @@ class ProfileRepo {
     });
   }
 
+    static Stream<List<ProductDataModel>> getStationaryProducts() {
+    final collection = FirebaseFirestore.instance.collection('stationary');
+    return collection.snapshots().map((snapshot) {
+      return snapshot.docs.map((doc) {
+        final data = doc.data();
+        return ProductDataModel(
+          gst: data['gst'],
+          imageUrl: data['imageUrl'],
+          name: data['name'],
+          isFeatured: data['isFeatured'],
+          price: data['price'],
+          productId: data['productId'],
+          nos: 0,
+          description: data['description'],
+          inStock: data['inStock'],
+          size: data['size'],
+          discountedPrice: data['discountedPrice'],
+        );
+      }).toList();
+    });
+  }
+
+      static Stream<List<ProductDataModel>> getCosmeticProducts() {
+    final collection = FirebaseFirestore.instance.collection('stationary');
+    return collection.snapshots().map((snapshot) {
+      return snapshot.docs.map((doc) {
+        final data = doc.data();
+        return ProductDataModel(
+          gst: data['gst'],
+          imageUrl: data['imageUrl'],
+          name: data['name'],
+          isFeatured: data['isFeatured'],
+          price: data['price'],
+          productId: data['productId'],
+          nos: 0,
+          description: data['description'],
+          inStock: data['inStock'],
+          size: data['size'],
+          discountedPrice: data['discountedPrice'],
+        );
+      }).toList();
+    });
+  }
+
   // update product details
   static Future<void> updateProductDetails({
     required ProductDataModel productDataModel,

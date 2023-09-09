@@ -31,7 +31,7 @@ class UserDetailsPageState extends State<UserDetailsPage> {
             Container(
               margin: EdgeInsets.all(getScreenWidth(context) * 0.07),
               child: Text(
-                'Fill up the details!',
+                'Complete your profile',
                 style: GoogleFonts.chivo(
                   color: Colors.black,
                   fontWeight: FontWeight.w900,
@@ -45,13 +45,20 @@ class UserDetailsPageState extends State<UserDetailsPage> {
             DetailsTextField(
                 controller: lastNameController, label: 'Last name'),
             DetailsTextField(
-                controller: mobileController, label: 'Mobile Number'),
+              controller: mobileController,
+              label: 'Mobile Number',
+              keyboardType: TextInputType.number,
+            ),
             DetailsTextField(controller: addressController, label: 'Address'),
-            DetailsTextField(controller: pinController, label: 'Pin code'),
+            DetailsTextField(
+              controller: pinController,
+              label: 'Pin code',
+              keyboardType: TextInputType.number,
+            ),
 
             SizedBox(height: getScreenWidth(context) * 0.07),
-            GestureDetector(
-              onTap: () async{
+            TextButton(
+              onPressed: () async {
                 await AuthService().uploadUserDetails(
                   firstName: firstNameController.text,
                   lastName: lastNameController.text,
@@ -65,11 +72,14 @@ class UserDetailsPageState extends State<UserDetailsPage> {
                 alignment: Alignment.center,
                 child: const Button(
                   radius: 15,
-                  text:
-                      '                          Proceed                          ',
+                  text: 'Proceed',
+                  paddingH: 0.35,
+                  paddingV: 0.05,
                 ),
               ),
             ),
+
+            SizedBox(height: getScreenWidth(context) * 0.15),
           ],
         ),
       )),

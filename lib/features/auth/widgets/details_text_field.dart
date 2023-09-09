@@ -6,11 +6,13 @@ class DetailsTextField extends StatelessWidget {
   final String label;
   final double hMargin;
   final double vMargin;
+  final TextInputType keyboardType;
   const DetailsTextField({
     required this.controller,
     required this.label,
     this.hMargin = 0.07,
     this.vMargin = 0.04,
+    this.keyboardType = TextInputType.text, 
     super.key,
   });
 
@@ -23,6 +25,7 @@ class DetailsTextField extends StatelessWidget {
       ),
       child: TextField(
         controller: controller,
+        keyboardType: keyboardType,
         style: const TextStyle(color: Colors.black),
         decoration: InputDecoration(
             enabledBorder: OutlineInputBorder(

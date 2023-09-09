@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
+import 'package:johar/constants/colors.dart';
 import 'package:johar/constants/dimensions.dart';
 import 'package:johar/features/on_boarding/ui/widgets/body_text.dart';
 import 'package:johar/shared/button.dart';
 import 'package:johar/features/on_boarding/ui/widgets/head_text.dart';
+import 'package:lottie/lottie.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class OnBoardingScreen extends StatefulWidget {
@@ -23,56 +26,45 @@ class _OnBoardingScreenState extends State<OnBoardingScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color.fromARGB(255, 226, 245, 251),
-      body: Stack(
-        children: [
-          Positioned(
-            left: -getScreenWidth(context) * 0.15,
-            top: -getScreenheight(context) * 0.03,
-            child: Image.asset(
-              'assets/img/girl 1.png',
-              scale: 1.15,
-            ),
-          ),
-          Positioned(
-            top: getScreenheight(context) * 0.5,
-            left: -getScreenWidth(context) * 0.5,
-            child: Container(
-              width: getScreenWidth(context) * 2,
-              height: getScreenWidth(context) * 2,
-              decoration: const BoxDecoration(
-                shape: BoxShape.circle,
-                color: Colors.white,
-              ),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.center,
+        backgroundColor: const Color.fromARGB(255, 226, 245, 251),
+        body: SingleChildScrollView(
+          child: Column(
+            children: [
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  SizedBox(height: getScreenWidth(context) * 0.12),
-                  const HeadText(text: 'Buy Groceries Easily With Us'),
-                  SizedBox(height: getScreenWidth(context) * 0.05),
-                  const BodyText(
-                    text:
-                        'Your One-Stop Haven for Stationary and Grocery Delights – Discover Convenience at Johar Basket!',
-                  ),
-                  SizedBox(height: getScreenWidth(context) * 0.15),
-                  GestureDetector(
-                    // onTapUp: (details) => _completeOnboarding(),
-                    onTapUp: (details) {
-                      // _completeOnboarding();
-                       Navigator.pushReplacementNamed(context, 'googleSignIn');
-                    },
-
-                    child: const Button(
-                      text: 'Get Started',
-                      radius: 40,
-                    ),
-                  ),
+                  Lottie.asset('assets/svgs/animation_1.json',
+                      height: getScreenheight(context) * 0.5),
                 ],
               ),
-            ),
+              Text(
+                'Johar Basket',
+                textAlign: TextAlign.center,
+                style: GoogleFonts.publicSans(
+                  color: Colors.black,
+                  fontWeight: FontWeight.w900,
+                  fontSize: getScreenWidth(context) * 0.1,
+                ),
+              ),
+              SizedBox(height: getScreenWidth(context) * 0.05),
+              Text(
+                'Your One Stop Shop for Groceries to Stationery and Cosmetic Products',
+                textAlign: TextAlign.center,
+                style: GoogleFonts.leagueSpartan(
+                  color: greyColor,
+                  fontWeight: FontWeight.w600,
+                  fontSize: getScreenWidth(context) * 0.07,
+                ),
+              ),
+              SizedBox(height: getScreenWidth(context) * 0.1),
+              TextButton(
+                onPressed: () {
+                  Navigator.pushReplacementNamed(context, 'googleSignIn');
+                },
+                child: const Button(radius: 40, text: 'Get Started'),
+              ),
+            ],
           ),
-        ],
-      ),
-    );
+        ));
   }
 }
