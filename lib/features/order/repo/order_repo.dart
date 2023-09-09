@@ -244,6 +244,23 @@ class OrderRepo {
       return '';
     }
   }
+    // show otp
+    static Future<String> fetchOTP(String orderId) async {
+    DocumentSnapshot documentSnapshot = await FirebaseFirestore.instance
+        .collection('users')
+        .doc(FirebaseAuth.instance.currentUser!.uid)
+        .collection('order')
+        .doc('myOrders')
+        .collection(orderId)
+        .doc('orderDetails')
+        .get();
+    if (documentSnapshot['isAccepted'] == true) {
+      String otp = documentSnapshot['otp'] ?? '';
+      return otp;
+    } else {
+      return '';
+    }
+  }
 
   // fetch past orders...
     static Future<List<List<ProductDataModel>>> fetchPastOrders() async {

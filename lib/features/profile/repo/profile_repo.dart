@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'dart:math';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -333,6 +334,12 @@ class ProfileRepo {
   // order accepted by admin
   static Future<void> orderAccepted(
       String userId, String orderid, String deliveryTime) async {
+
+        // generate otp  
+        final random = Random();
+        final code = random.nextInt(900000) + 100000;
+        final otp = code.toString();
+
     final userOrderRef = FirebaseFirestore.instance
         .collection('users')
         .doc(userId)
@@ -350,12 +357,14 @@ class ProfileRepo {
       userOrderRef.doc('orderDetails').update({
         'isAccepted': true,
         'time': deliveryTime,
+        'otp': otp
       });
     }
     if (gOrderRef.exists) {
       globalOrderRef.doc('orderDetails').update({
         'isAccepted': true,
         'time': deliveryTime,
+        'otp': otp
       });
     }
   }

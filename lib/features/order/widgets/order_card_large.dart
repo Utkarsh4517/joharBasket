@@ -31,6 +31,7 @@ class _OrderCardLargeState extends State<OrderCardLarge> {
   bool isPaymentReceived = false;
   String amountOfOrder = '';
   String deliveryTime = '';
+  String otp = '';
 
   @override
   void initState() {
@@ -50,6 +51,7 @@ class _OrderCardLargeState extends State<OrderCardLarge> {
         await OrderRepo.fetchAmountOfOrder(widget.orderIdList[widget.indexU]);
     final time =
         await OrderRepo.fetchDeliveryTime(widget.orderIdList[widget.indexU]);
+    final otpGen = await OrderRepo.fetchOTP(widget.orderIdList[widget.indexU]);
 
     if (mounted) {
       setState(() {
@@ -58,6 +60,7 @@ class _OrderCardLargeState extends State<OrderCardLarge> {
         isPaymentReceived = isPay;
         amountOfOrder = amount;
         deliveryTime = time;
+        otp = otpGen;
       });
     }
   }
@@ -86,8 +89,10 @@ class _OrderCardLargeState extends State<OrderCardLarge> {
                 itemCount: widget.successState.orders[widget.indexU].length,
                 itemBuilder: (context, index) {
                   return OrderProductCard(
-                    size: widget.successState.orders[widget.indexU][index].size!,
-                    discountedPrice: widget.successState.orders[widget.indexU][index].discountedPrice,
+                    size:
+                        widget.successState.orders[widget.indexU][index].size!,
+                    discountedPrice: widget.successState
+                        .orders[widget.indexU][index].discountedPrice,
                     orderBloc: widget.bloc,
                     gst: widget.successState.orders[widget.indexU][index].gst,
                     name: widget.successState.orders[widget.indexU][index].name,
@@ -143,6 +148,25 @@ class _OrderCardLargeState extends State<OrderCardLarge> {
                         color: isPaymentReceived ? Colors.green : Colors.red,
                         fontSize: getScreenWidth(context) * 0.04,
                         fontWeight: FontWeight.bold),
+                  )
+                ],
+              ),
+            ),
+            if (!isOrderDelivered && isOrderAccepted)
+            Container(
+              margin: EdgeInsets.symmetric(
+                  horizontal: getScreenWidth(context) * 0.04),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  const SmallTextBody(text: 'OTP'),
+                  SelectableText(
+                    otp,
+                    style: TextStyle(
+                      color: Colors.black,
+                      fontSize: getScreenWidth(context) * 0.03,
+                      fontWeight: FontWeight.bold,
+                    ),
                   )
                 ],
               ),
