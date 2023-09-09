@@ -6,7 +6,6 @@ import 'package:johar/features/profile/bloc/profile_bloc.dart';
 import 'package:johar/features/profile/repo/profile_repo.dart';
 import 'package:johar/features/profile/widgets/profile_product_card.dart';
 import 'package:johar/model/grocery_model.dart';
-import 'package:johar/shared/search_textfield.dart';
 
 class ProfileProductPage extends StatefulWidget {
   const ProfileProductPage({super.key});

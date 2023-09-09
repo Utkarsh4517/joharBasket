@@ -5,6 +5,7 @@ import 'package:johar/features/auth/widgets/details_text_field.dart';
 import 'package:johar/features/cart/widgets/small_text_body.dart';
 import 'package:johar/features/profile/bloc/profile_bloc.dart';
 import 'package:johar/features/profile/repo/profile_repo.dart';
+import 'package:johar/features/profile/ui/profile_page.dart';
 import 'package:johar/features/profile/widgets/profile_product_order_card.dart';
 import 'package:johar/shared/button.dart';
 
@@ -151,7 +152,7 @@ class _ProfileOrderCardLargeState extends State<ProfileOrderCardLarge> {
                       child: const Button(
                         radius: 15,
                         text: 'Confirm',
-                        paddingH: 0.28,
+                        paddingH: 0.25,
                         paddingV: 0.032,
                       ),
                     )
@@ -163,191 +164,197 @@ class _ProfileOrderCardLargeState extends State<ProfileOrderCardLarge> {
         } else if (state is DeliveryConfirmedState) {
           Navigator.pop(context);
           fetchDetails();
+          Navigator.pushReplacement(
+            context,
+            MaterialPageRoute(
+              builder: (context) => const ProfilePage(),
+            ),
+          );
         }
       },
       builder: (context, state) {
-        if(!isOrderDelivered) {
-        return Container(
-          decoration: BoxDecoration(
-              color: Colors.white, borderRadius: BorderRadius.circular(15)),
-          margin: EdgeInsets.symmetric(
-              horizontal: getScreenWidth(context) * 0.06,
-              vertical: getScreenWidth(context) * 0.02),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              SizedBox(
-                height: widget.successState.orders[widget.indexU].length *
-                    0.3 *
-                    getScreenWidth(context),
-                child: ListView.builder(
-                  physics: const NeverScrollableScrollPhysics(),
-                  itemCount: widget.successState.orders[widget.indexU].length,
-                  itemBuilder: (context, index) {
-                    return ProfileProductOrderCard(
-                      successState: widget.successState,
-                      indexU: widget.indexU,
-                      index: index,
-                    );
-                  },
+        if (!isOrderDelivered) {
+          return Container(
+            decoration: BoxDecoration(
+                color: Colors.white, borderRadius: BorderRadius.circular(15)),
+            margin: EdgeInsets.symmetric(
+                horizontal: getScreenWidth(context) * 0.06,
+                vertical: getScreenWidth(context) * 0.02),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                SizedBox(
+                  height: widget.successState.orders[widget.indexU].length *
+                      0.3 *
+                      getScreenWidth(context),
+                  child: ListView.builder(
+                    physics: const NeverScrollableScrollPhysics(),
+                    itemCount: widget.successState.orders[widget.indexU].length,
+                    itemBuilder: (context, index) {
+                      return ProfileProductOrderCard(
+                        successState: widget.successState,
+                        indexU: widget.indexU,
+                        index: index,
+                      );
+                    },
+                  ),
                 ),
-              ),
-              Container(
-                margin: EdgeInsets.symmetric(
-                    horizontal: getScreenWidth(context) * 0.04),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    const SmallTextBody(text: 'Order ID'),
-                    SelectableText(
-                      '${widget.orderIdList[widget.indexU]}',
-                      style: TextStyle(
-                          color: Colors.black,
-                          fontSize: getScreenWidth(context) * 0.025),
-                    )
-                  ],
+                Container(
+                  margin: EdgeInsets.symmetric(
+                      horizontal: getScreenWidth(context) * 0.04),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      const SmallTextBody(text: 'Order ID'),
+                      SelectableText(
+                        '${widget.orderIdList[widget.indexU]}',
+                        style: TextStyle(
+                            color: Colors.black,
+                            fontSize: getScreenWidth(context) * 0.025),
+                      )
+                    ],
+                  ),
                 ),
-              ),
-              Container(
-                margin: EdgeInsets.symmetric(
-                    horizontal: getScreenWidth(context) * 0.04),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    const SmallTextBody(text: 'Total amount'),
-                    SelectableText(
-                      '₹ $amountOfOrder',
-                      style: TextStyle(
-                          color: isPaymentReceived ? Colors.green : Colors.red,
-                          fontSize: getScreenWidth(context) * 0.04,
-                          fontWeight: FontWeight.bold),
-                    )
-                  ],
+                Container(
+                  margin: EdgeInsets.symmetric(
+                      horizontal: getScreenWidth(context) * 0.04),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      const SmallTextBody(text: 'Total amount'),
+                      SelectableText(
+                        '₹ $amountOfOrder',
+                        style: TextStyle(
+                            color:
+                                isPaymentReceived ? Colors.green : Colors.red,
+                            fontSize: getScreenWidth(context) * 0.04,
+                            fontWeight: FontWeight.bold),
+                      )
+                    ],
+                  ),
                 ),
-              ),
-              Container(
-                margin: EdgeInsets.symmetric(
-                    horizontal: getScreenWidth(context) * 0.04),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    const SmallTextBody(text: 'Ordered by'),
-                    SelectableText(
-                      userName,
-                      style: TextStyle(
-                          color: Colors.black,
-                          fontSize: getScreenWidth(context) * 0.03,
-                          fontWeight: FontWeight.bold),
-                    )
-                  ],
-                ),
-              ),
-              Container(
-                margin: EdgeInsets.symmetric(
-                    horizontal: getScreenWidth(context) * 0.04),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    const SmallTextBody(text: 'Mobile Number'),
-                    TextButton(
-                        onPressed: () {},
-                        child: Text(
-                          userMobile,
-                          style: TextStyle(
-                              color: Colors.black,
-                              fontSize: getScreenWidth(context) * 0.03,
-                              fontWeight: FontWeight.bold),
-                        )),
-                  ],
-                ),
-              ),
-              Container(
-                margin: EdgeInsets.symmetric(
-                  horizontal: getScreenWidth(context) * 0.04,
-                  vertical: getScreenWidth(context) * 0.01,
-                ),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    const SmallTextBody(text: 'Address'),
-                    Container(
-                      alignment: Alignment.centerRight,
-                      width: getScreenWidth(context) * 0.5,
-                      child: Text(
-                        address,
+                Container(
+                  margin: EdgeInsets.symmetric(
+                      horizontal: getScreenWidth(context) * 0.04),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      const SmallTextBody(text: 'Ordered by'),
+                      SelectableText(
+                        userName,
                         style: TextStyle(
                             color: Colors.black,
                             fontSize: getScreenWidth(context) * 0.03,
-                            fontWeight: FontWeight.normal),
+                            fontWeight: FontWeight.bold),
+                      )
+                    ],
+                  ),
+                ),
+                Container(
+                  margin: EdgeInsets.symmetric(
+                      horizontal: getScreenWidth(context) * 0.04),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      const SmallTextBody(text: 'Mobile Number'),
+                      TextButton(
+                          onPressed: () {},
+                          child: Text(
+                            userMobile,
+                            style: TextStyle(
+                                color: Colors.black,
+                                fontSize: getScreenWidth(context) * 0.03,
+                                fontWeight: FontWeight.bold),
+                          )),
+                    ],
+                  ),
+                ),
+                Container(
+                  margin: EdgeInsets.symmetric(
+                    horizontal: getScreenWidth(context) * 0.04,
+                    vertical: getScreenWidth(context) * 0.01,
+                  ),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      const SmallTextBody(text: 'Address'),
+                      Container(
+                        alignment: Alignment.centerRight,
+                        width: getScreenWidth(context) * 0.5,
+                        child: Text(
+                          address,
+                          style: TextStyle(
+                              color: Colors.black,
+                              fontSize: getScreenWidth(context) * 0.03,
+                              fontWeight: FontWeight.normal),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                Container(
+                  margin: EdgeInsets.symmetric(
+                      horizontal: getScreenWidth(context) * 0.04),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      const SmallTextBody(text: 'Pincode'),
+                      Text(
+                        pincode,
+                        style: TextStyle(
+                            color: Colors.black,
+                            fontSize: getScreenWidth(context) * 0.03,
+                            fontWeight: FontWeight.bold),
+                      ),
+                    ],
+                  ),
+                ),
+                if (!isOrderAccepted)
+                  GestureDetector(
+                    onTap: () {
+                      profileBloc.add(AcceptOrderClickedEvent(
+                        orderId: widget.orderIdList[widget.indexU],
+                        userId: userId,
+                      ));
+                    },
+                    child: Container(
+                      margin: EdgeInsets.symmetric(
+                          vertical: getScreenWidth(context) * 0.03),
+                      alignment: Alignment.center,
+                      child: const Button(
+                        radius: 15,
+                        text: 'Accept Order',
+                        paddingH: 0.3,
+                        paddingV: 0.04,
                       ),
                     ),
-                  ],
-                ),
-              ),
-              Container(
-                margin: EdgeInsets.symmetric(
-                    horizontal: getScreenWidth(context) * 0.04),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    const SmallTextBody(text: 'Pincode'),
-                    Text(
-                      pincode,
-                      style: TextStyle(
-                          color: Colors.black,
-                          fontSize: getScreenWidth(context) * 0.03,
-                          fontWeight: FontWeight.bold),
-                    ),
-                  ],
-                ),
-              ),
-              if (!isOrderAccepted)
-                GestureDetector(
-                  onTap: () {
-                    profileBloc.add(AcceptOrderClickedEvent(
-                      orderId: widget.orderIdList[widget.indexU],
-                      userId: userId,
-                    ));
-                  },
-                  child: Container(
-                    margin: EdgeInsets.symmetric(
-                        vertical: getScreenWidth(context) * 0.03),
-                    alignment: Alignment.center,
-                    child: const Button(
-                      radius: 15,
-                      text: 'Accept Order',
-                      paddingH: 0.3,
-                      paddingV: 0.04,
-                    ),
                   ),
-                ),
-              if (isOrderAccepted)
-                GestureDetector(
-                  onTap: () {
-                    profileBloc.add(ShowConfirmDeliveryDialogEvent(
-                      orderId: widget.orderIdList[widget.indexU],
-                      userId: userId,
-                    ));
-                  },
-                  child: Container(
-                    margin: EdgeInsets.symmetric(
-                        vertical: getScreenWidth(context) * 0.03),
-                    alignment: Alignment.center,
-                    child: const Button(
-                      radius: 15,
-                      text: 'Confirm Delivery',
-                      paddingH: 0.28,
-                      paddingV: 0.04,
+                if (isOrderAccepted)
+                  GestureDetector(
+                    onTap: () {
+                      profileBloc.add(ShowConfirmDeliveryDialogEvent(
+                        orderId: widget.orderIdList[widget.indexU],
+                        userId: userId,
+                      ));
+                    },
+                    child: Container(
+                      margin: EdgeInsets.symmetric(
+                          vertical: getScreenWidth(context) * 0.03),
+                      alignment: Alignment.center,
+                      child: const Button(
+                        radius: 15,
+                        text: 'Confirm Delivery',
+                        paddingH: 0.28,
+                        paddingV: 0.04,
+                      ),
                     ),
-                  ),
-                )
-            ],
-          ),
-        );
+                  )
+              ],
+            ),
+          );
         } else {
           return Container();
         }
-
       },
     );
   }
