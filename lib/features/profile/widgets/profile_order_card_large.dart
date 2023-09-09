@@ -2,12 +2,16 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:johar/constants/dimensions.dart';
 import 'package:johar/features/auth/widgets/details_text_field.dart';
+import 'package:johar/features/cart/repo/cart_repo.dart';
 import 'package:johar/features/cart/widgets/small_text_body.dart';
+import 'package:johar/features/order/repo/order_repo.dart';
 import 'package:johar/features/profile/bloc/profile_bloc.dart';
 import 'package:johar/features/profile/repo/profile_repo.dart';
 import 'package:johar/features/profile/ui/profile_page.dart';
 import 'package:johar/features/profile/widgets/profile_product_order_card.dart';
 import 'package:johar/shared/button.dart';
+import 'package:top_snackbar_flutter/custom_snack_bar.dart';
+import 'package:top_snackbar_flutter/top_snack_bar.dart';
 
 class ProfileOrderCardLarge extends StatefulWidget {
   final List orderIdList;
@@ -37,6 +41,8 @@ class _ProfileOrderCardLargeState extends State<ProfileOrderCardLarge> {
   String address = '';
   String pincode = '';
   String userId = '';
+  String otp = '';
+  final otpController = TextEditingController();
 
   @override
   void initState() {
@@ -64,6 +70,7 @@ class _ProfileOrderCardLargeState extends State<ProfileOrderCardLarge> {
     final pin =
         await ProfileRepo.fetchPincode(widget.orderIdList[widget.indexU]);
     final id = await ProfileRepo.fetchUserid(widget.orderIdList[widget.indexU]);
+    final otpGen = await OrderRepo.fetchOTP(widget.orderIdList[widget.indexU]);
 
     if (mounted) {
       setState(() {
@@ -76,6 +83,7 @@ class _ProfileOrderCardLargeState extends State<ProfileOrderCardLarge> {
         address = addr;
         pincode = pin;
         userId = id;
+        otp = otpGen;
       });
     }
   }
@@ -128,6 +136,12 @@ class _ProfileOrderCardLargeState extends State<ProfileOrderCardLarge> {
           );
         } else if (state is OrderAcceptedSuccessState) {
           Navigator.pop(context);
+          showTopSnackBar(
+            Overlay.of(context),
+            const CustomSnackBar.success(
+              message: "Order Accepted",
+            ),
+          );
           fetchDetails();
         } else if (state is ConfirmDeliveryDialogState) {
           showDialog(
@@ -146,9 +160,31 @@ class _ProfileOrderCardLargeState extends State<ProfileOrderCardLarge> {
                         fontSize: getScreenWidth(context) * 0.04,
                       ),
                     ),
+                    DetailsTextField(
+                      controller: otpController,
+                      label: 'Enter OTP',
+                      keyboardType: TextInputType.number,
+                    ),
                     GestureDetector(
-                      onTap: () => profileBloc.add(DeliveryConfirmedEvent(
-                          orderId: state.orderId, userId: state.userId)),
+                      onTap: () {
+                        if (otpController.text == otp) {
+                          profileBloc.add(DeliveryConfirmedEvent(
+                              orderId: state.orderId, userId: state.userId));
+                          showTopSnackBar(
+                            Overlay.of(context),
+                            const CustomSnackBar.success(
+                              message: "Delivery Confirmed",
+                            ),
+                          );
+                        } else {
+                          showTopSnackBar(
+                            Overlay.of(context),
+                            const CustomSnackBar.error(
+                              message: "Please enter the correct OTP",
+                            ),
+                          );
+                        }
+                      },
                       child: const Button(
                         radius: 15,
                         text: 'Confirm',
