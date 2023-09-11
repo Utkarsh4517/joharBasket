@@ -118,12 +118,23 @@ class _OrderPageState extends State<OrderPage> {
                       alignment: Alignment.center,
                       margin: EdgeInsets.all(getScreenWidth(context) * 0.06),
                       child: Text(
-                        'You have not ordered anything yet!',
+                        'You have no orders right now',
                         style: GoogleFonts.publicSans(
                           color: Colors.black,
                           fontWeight: FontWeight.w900,
                           fontSize: getScreenWidth(context) * 0.04,
                         ),
+                      ),
+                    ),
+                    TextButton(
+                      onPressed: () {
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => const PastOrderPage()));
+                      },
+                      child: const Text(
+                        'View Past Orders',
                       ),
                     ),
                   ],

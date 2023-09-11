@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:johar/constants/dimensions.dart';
 import 'package:johar/features/auth/widgets/details_text_field.dart';
-import 'package:johar/features/cart/repo/cart_repo.dart';
 import 'package:johar/features/cart/widgets/small_text_body.dart';
 import 'package:johar/features/order/repo/order_repo.dart';
 import 'package:johar/features/profile/bloc/profile_bloc.dart';
