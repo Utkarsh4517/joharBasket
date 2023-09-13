@@ -5,7 +5,8 @@ import 'package:johar/constants/dimensions.dart';
 import 'package:johar/features/grocery/bloc/grocery_bloc.dart';
 import 'package:johar/features/grocery/widgets/grocery_card.dart';
 import 'package:johar/features/grocery/widgets/grocery_card_small.dart';
-import 'package:johar/shared/search_textfield.dart';
+import 'package:johar/features/search/ui/cosmetic_search_page.dart';
+import 'package:johar/shared/cosmetic_appbar.dart';
 
 class CosmeticsPage extends StatefulWidget {
   const CosmeticsPage({super.key});
@@ -43,8 +44,12 @@ class _CosmeticsPageState extends State<CosmeticsPage>
             );
           case CosmeticLoadedSuccessState:
             final successState = state as CosmeticLoadedSuccessState;
-
+            final searchController = TextEditingController();
             return Scaffold(
+              appBar: CosmeticAppBar(
+                controller: searchController,
+                successState: successState,
+              ),
               backgroundColor: const Color.fromARGB(255, 248, 248, 248),
               body: SafeArea(
                 child: SingleChildScrollView(
@@ -54,7 +59,7 @@ class _CosmeticsPageState extends State<CosmeticsPage>
                       // name and profile pic
                       SizedBox(height: getScreenWidth(context) * 0.01),
                       SizedBox(height: getScreenWidth(context) * 0.04),
-                      const SearchTextField(),
+                      // const SearchTextField(),
 
                       Container(
                         margin: EdgeInsets.all(getScreenWidth(context) * 0.06),

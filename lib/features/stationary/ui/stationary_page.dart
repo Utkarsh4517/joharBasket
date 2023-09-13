@@ -5,7 +5,7 @@ import 'package:johar/constants/dimensions.dart';
 import 'package:johar/features/grocery/bloc/grocery_bloc.dart';
 import 'package:johar/features/grocery/widgets/grocery_card.dart';
 import 'package:johar/features/grocery/widgets/grocery_card_small.dart';
-import 'package:johar/shared/search_textfield.dart';
+import 'package:johar/shared/stationary_appbar.dart';
 
 class StationaryPage extends StatefulWidget {
   const StationaryPage({super.key});
@@ -47,8 +47,13 @@ class _StationaryPageState extends State<StationaryPage>
             );
           case StationaryLoadedSuccessState:
             final successState = state as StationaryLoadedSuccessState;
+            final searchController = TextEditingController();
 
             return Scaffold(
+              appBar: StationaryAppBar(
+                controller: searchController,
+                successState: successState,
+              ),
               backgroundColor: const Color.fromARGB(255, 248, 248, 248),
               body: SafeArea(
                 child: SingleChildScrollView(
@@ -58,7 +63,7 @@ class _StationaryPageState extends State<StationaryPage>
                       // name and profile pic
                       SizedBox(height: getScreenWidth(context) * 0.01),
                       SizedBox(height: getScreenWidth(context) * 0.04),
-                      const SearchTextField(),
+                      // const SearchTextField(),
 
                       Container(
                         margin: EdgeInsets.all(getScreenWidth(context) * 0.06),

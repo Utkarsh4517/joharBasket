@@ -7,8 +7,7 @@ import 'package:johar/constants/dimensions.dart';
 import 'package:johar/features/grocery/bloc/grocery_bloc.dart';
 import 'package:johar/features/grocery/widgets/grocery_card.dart';
 import 'package:johar/features/grocery/widgets/grocery_card_small.dart';
-import 'package:johar/features/grocery/widgets/topbar.dart';
-import 'package:johar/shared/search_textfield.dart';
+import 'package:johar/shared/appbar.dart';
 
 class GroceryPage extends StatefulWidget {
   const GroceryPage({super.key});
@@ -51,7 +50,6 @@ class _GroceryPageState extends State<GroceryPage>
 
   @override
   Widget build(BuildContext context) {
-    
     super.build(context);
     return BlocConsumer<GroceryBloc, GroceryState>(
       bloc: groceryBloc,
@@ -71,20 +69,19 @@ class _GroceryPageState extends State<GroceryPage>
             );
           case GroceryLoadedSuccessState:
             final successState = state as GroceryLoadedSuccessState;
+            final searchController = TextEditingController();
 
             return Scaffold(
+              appBar: CustomAppbar(
+                controller: searchController,
+                successState: successState,
+              ),
               backgroundColor: const Color.fromARGB(255, 248, 248, 248),
               body: SafeArea(
                 child: SingleChildScrollView(
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      // name and profile pic
-                      SizedBox(height: getScreenWidth(context) * 0.01),
-                      TopBar(firstName: firstName, lastName: lastName),
-                      SizedBox(height: getScreenWidth(context) * 0.04),
-                      const SearchTextField(),
-
                       Container(
                         margin: EdgeInsets.all(getScreenWidth(context) * 0.06),
                         child: Text('Featured Groceries',
@@ -103,13 +100,13 @@ class _GroceryPageState extends State<GroceryPage>
                             if (successState.products[index].isFeatured ==
                                 true) {
                               return GroceryCard(
-                                discountedPrice: successState.products[index].discountedPrice,
+                                discountedPrice: successState
+                                    .products[index].discountedPrice,
                                 size: successState.products[index].size!,
                                 bloc: groceryBloc,
                                 gst: successState.products[index].gst,
                                 name: successState.products[index].name,
-                                imageUrl:
-                                    successState.products[index].imageUrl,
+                                imageUrl: successState.products[index].imageUrl,
                                 price: successState.products[index].price,
                                 isFeatured:
                                     successState.products[index].isFeatured,
@@ -151,7 +148,8 @@ class _GroceryPageState extends State<GroceryPage>
                           itemCount: successState.products.length,
                           itemBuilder: (context, index) {
                             return GroceryCardSmall(
-                              discountedPrice: successState.products[index].discountedPrice,
+                              discountedPrice:
+                                  successState.products[index].discountedPrice,
                               size: successState.products[index].size!,
                               bloc: groceryBloc,
                               gst: successState.products[index].gst,
@@ -161,8 +159,7 @@ class _GroceryPageState extends State<GroceryPage>
                               isFeatured:
                                   successState.products[index].isFeatured,
                               inStock: successState.products[index].inStock,
-                              productId:
-                                  successState.products[index].productId,
+                              productId: successState.products[index].productId,
                               groceryUiDataModel: successState.products[index],
                               description:
                                   successState.products[index].description,

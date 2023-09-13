@@ -17,7 +17,7 @@ class TopBar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      margin: EdgeInsets.symmetric(horizontal: getScreenWidth(context) * 0.06),
+      // margin: EdgeInsets.symmetric(horizontal: getScreenWidth(context) * 0.06),
       height: getScreenWidth(context) * 0.15,
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
