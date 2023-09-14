@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:google_fonts/google_fonts.dart';
+import 'package:johar/constants/colors.dart';
 import 'package:johar/constants/dimensions.dart';
 import 'package:johar/features/auth/widgets/details_text_field.dart';
 import 'package:johar/features/cart/widgets/small_text_body.dart';
@@ -205,6 +207,55 @@ class _ProfileOrderCardLargeState extends State<ProfileOrderCardLarge> {
               builder: (context) => const ProfilePage(),
             ),
           );
+        } else if (state is ProfilePageShowCancelOrderDialogBoxState) {
+          showDialog(
+              context: context,
+              builder: (context) {
+                return AlertDialog(
+                  title: const Text('Do you want to cancel this order?'),
+                  content: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: [
+                      TextButton(
+                        onPressed: () {
+                          Navigator.pop(context);
+                        },
+                        child: Text(
+                          'No',
+                          style: GoogleFonts.publicSans(
+                            color: Colors.green,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                      ),
+                      TextButton(
+                        onPressed: () {
+                          profileBloc.add(ConfirmCancelOrderEvent(
+                              orderId: state.orderId, userId: userId));
+                          // orderBloc.add(
+                          //     ConfirmCancelOrderEvent(orderId: state.orderId));
+                        },
+                        child: Text(
+                          'Cancel Order',
+                          style: GoogleFonts.publicSans(
+                            color: Colors.red,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                      )
+                    ],
+                  ),
+                );
+              });
+        } else if (state is ProfilePageOrderCancelSuccessfulState) {
+          Navigator.pop(context);
+          fetchDetails();
+          Navigator.pushReplacement(
+            context,
+            MaterialPageRoute(
+              builder: (context) => const ProfilePage(),
+            ),
+          );
         }
       },
       builder: (context, state) {
@@ -364,6 +415,26 @@ class _ProfileOrderCardLargeState extends State<ProfileOrderCardLarge> {
                       ),
                     ),
                   ),
+                GestureDetector(
+                  onTap: () {
+                    profileBloc.add(CancelOrderClickedEvent(
+                      orderId: widget.orderIdList[widget.indexU],
+                      userId: userId,
+                    ));
+                  },
+                  child: Container(
+                    margin: EdgeInsets.symmetric(
+                        vertical: getScreenWidth(context) * 0.03),
+                    alignment: Alignment.center,
+                    child: const Button(
+                      grd: linerGrdR,
+                      radius: 15,
+                      text: 'Cancel Order',
+                      paddingH: 0.3,
+                      paddingV: 0.04,
+                    ),
+                  ),
+                ),
                 if (isOrderAccepted)
                   GestureDetector(
                     onTap: () {

@@ -93,7 +93,7 @@ class ProfileRepo {
     });
   }
 
-    static Stream<List<ProductDataModel>> getStationaryProducts() {
+  static Stream<List<ProductDataModel>> getStationaryProducts() {
     final collection = FirebaseFirestore.instance.collection('stationary');
     return collection.snapshots().map((snapshot) {
       return snapshot.docs.map((doc) {
@@ -115,7 +115,7 @@ class ProfileRepo {
     });
   }
 
-      static Stream<List<ProductDataModel>> getCosmeticProducts() {
+  static Stream<List<ProductDataModel>> getCosmeticProducts() {
     final collection = FirebaseFirestore.instance.collection('stationary');
     return collection.snapshots().map((snapshot) {
       return snapshot.docs.map((doc) {
@@ -210,9 +210,6 @@ class ProfileRepo {
       return [];
     }
   }
-  
-
-
 
   // fetch orderId list
   static Future<List<dynamic>> fetchOrderIdList() async {
@@ -334,11 +331,10 @@ class ProfileRepo {
   // order accepted by admin
   static Future<void> orderAccepted(
       String userId, String orderid, String deliveryTime) async {
-
-        // generate otp  
-        final random = Random();
-        final code = random.nextInt(900000) + 100000;
-        final otp = code.toString();
+    // generate otp
+    final random = Random();
+    final code = random.nextInt(900000) + 100000;
+    final otp = code.toString();
 
     final userOrderRef = FirebaseFirestore.instance
         .collection('users')
@@ -354,18 +350,14 @@ class ProfileRepo {
     final orderRef = await userOrderRef.doc('orderDetails').get();
     final gOrderRef = await globalOrderRef.doc('orderDetails').get();
     if (orderRef.exists) {
-      userOrderRef.doc('orderDetails').update({
-        'isAccepted': true,
-        'time': deliveryTime,
-        'otp': otp
-      });
+      userOrderRef
+          .doc('orderDetails')
+          .update({'isAccepted': true, 'time': deliveryTime, 'otp': otp});
     }
     if (gOrderRef.exists) {
-      globalOrderRef.doc('orderDetails').update({
-        'isAccepted': true,
-        'time': deliveryTime,
-        'otp': otp
-      });
+      globalOrderRef
+          .doc('orderDetails')
+          .update({'isAccepted': true, 'time': deliveryTime, 'otp': otp});
     }
   }
 
@@ -530,7 +522,6 @@ class ProfileRepo {
     });
   }
 
-
   // fetch number of delivered orders
   static Future<int> getDeliveredOrdersLength() async {
     DocumentReference documentReference =
@@ -600,7 +591,7 @@ class ProfileRepo {
     }
   }
 
-    // fetch total sales
+  // fetch total sales
   static Future<dynamic> getTotalGST() async {
     double totalAmount = 0;
     DocumentReference documentReference =
@@ -700,5 +691,100 @@ class ProfileRepo {
         .get();
     String name = documentSnapshot['userName'];
     return name;
+  }
+
+  // cancel order ************************************
+  static Future<void> cancelOrder(String orderId, String userId) async {
+    CollectionReference collectionReference = FirebaseFirestore.instance
+        .collection('users')
+        .doc(userId)
+        .collection('order')
+        .doc('myOrders')
+        .collection(orderId);
+
+    QuerySnapshot querySnapshot = await collectionReference.get();
+    for (QueryDocumentSnapshot documentSnapshot in querySnapshot.docs) {
+      await collectionReference.doc(documentSnapshot.id).delete();
+    }
+
+    // delete orderId from user orderList
+    DocumentReference docRef = FirebaseFirestore.instance
+        .collection('users')
+        .doc(userId)
+        .collection('orderDetails')
+        .doc('orders');
+    await docRef.update({
+      'orderList': FieldValue.arrayRemove([orderId])
+    });
+
+    await cancelOrderGlobally(orderId, userId);
+
+    // Managing cancel order id globally
+
+    DocumentReference globalDocRef =
+        FirebaseFirestore.instance.collection('orders').doc('orderList');
+
+    DocumentReference globalDocRefCancelled = FirebaseFirestore.instance
+        .collection('orders')
+        .doc('cancelledOrderList');
+
+    // create a new cancelledOrderList and add orderId there (global)
+
+    final globalDocRefGet = await globalDocRefCancelled.get();
+    if (globalDocRefGet.exists) {
+      List<dynamic> currentGlobalList =
+          globalDocRefGet.get('cancelledOrdersList');
+      currentGlobalList.add(orderId);
+
+      await FirebaseFirestore.instance
+          .collection('orders')
+          .doc('cancelledOrderList')
+          .update({'cancelledOrdersList': currentGlobalList});
+    } else {
+      await FirebaseFirestore.instance
+          .collection('orders')
+          .doc('cancelledOrderList')
+          .set({
+        'cancelledOrdersList': [orderId]
+      });
+    }
+
+    // delete orderId from global orderList
+    await globalDocRef.update({
+      'ordersList': FieldValue.arrayRemove([orderId])
+    });
+  }
+
+  static Future<void> cancelOrderGlobally(String orderId, String userId) async {
+    // source collection
+    CollectionReference sourceCollection = FirebaseFirestore.instance
+        .collection('orders')
+        .doc('newOrders')
+        .collection(orderId);
+
+    // get the documents from source collection
+    QuerySnapshot sourceQuerySnapshot = await sourceCollection.get();
+
+    // Iterate through the documents and copy them to the target location
+
+    for (QueryDocumentSnapshot sourceDocument in sourceQuerySnapshot.docs) {
+      //get the data from the source document
+      Map<String, dynamic> data = sourceDocument.data() as Map<String, dynamic>;
+
+      // Get the document ID of the source document
+      String documentId = sourceDocument.id;
+
+      // create a reference to the target location
+      DocumentReference targetDocument = FirebaseFirestore.instance
+          .collection('orders')
+          .doc('cancelledOrders')
+          .collection(orderId)
+          .doc(documentId);
+
+      await targetDocument.set(data);
+
+      // delete source documents
+      await sourceDocument.reference.delete();
+    }
   }
 }

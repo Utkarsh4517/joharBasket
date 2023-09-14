@@ -21,7 +21,7 @@ class StationaryAppBar extends StatefulWidget implements PreferredSizeWidget {
   State<StationaryAppBar> createState() => _StationaryCustomAppbarState();
 
   @override
-  Size get preferredSize => const Size.fromHeight(140);
+  Size get preferredSize => const Size.fromHeight(160);
 }
 
 class _StationaryCustomAppbarState extends State<StationaryAppBar> {

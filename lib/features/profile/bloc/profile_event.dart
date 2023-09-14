@@ -86,6 +86,24 @@ class AcceptOrderClickedEvent extends ProfileEvent {
   });
 }
 
+class CancelOrderClickedEvent extends ProfileEvent {
+  final String orderId;
+  final String userId;
+  CancelOrderClickedEvent({
+    required this.orderId,
+    required this.userId,
+  });
+}
+
+class ConfirmCancelOrderEvent extends ProfileEvent {
+  final String orderId;
+  final String userId;
+  ConfirmCancelOrderEvent({
+    required this.orderId,
+    required this.userId,
+  });
+}
+
 class ConfirmOrderClickedEvent extends ProfileEvent {
   final String orderId;
   final String userId;
@@ -116,6 +134,3 @@ class DeliveryConfirmedEvent extends ProfileEvent {
 }
 
 class StatsPageInitialEvent extends ProfileEvent {}
-
-
-

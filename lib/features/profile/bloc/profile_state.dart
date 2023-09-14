@@ -15,6 +15,19 @@ class ProductEditButtonClickedState extends ProfileActionState {
   });
 }
 
+class ProfilePageShowCancelOrderDialogBoxState extends ProfileActionState {
+  final String orderId;
+  final String userId;
+  ProfilePageShowCancelOrderDialogBoxState({
+    required this.orderId,
+    required this.userId,
+  });
+}
+
+class ProfilePageOrderCancelSuccessfulState extends ProfileActionState {}
+
+class OrderCancelSuccessfulState extends ProfileActionState {}
+
 class ProductDetailsUpdatedState extends ProfileActionState {}
 
 class ShowDeleteDialogState extends ProfileActionState {}

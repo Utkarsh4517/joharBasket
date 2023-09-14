@@ -22,7 +22,7 @@ class CosmeticAppBar extends StatefulWidget implements PreferredSizeWidget {
   State<CosmeticAppBar> createState() => _CosmeticCustomAppbarState();
 
   @override
-  Size get preferredSize => const Size.fromHeight(140);
+  Size get preferredSize => const Size.fromHeight(160);
 }
 
 class _CosmeticCustomAppbarState extends State<CosmeticAppBar> {

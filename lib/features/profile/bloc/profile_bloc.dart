@@ -1,6 +1,8 @@
 import 'dart:async';
 
 import 'package:bloc/bloc.dart';
+import 'package:johar/features/order/bloc/order_bloc.dart';
+import 'package:johar/features/order/repo/order_repo.dart';
 import 'package:johar/features/profile/repo/profile_repo.dart';
 import 'package:johar/model/grocery_model.dart';
 import 'package:meta/meta.dart';
@@ -21,6 +23,8 @@ class ProfileBloc extends Bloc<ProfileEvent, ProfileState> {
     on<ShowConfirmDeliveryDialogEvent>(showConfirmDeliveryDialogEvent);
     on<DeliveryConfirmedEvent>(deliveryConfirmedEvent);
     on<StatsPageInitialEvent>(statsPageInitialEvent);
+    on<CancelOrderClickedEvent>(cancelOrderClickedEvent);
+    on<ConfirmCancelOrderEvent>(confirmCancelOrderEvent);
   }
 
   FutureOr<void> profilePageOrderInitialEvent(
@@ -39,18 +43,17 @@ class ProfileBloc extends Bloc<ProfileEvent, ProfileState> {
   FutureOr<void> addProductClickedEvent(
       AddProductClickedEvent event, Emitter<ProfileState> emit) async {
     await ProfileRepo.addNewProduct(
-      collectionName: event.category,
-      name: event.name,
-      description: event.description,
-      imageUrl: event.imageUrl,
-      inStock: event.inStock,
-      price: event.price,
-      gst: event.gst,
-      isFeatured: event.isFeatured,
-      productId: event.productId,
-      size: event.size,
-      discountedPrice: event.discountedPrice
-    );
+        collectionName: event.category,
+        name: event.name,
+        description: event.description,
+        imageUrl: event.imageUrl,
+        inStock: event.inStock,
+        price: event.price,
+        gst: event.gst,
+        isFeatured: event.isFeatured,
+        productId: event.productId,
+        size: event.size,
+        discountedPrice: event.discountedPrice);
   }
 
   FutureOr<void> productEditButtonClickedEvent(
@@ -117,4 +120,16 @@ class ProfileBloc extends Bloc<ProfileEvent, ProfileState> {
     List<List<ProductDataModel>> orders = await ProfileRepo.fetchPastOrders();
     emit(StatsPageOrderDeliveredSuccessState(orders: orders));
   }
+
+  FutureOr<void> cancelOrderClickedEvent(
+      CancelOrderClickedEvent event, Emitter<ProfileState> emit) {
+    emit(ProfilePageShowCancelOrderDialogBoxState(
+        orderId: event.orderId, userId: event.orderId));
+  }
+
+  FutureOr<void> confirmCancelOrderEvent(
+      ConfirmCancelOrderEvent event, Emitter<ProfileState> emit) async{
+        await ProfileRepo.cancelOrder(event.orderId, event.userId);
+        emit(ProfilePageOrderCancelSuccessfulState());
+      }
 }
