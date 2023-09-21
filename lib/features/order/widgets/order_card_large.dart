@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:johar/constants/dimensions.dart';
@@ -51,7 +52,10 @@ class _OrderCardLargeState extends State<OrderCardLarge> {
         await OrderRepo.fetchAmountOfOrder(widget.orderIdList[widget.indexU]);
     final time =
         await OrderRepo.fetchDeliveryTime(widget.orderIdList[widget.indexU]);
-    final otpGen = await OrderRepo.fetchOTP(widget.orderIdList[widget.indexU]);
+    final otpGen = await OrderRepo.fetchOTP(
+      widget.orderIdList[widget.indexU],
+      FirebaseAuth.instance.currentUser!.uid,
+    );
 
     if (mounted) {
       setState(() {
@@ -153,24 +157,24 @@ class _OrderCardLargeState extends State<OrderCardLarge> {
               ),
             ),
             if (!isOrderDelivered && isOrderAccepted)
-            Container(
-              margin: EdgeInsets.symmetric(
-                  horizontal: getScreenWidth(context) * 0.04),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  const SmallTextBody(text: 'OTP'),
-                  SelectableText(
-                    otp,
-                    style: TextStyle(
-                      color: Colors.black,
-                      fontSize: getScreenWidth(context) * 0.03,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  )
-                ],
+              Container(
+                margin: EdgeInsets.symmetric(
+                    horizontal: getScreenWidth(context) * 0.04),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    const SmallTextBody(text: 'OTP'),
+                    SelectableText(
+                      otp,
+                      style: TextStyle(
+                        color: Colors.black,
+                        fontSize: getScreenWidth(context) * 0.03,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    )
+                  ],
+                ),
               ),
-            ),
 
             if (!isOrderDelivered && isOrderAccepted)
               Container(

@@ -147,6 +147,7 @@ class ProfileRepo {
     required double price,
     required double gst,
     required String size,
+    required double discountedPrice
   }) async {
     final document = FirebaseFirestore.instance
         .collection('grocery')
@@ -160,14 +161,92 @@ class ProfileRepo {
       'price': price,
       'gst': gst,
       'size': size,
+      'discountedPrice': discountedPrice
     });
   }
+
+  // update stationary details
+  static Future<void> updateStationaryDetails({
+    required ProductDataModel productDataModel,
+    required double inStock,
+    required String name,
+    required bool isFeatured,
+    required String description,
+    required double price,
+    required double gst,
+    required String size,
+    required double discountedPrice
+  }) async {
+    final document = FirebaseFirestore.instance
+        .collection('stationary')
+        .doc(productDataModel.productId);
+
+    await document.update({
+      'inStock': inStock,
+      'name': name,
+      'isFeatured': isFeatured,
+      'description': description,
+      'price': price,
+      'gst': gst,
+      'size': size,
+      'discountedPrice': discountedPrice
+    });
+  }
+
+  // update cosmetics
+    static Future<void> updateCosmeticsDetails({
+    required ProductDataModel productDataModel,
+    required double inStock,
+    required String name,
+    required bool isFeatured,
+    required String description,
+    required double price,
+    required double gst,
+    required String size,
+    required double discountedPrice
+  }) async {
+    final document = FirebaseFirestore.instance
+        .collection('cosmetics')
+        .doc(productDataModel.productId);
+
+    await document.update({
+      'inStock': inStock,
+      'name': name,
+      'isFeatured': isFeatured,
+      'description': description,
+      'price': price,
+      'gst': gst,
+      'size': size,
+      'discountedPrice': discountedPrice
+    });
+  }
+  
 
   // delete product ....
   static Future<void> deleteProduct(
       {required ProductDataModel productDataModel}) async {
     final document = FirebaseFirestore.instance
         .collection('grocery')
+        .doc(productDataModel.productId);
+
+    await document.delete();
+  }
+
+    // delete stationary ....
+  static Future<void> deleteStationary(
+      {required ProductDataModel productDataModel}) async {
+    final document = FirebaseFirestore.instance
+        .collection('stationary')
+        .doc(productDataModel.productId);
+
+    await document.delete();
+  }
+
+      // delete stationary ....
+  static Future<void> deleteCosmetic(
+      {required ProductDataModel productDataModel}) async {
+    final document = FirebaseFirestore.instance
+        .collection('cosmetics')
         .doc(productDataModel.productId);
 
     await document.delete();

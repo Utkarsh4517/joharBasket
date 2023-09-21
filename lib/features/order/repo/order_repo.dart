@@ -245,10 +245,10 @@ class OrderRepo {
     }
   }
     // show otp
-    static Future<String> fetchOTP(String orderId) async {
+    static Future<String> fetchOTP(String orderId, String id) async {
     DocumentSnapshot documentSnapshot = await FirebaseFirestore.instance
         .collection('users')
-        .doc(FirebaseAuth.instance.currentUser!.uid)
+        .doc(id)
         .collection('order')
         .doc('myOrders')
         .collection(orderId)

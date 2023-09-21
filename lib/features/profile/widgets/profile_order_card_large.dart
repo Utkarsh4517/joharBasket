@@ -71,7 +71,7 @@ class _ProfileOrderCardLargeState extends State<ProfileOrderCardLarge> {
     final pin =
         await ProfileRepo.fetchPincode(widget.orderIdList[widget.indexU]);
     final id = await ProfileRepo.fetchUserid(widget.orderIdList[widget.indexU]);
-    final otpGen = await OrderRepo.fetchOTP(widget.orderIdList[widget.indexU]);
+    final otpGen = await OrderRepo.fetchOTP(widget.orderIdList[widget.indexU], id);
 
     if (mounted) {
       setState(() {

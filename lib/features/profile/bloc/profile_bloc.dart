@@ -16,6 +16,9 @@ class ProfileBloc extends Bloc<ProfileEvent, ProfileState> {
     on<AddProductClickedEvent>(addProductClickedEvent);
     on<ProductEditButtonClickedEvent>(productEditButtonClickedEvent);
     on<ProductUpdateDetailsClickedEvent>(productUpdateDetailsClickedEvent);
+    on<StationaryUpdateDetailsClickedEvent>(
+        stationaryUpdateDetailsClickedEvent);
+    on<CosmeticUpdateClickedEvent>(cosmeticUpdateClickedEvent);
     on<ProductDeleteButtonClickedEvent>(productDeleteButtonClickedEvent);
     on<RemoveProductClickedEvent>(removeProductClickedEvent);
     on<AcceptOrderClickedEvent>(acceptOrderClickedEvent);
@@ -25,6 +28,8 @@ class ProfileBloc extends Bloc<ProfileEvent, ProfileState> {
     on<StatsPageInitialEvent>(statsPageInitialEvent);
     on<CancelOrderClickedEvent>(cancelOrderClickedEvent);
     on<ConfirmCancelOrderEvent>(confirmCancelOrderEvent);
+    on<RemoveCosmeticClickedEvent>(removeCosmeticClickedEvent);
+    on<RemoveStationaryClickedEvent>(removeStationaryClickedEvent);
   }
 
   FutureOr<void> profilePageOrderInitialEvent(
@@ -73,6 +78,7 @@ class ProfileBloc extends Bloc<ProfileEvent, ProfileState> {
       price: event.price,
       gst: event.gst,
       size: event.size,
+      discountedPrice: event.discountedPrice,
     );
     emit(ProductDetailsUpdatedState());
   }
@@ -128,8 +134,54 @@ class ProfileBloc extends Bloc<ProfileEvent, ProfileState> {
   }
 
   FutureOr<void> confirmCancelOrderEvent(
-      ConfirmCancelOrderEvent event, Emitter<ProfileState> emit) async{
-        await ProfileRepo.cancelOrder(event.orderId, event.userId);
-        emit(ProfilePageOrderCancelSuccessfulState());
-      }
+      ConfirmCancelOrderEvent event, Emitter<ProfileState> emit) async {
+    await ProfileRepo.cancelOrder(event.orderId, event.userId);
+    emit(ProfilePageOrderCancelSuccessfulState());
+  }
+
+  FutureOr<void> stationaryUpdateDetailsClickedEvent(
+      StationaryUpdateDetailsClickedEvent event,
+      Emitter<ProfileState> emit) async {
+    await ProfileRepo.updateStationaryDetails(
+      productDataModel: event.product,
+      inStock: event.inStock,
+      name: event.name,
+      isFeatured: event.isFeatred,
+      description: event.description,
+      price: event.price,
+      gst: event.gst,
+      size: event.size,
+      discountedPrice: event.discountedPrice,
+    );
+    emit(ProductDetailsUpdatedState());
+  }
+
+  FutureOr<void> cosmeticUpdateClickedEvent(
+      CosmeticUpdateClickedEvent event, Emitter<ProfileState> emit) async {
+    await ProfileRepo.updateCosmeticsDetails(
+      productDataModel: event.product,
+      inStock: event.inStock,
+      name: event.name,
+      isFeatured: event.isFeatred,
+      description: event.description,
+      price: event.price,
+      gst: event.gst,
+      size: event.size,
+      discountedPrice: event.discountedPrice,
+    );
+    emit(ProductDetailsUpdatedState());
+  }
+
+  FutureOr<void> removeCosmeticClickedEvent(
+      RemoveCosmeticClickedEvent event, Emitter<ProfileState> emit) async {
+    await ProfileRepo.deleteCosmetic(productDataModel: event.productDataModel);
+    emit(RemoveDialogState());
+  }
+
+  FutureOr<void> removeStationaryClickedEvent(
+      RemoveStationaryClickedEvent event, Emitter<ProfileState> emit) async {
+    await ProfileRepo.deleteStationary(
+        productDataModel: event.productDataModel);
+    emit(RemoveDialogState());
+  }
 }

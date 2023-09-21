@@ -58,6 +58,7 @@ class ProductUpdateDetailsClickedEvent extends ProfileEvent {
   final double price;
   final double gst;
   final String size;
+  final double discountedPrice;
   ProductUpdateDetailsClickedEvent({
     required this.product,
     required this.inStock,
@@ -67,12 +68,73 @@ class ProductUpdateDetailsClickedEvent extends ProfileEvent {
     required this.price,
     required this.gst,
     required this.size,
+    required this.discountedPrice,
+  });
+}
+
+class StationaryUpdateDetailsClickedEvent extends ProfileEvent {
+  final ProductDataModel product;
+  final double inStock;
+  final String name;
+  final bool isFeatred;
+  final String description;
+  final double price;
+  final double gst;
+  final String size;
+  final double discountedPrice;
+  StationaryUpdateDetailsClickedEvent({
+    required this.product,
+    required this.inStock,
+    required this.name,
+    required this.isFeatred,
+    required this.description,
+    required this.price,
+    required this.gst,
+    required this.size,
+    required this.discountedPrice,
+  });
+}
+
+class CosmeticUpdateClickedEvent extends ProfileEvent {
+  final ProductDataModel product;
+  final double inStock;
+  final String name;
+  final bool isFeatred;
+  final String description;
+  final double price;
+  final double gst;
+  final String size;
+  final double discountedPrice;
+  CosmeticUpdateClickedEvent({
+    required this.product,
+    required this.inStock,
+    required this.name,
+    required this.isFeatred,
+    required this.description,
+    required this.price,
+    required this.gst,
+    required this.size,
+    required this.discountedPrice,
   });
 }
 
 class RemoveProductClickedEvent extends ProfileEvent {
   final ProductDataModel productDataModel;
   RemoveProductClickedEvent({
+    required this.productDataModel,
+  });
+}
+
+class RemoveStationaryClickedEvent extends ProfileEvent {
+  final ProductDataModel productDataModel;
+  RemoveStationaryClickedEvent({
+    required this.productDataModel,
+  });
+}
+
+class RemoveCosmeticClickedEvent extends ProfileEvent {
+  final ProductDataModel productDataModel;
+  RemoveCosmeticClickedEvent({
     required this.productDataModel,
   });
 }

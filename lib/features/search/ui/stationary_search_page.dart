@@ -6,6 +6,7 @@ import 'package:johar/constants/colors.dart';
 import 'package:johar/constants/dimensions.dart';
 import 'package:johar/features/grocery/bloc/grocery_bloc.dart';
 import 'package:johar/features/grocery/repo/grocery_repo.dart';
+import 'package:johar/features/grocery/ui/grocery_product_page.dart';
 import 'package:johar/model/grocery_model.dart';
 
 class StationarySearchPage extends StatefulWidget {
@@ -22,7 +23,7 @@ class StationarySearchPage extends StatefulWidget {
 class _StationarySearchPageState extends State<StationarySearchPage> {
   final controller = TextEditingController();
 
-  List<ProductDataModel> stationaries = []; 
+  List<ProductDataModel> stationaries = [];
 
   @override
   void initState() {
@@ -36,7 +37,6 @@ class _StationarySearchPageState extends State<StationarySearchPage> {
       stationaries = stationary;
     });
   }
-
 
   @override
   Widget build(BuildContext context) {
@@ -88,44 +88,54 @@ class _StationarySearchPageState extends State<StationarySearchPage> {
                   itemCount: stationaries.length,
                   itemBuilder: (context, index) {
                     final product = stationaries[index];
-                    return Container(
-                      margin: EdgeInsets.symmetric(
-                        horizontal: getScreenWidth(context) * 0.02,
-                        vertical: getScreenWidth(context) * 0.01,
-                      ),
-                      decoration: BoxDecoration(
-                        color: Colors.white,
-                        borderRadius: BorderRadius.circular(15),
-                      ),
-                      child: Row(
-                        children: [
-                          CachedNetworkImage(
-                            imageUrl: product.imageUrl,
-                            fit: BoxFit.cover,
-                            width: getScreenWidth(context) * 0.2,
-                          ),
-                          Text(
-                            product.name,
-                            style: GoogleFonts.publicSans(
-                              color: blackColor,
-                              fontWeight: FontWeight.bold,
+                    return GestureDetector(
+                      onTap: () {
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => GroceryProductPage(
+                                      grocery: product,
+                                    )));
+                      },
+                      child: Container(
+                        margin: EdgeInsets.symmetric(
+                          horizontal: getScreenWidth(context) * 0.02,
+                          vertical: getScreenWidth(context) * 0.01,
+                        ),
+                        decoration: BoxDecoration(
+                          color: Colors.white,
+                          borderRadius: BorderRadius.circular(15),
+                        ),
+                        child: Row(
+                          children: [
+                            CachedNetworkImage(
+                              imageUrl: product.imageUrl,
+                              fit: BoxFit.cover,
+                              width: getScreenWidth(context) * 0.2,
                             ),
-                          ),
-                          Text(
-                            ' ',
-                            style: GoogleFonts.publicSans(
-                              color: blackColor,
-                              fontWeight: FontWeight.bold,
+                            Text(
+                              product.name,
+                              style: GoogleFonts.publicSans(
+                                color: blackColor,
+                                fontWeight: FontWeight.bold,
+                              ),
                             ),
-                          ),
-                          Text(
-                            product.size!,
-                            style: GoogleFonts.publicSans(
-                              color: blackColor,
-                              fontWeight: FontWeight.bold,
+                            Text(
+                              ' ',
+                              style: GoogleFonts.publicSans(
+                                color: blackColor,
+                                fontWeight: FontWeight.bold,
+                              ),
                             ),
-                          ),
-                        ],
+                            Text(
+                              product.size!,
+                              style: GoogleFonts.publicSans(
+                                color: blackColor,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                          ],
+                        ),
                       ),
                     );
                   },

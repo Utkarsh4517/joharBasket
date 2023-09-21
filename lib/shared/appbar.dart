@@ -25,11 +25,13 @@ class CustomAppbar extends StatefulWidget implements PreferredSizeWidget {
 }
 
 class _CustomAppbarState extends State<CustomAppbar> {
+
   @override
   void initState() {
     getUserName();
     super.initState();
   }
+
 
   String firstName = '';
   String lastName = '';

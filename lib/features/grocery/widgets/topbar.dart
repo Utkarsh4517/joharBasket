@@ -1,10 +1,12 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:johar/constants/colors.dart';
 import 'package:johar/constants/dimensions.dart';
 import 'package:johar/features/profile/ui/profile_page.dart';
 
-class TopBar extends StatelessWidget {
+class TopBar extends StatefulWidget {
   const TopBar({
     super.key,
     required this.firstName,
@@ -13,6 +15,37 @@ class TopBar extends StatelessWidget {
 
   final String firstName;
   final String lastName;
+
+  @override
+  State<TopBar> createState() => _TopBarState();
+}
+
+class _TopBarState extends State<TopBar> {
+  bool isAdmin = false;
+
+  @override
+  void initState() {
+    fetchAdmins();
+    super.initState();
+  }
+
+  // fetch admin user list
+  Future<void> fetchAdmins() async {
+    DocumentSnapshot docSnapshot = await FirebaseFirestore.instance
+        .collection('admin') // Replace with your collection name
+        .doc('adminEmails') // Replace with your document ID
+        .get();
+    if (docSnapshot.exists) {
+      List<dynamic> admins = docSnapshot.get('list');
+      for (var admin in admins) {
+        if (FirebaseAuth.instance.currentUser!.email == admin) {
+          setState(() {
+            isAdmin = true;
+          });
+        }
+      }
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -37,7 +70,7 @@ class TopBar extends StatelessWidget {
                 ),
               ),
               Text(
-                '$firstName $lastName',
+                '${widget.firstName} ${widget.lastName}',
                 style: GoogleFonts.publicSans(
                   color: Colors.black,
                   fontWeight: FontWeight.w800,
@@ -64,17 +97,18 @@ class TopBar extends StatelessWidget {
           //       ),
           //       child: Text('Admin')),
           // ),
-          TextButton(
-            onPressed: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => const ProfilePage(),
-                ),
-              );
-            },
-            child: const Text('Admin'),
-          ),
+          if (isAdmin)
+            TextButton(
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => const ProfilePage(),
+                  ),
+                );
+              },
+              child: const Text('Admin'),
+            ),
         ],
       ),
     );

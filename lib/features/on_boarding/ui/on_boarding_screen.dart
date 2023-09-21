@@ -59,7 +59,8 @@ class _OnBoardingScreenState extends State<OnBoardingScreen> {
               SizedBox(height: getScreenWidth(context) * 0.1),
               TextButton(
                 onPressed: () {
-                  Navigator.pushReplacementNamed(context, 'googleSignIn');
+                  // Navigator.pushReplacementNamed(context, 'googleSignIn');
+                  _completeOnboarding();
                 },
                 child: const Button(radius: 40, text: 'Get Started'),
               ),

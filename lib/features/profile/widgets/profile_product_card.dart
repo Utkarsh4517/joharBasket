@@ -11,9 +11,11 @@ import 'package:johar/shared/button.dart';
 
 class ProfileProductCard extends StatefulWidget {
   final ProductDataModel product;
+  final String type;
 
   const ProfileProductCard({
     required this.product,
+    required this.type,
     super.key,
   });
 
@@ -70,7 +72,8 @@ class _ProfileProductCardState extends State<ProfileProductCard> {
               DetailsTextField(
                   controller: priceController, label: 'Price including gst'),
               DetailsTextField(
-                  controller: discountedPriceController, label: 'Price after discount'),
+                  controller: discountedPriceController,
+                  label: 'Price after discount'),
               DetailsTextField(
                   controller: gstController,
                   label: 'GST in Rs on this product'),
@@ -100,52 +103,82 @@ class _ProfileProductCardState extends State<ProfileProductCard> {
                   ],
                 ),
               ),
-              Container(
-                decoration: BoxDecoration(
-                    color: Colors.white,
-                    borderRadius: BorderRadius.circular(15)),
-                margin: EdgeInsets.all(getScreenWidth(context) * 0.06),
-                padding: EdgeInsets.all(getScreenWidth(context) * 0.02),
-                child: Column(
-                  children: [
-                    RadioListTile(
-                      controlAffinity: ListTileControlAffinity.trailing,
-                      activeColor: Colors.green,
-                      value: 'grocery',
-                      groupValue: radioValue,
-                      onChanged: (value) {
-                        setState(() {
-                          radioValue = value.toString();
-                        });
-                      },
-                      title: const SmallTextBody(text: 'Grocery Product'),
-                    ),
-                    RadioListTile(
-                      controlAffinity: ListTileControlAffinity.trailing,
-                      activeColor: Colors.green,
-                      value: 'stationary',
-                      groupValue: radioValue,
-                      onChanged: (value) {
-                        setState(() {
-                          radioValue = value.toString();
-                        });
-                      },
-                      title: const SmallTextBody(text: 'Stationary Product'),
-                    )
-                  ],
-                ),
-              ),
+              // Container(
+              //   decoration: BoxDecoration(
+              //       color: Colors.white,
+              //       borderRadius: BorderRadius.circular(15)),
+              //   margin: EdgeInsets.all(getScreenWidth(context) * 0.06),
+              //   padding: EdgeInsets.all(getScreenWidth(context) * 0.02),
+              //   child: Column(
+              //     children: [
+              //       RadioListTile(
+              //         controlAffinity: ListTileControlAffinity.trailing,
+              //         activeColor: Colors.green,
+              //         value: 'grocery',
+              //         groupValue: radioValue,
+              //         onChanged: (value) {
+              //           setState(() {
+              //             radioValue = value.toString();
+              //           });
+              //         },
+              //         title: const SmallTextBody(text: 'Grocery Product'),
+              //       ),
+              //       RadioListTile(
+              //         controlAffinity: ListTileControlAffinity.trailing,
+              //         activeColor: Colors.green,
+              //         value: 'stationary',
+              //         groupValue: radioValue,
+              //         onChanged: (value) {
+              //           setState(() {
+              //             radioValue = value.toString();
+              //           });
+              //         },
+              //         title: const SmallTextBody(text: 'Stationary Product'),
+              //       )
+              //     ],
+              //   ),
+              // ),
               GestureDetector(
-                onTap: () => profileBloc.add(ProductUpdateDetailsClickedEvent(
-                  product: productDataModel,
-                  size: sizeController.text.toString(),
-                  description: descriptionController.text,
-                  gst: double.parse(gstController.text),
-                  inStock: double.parse(inStockController.text),
-                  isFeatred: toggle,
-                  name: nameController.text,
-                  price: double.parse(priceController.text),
-                )),
+                onTap: () {
+                  if (widget.type == 'grocery') {
+                    profileBloc.add(ProductUpdateDetailsClickedEvent(
+                      product: productDataModel,
+                      size: sizeController.text.toString(),
+                      description: descriptionController.text,
+                      gst: double.parse(gstController.text),
+                      inStock: double.parse(inStockController.text),
+                      isFeatred: toggle,
+                      name: nameController.text,
+                      price: double.parse(priceController.text),
+                      discountedPrice: double.parse(discountedPriceController.text),
+
+                    ));
+                  } else if (widget.type == 'stationary') {
+                    profileBloc.add(StationaryUpdateDetailsClickedEvent(
+                      product: productDataModel,
+                      size: sizeController.text.toString(),
+                      description: descriptionController.text,
+                      gst: double.parse(gstController.text),
+                      inStock: double.parse(inStockController.text),
+                      isFeatred: toggle,
+                      name: nameController.text,
+                      price: double.parse(priceController.text),
+                      discountedPrice: double.parse(discountedPriceController.text),
+                    ));
+                  } else if (widget.type == 'cosmetics') {
+                    profileBloc.add(CosmeticUpdateClickedEvent(
+                      product: productDataModel,
+                      size: sizeController.text.toString(),
+                      description: descriptionController.text,
+                      gst: double.parse(gstController.text),
+                      inStock: double.parse(inStockController.text),
+                      isFeatred: toggle,
+                      name: nameController.text,
+                      price: double.parse(priceController.text),
+                      discountedPrice: double.parse(discountedPriceController.text),
+                    ));
+                  }
+                },
                 child: const Button(
                   radius: 15,
                   text: 'Update Product Details!',

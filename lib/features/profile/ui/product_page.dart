@@ -62,6 +62,7 @@ class ProfileProductPageState extends State<ProfileProductPage> {
                               ProductDataModel product = products[index];
                               return ProfileProductCard(
                                 product: product,
+                                type: 'grocery',
                               );
                             });
                       } else if (snapshot.hasError) {}
@@ -87,6 +88,7 @@ class ProfileProductPageState extends State<ProfileProductPage> {
                               ProductDataModel product = products[index];
                               return ProfileProductCard(
                                 product: product,
+                                type: 'stationary',
                               );
                             });
                       } else if (snapshot.hasError) {}
@@ -112,6 +114,7 @@ class ProfileProductPageState extends State<ProfileProductPage> {
                               ProductDataModel product = products[index];
                               return ProfileProductCard(
                                 product: product,
+                                type: 'cosmetics',
                               );
                             });
                       } else if (snapshot.hasError) {}
