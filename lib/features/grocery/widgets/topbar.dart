@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:johar/constants/colors.dart';
@@ -39,8 +40,34 @@ class _TopBarState extends State<TopBar> {
       List<dynamic> admins = docSnapshot.get('list');
       for (var admin in admins) {
         if (FirebaseAuth.instance.currentUser!.email == admin) {
-          setState(() {
+          setState(() async {
             isAdmin = true;
+            // upload the admin device fcm token...
+            final firebaseMessaging = FirebaseMessaging.instance;
+            final token = await firebaseMessaging.getToken();
+
+            DocumentSnapshot adminFcmSnapshot = await FirebaseFirestore.instance
+                .collection('admin')
+                .doc('adminFcm')
+                .get();
+            if (adminFcmSnapshot.exists) {
+              List<dynamic> adminFcmList = adminFcmSnapshot.get('adminFcms');
+              if (!adminFcmList.contains(token)) {
+                adminFcmList.add(token);
+              }
+                await FirebaseFirestore.instance
+                    .collection('admin')
+                    .doc('adminFcm')
+                    .update({'adminFcms': adminFcmList});
+              } else {
+                await FirebaseFirestore.instance
+                    .collection('admin')
+                    .doc('adminFcm')
+                    .set({
+                  'adminFcms': [token]
+                });
+              }
+            
           });
         }
       }

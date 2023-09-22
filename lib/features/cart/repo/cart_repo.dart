@@ -3,6 +3,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
+import 'package:johar/features/profile/repo/profile_repo.dart';
 import 'package:johar/model/grocery_model.dart';
 import 'package:uuid/uuid.dart';
 
@@ -108,7 +109,7 @@ class CartRepo {
     return sum;
   }
 
-    static Future<dynamic> calculateTotalWithoutDiscount() async {
+  static Future<dynamic> calculateTotalWithoutDiscount() async {
     dynamic sum = 0;
     CollectionReference collectionReference = FirebaseFirestore.instance
         .collection('users')
@@ -237,7 +238,6 @@ class CartRepo {
 
   // add cart products to order
   static Future<void> addProductsToOrder(
-
       List<ProductDataModel> products, String amount, String gst) async {
     var uuid = const Uuid();
     final orderId = uuid.v1();
@@ -309,7 +309,6 @@ class CartRepo {
         'amount': amount,
         'gst': gst,
         'orderTime': FieldValue.serverTimestamp()
-
       });
 
       await adminOrderCollectionRef.doc('orderDetails').set({
@@ -325,8 +324,6 @@ class CartRepo {
         'amount': amount,
         'gst': gst,
         'orderTime': FieldValue.serverTimestamp()
-        
-
       });
     }
 
@@ -384,7 +381,17 @@ class CartRepo {
       });
     }
 
-    // send the order to admin.
+    // send the order notification to admin..
+    // get the admin fcm token...
+    DocumentSnapshot adminFcmSnapshot = await FirebaseFirestore.instance
+        .collection('admin')
+        .doc('adminFcm')
+        .get();
+    List<dynamic> adminFcmList = adminFcmSnapshot.get('adminFcms');
+    for (var fcm in adminFcmList) {
+      ProfileRepo.sendPushMessage(
+          token: fcm, body: 'A new order has been placed', title: 'New Order');
+    }
   }
 
   // empty cart
@@ -406,7 +413,6 @@ class CartRepo {
     required String address,
     required String pinCode,
   }) async {
-
     // get fcm token
     final firebaseMessaging = FirebaseMessaging.instance;
     final fcmToken = await firebaseMessaging.getToken();
