@@ -382,6 +382,8 @@ class CartRepo {
     }
 
     // send the order notification to admin..
+    final usrref = await collectionReference.doc('orderDetails').get();
+    final usrName = usrref.get('userName');
     // get the admin fcm token...
     DocumentSnapshot adminFcmSnapshot = await FirebaseFirestore.instance
         .collection('admin')
@@ -390,7 +392,10 @@ class CartRepo {
     List<dynamic> adminFcmList = adminFcmSnapshot.get('adminFcms');
     for (var fcm in adminFcmList) {
       ProfileRepo.sendPushMessage(
-          token: fcm, body: 'A new order has been placed', title: 'New Order');
+        token: fcm,
+        body: 'A new order has been placed by $usrName',
+        title: 'New Order',
+      );
     }
   }
 
