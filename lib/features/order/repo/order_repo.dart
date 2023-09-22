@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:johar/features/profile/repo/profile_repo.dart';
 import 'package:johar/model/grocery_model.dart';
 
 class OrderRepo {
@@ -63,7 +64,7 @@ class OrderRepo {
 
   // fetch past order Id list
 
-    static Future<List<dynamic>> fetchPastOrderIdList() async {
+  static Future<List<dynamic>> fetchPastOrderIdList() async {
     DocumentSnapshot orderListSnapshot = await FirebaseFirestore.instance
         .collection('users')
         .doc(FirebaseAuth.instance.currentUser!.uid)
@@ -141,6 +142,26 @@ class OrderRepo {
         .doc('myOrders')
         .collection(orderId);
 
+    // get username
+    DocumentSnapshot userRef =
+        await collectionReference.doc('orderDetails').get();
+    final userName = userRef.get('userName');
+    // send the order notification to admin..
+    // get the admin fcm token...
+    DocumentSnapshot adminFcmSnapshot = await FirebaseFirestore.instance
+        .collection('admin')
+        .doc('adminFcm')
+        .get();
+    List<dynamic> adminFcmList = adminFcmSnapshot.get('adminFcms');
+    for (var fcm in adminFcmList) {
+      ProfileRepo.sendPushMessage(
+          token: fcm,
+          body: 'An order has been cancelled by $userName',
+          title: 'User Cancelled Order');
+    }
+
+    
+
     QuerySnapshot querySnapshot = await collectionReference.get();
     for (QueryDocumentSnapshot documentSnapshot in querySnapshot.docs) {
       await collectionReference.doc(documentSnapshot.id).delete();
@@ -163,14 +184,16 @@ class OrderRepo {
     DocumentReference globalDocRef =
         FirebaseFirestore.instance.collection('orders').doc('orderList');
 
-    DocumentReference globalDocRefCancelled =
-        FirebaseFirestore.instance.collection('orders').doc('cancelledOrderList');
+    DocumentReference globalDocRefCancelled = FirebaseFirestore.instance
+        .collection('orders')
+        .doc('cancelledOrderList');
 
     // create a new cancelledOrderList and add orderId there (global)
 
     final globalDocRefGet = await globalDocRefCancelled.get();
     if (globalDocRefGet.exists) {
-      List<dynamic> currentGlobalList = globalDocRefGet.get('cancelledOrdersList');
+      List<dynamic> currentGlobalList =
+          globalDocRefGet.get('cancelledOrdersList');
       currentGlobalList.add(orderId);
 
       await FirebaseFirestore.instance
@@ -244,8 +267,9 @@ class OrderRepo {
       return '';
     }
   }
-    // show otp
-    static Future<String> fetchOTP(String orderId, String id) async {
+
+  // show otp
+  static Future<String> fetchOTP(String orderId, String id) async {
     DocumentSnapshot documentSnapshot = await FirebaseFirestore.instance
         .collection('users')
         .doc(id)
@@ -263,7 +287,7 @@ class OrderRepo {
   }
 
   // fetch past orders...
-    static Future<List<List<ProductDataModel>>> fetchPastOrders() async {
+  static Future<List<List<ProductDataModel>>> fetchPastOrders() async {
     List<List<ProductDataModel>> allOrders = [];
 
     try {
