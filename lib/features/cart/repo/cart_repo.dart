@@ -2,6 +2,7 @@
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:johar/model/grocery_model.dart';
 import 'package:uuid/uuid.dart';
 
@@ -405,6 +406,10 @@ class CartRepo {
     required String address,
     required String pinCode,
   }) async {
+
+    // get fcm token
+    final firebaseMessaging = FirebaseMessaging.instance;
+    final fcmToken = await firebaseMessaging.getToken();
     await FirebaseFirestore.instance
         .collection('users')
         .doc(FirebaseAuth.instance.currentUser!.uid)
@@ -415,6 +420,7 @@ class CartRepo {
       'address': address,
       'pincode': pinCode,
       'userExists': true,
+      'fcm': fcmToken,
     });
   }
 }

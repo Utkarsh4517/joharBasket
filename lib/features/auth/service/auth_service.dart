@@ -2,6 +2,7 @@
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 
@@ -58,6 +59,10 @@ class AuthService {
     required String address,
     required String pinCode,
   }) async {
+
+    // get fcm token
+    final firebaseMessaging = FirebaseMessaging.instance;
+    final fcmToken = await firebaseMessaging.getToken();
     await FirebaseFirestore.instance
         .collection('users')
         .doc(FirebaseAuth.instance.currentUser!.uid)
@@ -68,6 +73,7 @@ class AuthService {
       'address': address,
       'pincode': pinCode,
       'userExists': true,
+      'fcm': fcmToken,
     });
   }
 

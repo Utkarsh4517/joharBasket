@@ -1,11 +1,15 @@
+import 'dart:convert';
 import 'dart:io';
 import 'dart:math';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:firebase_storage/firebase_storage.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:image/image.dart' as img;
+import 'package:http/http.dart' as http;
 import 'package:johar/model/grocery_model.dart';
 
 class ProfileRepo {
@@ -138,17 +142,16 @@ class ProfileRepo {
   }
 
   // update product details
-  static Future<void> updateProductDetails({
-    required ProductDataModel productDataModel,
-    required double inStock,
-    required String name,
-    required bool isFeatured,
-    required String description,
-    required double price,
-    required double gst,
-    required String size,
-    required double discountedPrice
-  }) async {
+  static Future<void> updateProductDetails(
+      {required ProductDataModel productDataModel,
+      required double inStock,
+      required String name,
+      required bool isFeatured,
+      required String description,
+      required double price,
+      required double gst,
+      required String size,
+      required double discountedPrice}) async {
     final document = FirebaseFirestore.instance
         .collection('grocery')
         .doc(productDataModel.productId);
@@ -166,17 +169,16 @@ class ProfileRepo {
   }
 
   // update stationary details
-  static Future<void> updateStationaryDetails({
-    required ProductDataModel productDataModel,
-    required double inStock,
-    required String name,
-    required bool isFeatured,
-    required String description,
-    required double price,
-    required double gst,
-    required String size,
-    required double discountedPrice
-  }) async {
+  static Future<void> updateStationaryDetails(
+      {required ProductDataModel productDataModel,
+      required double inStock,
+      required String name,
+      required bool isFeatured,
+      required String description,
+      required double price,
+      required double gst,
+      required String size,
+      required double discountedPrice}) async {
     final document = FirebaseFirestore.instance
         .collection('stationary')
         .doc(productDataModel.productId);
@@ -194,17 +196,16 @@ class ProfileRepo {
   }
 
   // update cosmetics
-    static Future<void> updateCosmeticsDetails({
-    required ProductDataModel productDataModel,
-    required double inStock,
-    required String name,
-    required bool isFeatured,
-    required String description,
-    required double price,
-    required double gst,
-    required String size,
-    required double discountedPrice
-  }) async {
+  static Future<void> updateCosmeticsDetails(
+      {required ProductDataModel productDataModel,
+      required double inStock,
+      required String name,
+      required bool isFeatured,
+      required String description,
+      required double price,
+      required double gst,
+      required String size,
+      required double discountedPrice}) async {
     final document = FirebaseFirestore.instance
         .collection('cosmetics')
         .doc(productDataModel.productId);
@@ -220,7 +221,6 @@ class ProfileRepo {
       'discountedPrice': discountedPrice
     });
   }
-  
 
   // delete product ....
   static Future<void> deleteProduct(
@@ -232,7 +232,7 @@ class ProfileRepo {
     await document.delete();
   }
 
-    // delete stationary ....
+  // delete stationary ....
   static Future<void> deleteStationary(
       {required ProductDataModel productDataModel}) async {
     final document = FirebaseFirestore.instance
@@ -242,7 +242,7 @@ class ProfileRepo {
     await document.delete();
   }
 
-      // delete stationary ....
+  // delete stationary ....
   static Future<void> deleteCosmetic(
       {required ProductDataModel productDataModel}) async {
     final document = FirebaseFirestore.instance
@@ -438,6 +438,50 @@ class ProfileRepo {
           .doc('orderDetails')
           .update({'isAccepted': true, 'time': deliveryTime, 'otp': otp});
     }
+
+    // get the user fcm token....
+    DocumentSnapshot fcmSnap =
+        await FirebaseFirestore.instance.collection('users').doc(userId).get();
+    final fcmToken = fcmSnap['fcm'];
+
+    // send notification to the user that his order has been accepted....
+    await sendPushMessage(
+      token: fcmToken,
+      body: 'Your order has been accepted',
+      title: 'Order Accepted',
+    );
+  }
+
+  // Send Order Accepted Push Notification
+  static sendPushMessage(
+      {required String token,
+      required String body,
+      required String title}) async {
+    try {
+      await http.post(Uri.parse('https://fcm.googleapis.com/fcm/send'),
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization':
+                'key=AAAA0aFkqfQ:APA91bGsqVwA3ioOPvyxP3w7-Ax0MObVcE-D7mv0ej1S7XtXTv1yKDOhuVzVodRDidxaDuPfSfwuo-SKQnY4lKqfUCSgTq8TgAbOGGLVOTsJmeElEoIFFVAfwtJClc0kEwY4U6umfWwc'
+          },
+          body: jsonEncode(<String, dynamic>{
+            'priority': 'high',
+            'data': <String, dynamic>{
+              'click_action': 'FLUTTER_NOTIFICATION_CLICK',
+              'status': 'done',
+              'body': body,
+              'title': title,
+            },
+            "notification": <String, dynamic>{
+              "title": title,
+              "body": body,
+              "android_channel_id": "johar"
+            },
+            "to": token
+          }));
+    } catch (e) {
+      print(e.toString());
+    }
   }
 
   // delivery confirmed
@@ -469,6 +513,18 @@ class ProfileRepo {
     }
     moveOrderToPastOrderUser(orderid);
     moveOrderToPastOrderGlobal(orderid);
+
+    // get the user fcm token....
+    DocumentSnapshot fcmSnap =
+        await FirebaseFirestore.instance.collection('users').doc(userId).get();
+    final fcmToken = fcmSnap['fcm'];
+
+    // send notification to the user that his order has been accepted....
+    await sendPushMessage(
+      token: fcmToken,
+      body: 'Your order has been delivered',
+      title: 'Order Delivered',
+    );
   }
 
   // move order to past order for user
@@ -832,6 +888,17 @@ class ProfileRepo {
     await globalDocRef.update({
       'ordersList': FieldValue.arrayRemove([orderId])
     });
+    // get the user fcm token....
+    DocumentSnapshot fcmSnap =
+        await FirebaseFirestore.instance.collection('users').doc(userId).get();
+    final fcmToken = fcmSnap['fcm'];
+
+    // send notification to the user that his order has been accepted....
+    await sendPushMessage(
+      token: fcmToken,
+      body: 'Your order has been cancelled',
+      title: 'Order cancelled',
+    );
   }
 
   static Future<void> cancelOrderGlobally(String orderId, String userId) async {
