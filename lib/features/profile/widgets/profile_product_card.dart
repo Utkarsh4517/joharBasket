@@ -4,7 +4,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:johar/constants/dimensions.dart';
 import 'package:johar/features/auth/widgets/details_text_field.dart';
-import 'package:johar/features/cart/widgets/small_text_body.dart';
 import 'package:johar/features/profile/bloc/profile_bloc.dart';
 import 'package:johar/model/grocery_model.dart';
 import 'package:johar/shared/button.dart';

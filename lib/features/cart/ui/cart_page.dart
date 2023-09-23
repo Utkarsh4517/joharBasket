@@ -5,6 +5,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:johar/constants/colors.dart';
 import 'package:johar/constants/dimensions.dart';
+import 'package:johar/constants/razorpay.dart';
 import 'package:johar/features/auth/widgets/details_text_field.dart';
 import 'package:johar/features/cart/bloc/cart_bloc.dart';
 import 'package:johar/features/cart/repo/cart_repo.dart';
@@ -12,6 +13,7 @@ import 'package:johar/features/cart/widgets/cart_card.dart';
 import 'package:johar/features/cart/widgets/small_text_body.dart';
 import 'package:johar/shared/button.dart';
 import 'package:lottie/lottie.dart';
+import 'package:razorpay_flutter/razorpay_flutter.dart';
 // import 'package:razorpay_flutter/razorpay_flutter.dart';
 
 class CartPage extends StatefulWidget {
@@ -24,7 +26,7 @@ class CartPage extends StatefulWidget {
 class _CartPageState extends State<CartPage> {
   // razor pay instance
 
-  // var _razorpay = Razorpay();
+  var _razorpay = Razorpay();
 
   final CartBloc cartBloc = CartBloc();
   final firstNameController = TextEditingController();
@@ -42,24 +44,33 @@ class _CartPageState extends State<CartPage> {
     cartBloc.add(CartInitialEvent());
     fetchSubtotalAndGST();
     fetchUserDetails();
-    // _razorpay.on(Razorpay.EVENT_PAYMENT_SUCCESS, _handlePaymentSuccess);
-    // _razorpay.on(Razorpay.EVENT_PAYMENT_ERROR, _handlePaymentError);
-    // _razorpay.on(Razorpay.EVENT_EXTERNAL_WALLET, _handleExternalWallet);
+    _razorpay.on(Razorpay.EVENT_PAYMENT_SUCCESS, _handlePaymentSuccess);
+    _razorpay.on(Razorpay.EVENT_PAYMENT_ERROR, _handlePaymentError);
+    _razorpay.on(Razorpay.EVENT_EXTERNAL_WALLET, _handleExternalWallet);
 
     super.initState();
   }
 
-  // void _handlePaymentSuccess(PaymentSuccessResponse response) {
-  //   // Do something when payment succeeds
-  // }
+  void _handlePaymentSuccess(PaymentSuccessResponse response) async {
+    // Do something when payment succeeds
+    print('Payment success');
+    cartBloc.add(
+      CartPagePlaceOrderClickedEvent(
+        products: await CartRepo.fetchProducts(),
+        gst: '$gst',
+        amount: '${subTotal + (subTotal < 999 ? 49 : 0)}',
+      ),
+    );
+  }
 
-  // void _handlePaymentError(PaymentFailureResponse response) {
-  //   // Do something when payment fails
-  // }
+  void _handlePaymentError(PaymentFailureResponse response) {
+    // Do something when payment fails
+    print('error ${response.error}');
+  }
 
-  // void _handleExternalWallet(ExternalWalletResponse response) {
-  //   // Do something when an external wallet was selected
-  // }
+  void _handleExternalWallet(ExternalWalletResponse response) {
+    // Do something when an external wallet was selected
+  }
 
   fetchSubtotalAndGST() async {
     dynamic sub = await CartRepo.calculateSubTotal();
@@ -106,7 +117,7 @@ class _CartPageState extends State<CartPage> {
     pincodeController.dispose();
     addressController.dispose();
     mobileController.dispose();
-    // _razorpay.clear();
+    _razorpay.clear();
     super.dispose();
   }
 
@@ -543,6 +554,16 @@ class _CartPageState extends State<CartPage> {
                                         '${subTotal + (subTotal < 999 ? 49 : 0)}',
                                   ),
                                 );
+                              } else if (radioValue == 'upi') {
+                                var options = {
+                                  'key': key,
+                                  'amount': (subTotal + (subTotal < 999 ? 49 : 0)) * 100,
+                                  // (subTotal + (subTotal < 999 ? 49 : 0)) * 100,
+                                  'name': 'Johar Basket',
+                                  'timeout': 150, // in seconds
+                                  
+                                };
+                                _razorpay.open(options);
                               }
                             },
                             child: Container(
