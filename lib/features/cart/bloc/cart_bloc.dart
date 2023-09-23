@@ -70,7 +70,12 @@ class CartBloc extends Bloc<CartEvent, CartState> {
     // write a method in cart repo to add product list to order collection with document id = an unique order number
     // loading state
     emit(CartPlacingOrderLoadingState());
-    await CartRepo.addProductsToOrder(event.products, event.amount, event.gst);
+    await CartRepo.addProductsToOrder(
+      event.products,
+      event.amount,
+      event.gst,
+      event.isPaid,
+    );
     emit(CartPagePlaceOrderSuccessfulState());
     // empty the cart...
     await CartRepo.emptyCart();

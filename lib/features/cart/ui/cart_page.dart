@@ -59,6 +59,7 @@ class _CartPageState extends State<CartPage> {
         products: await CartRepo.fetchProducts(),
         gst: '$gst',
         amount: '${subTotal + (subTotal < 999 ? 49 : 0)}',
+        isPaid: true,
       ),
     );
   }
@@ -552,16 +553,18 @@ class _CartPageState extends State<CartPage> {
                                     gst: '$gst',
                                     amount:
                                         '${subTotal + (subTotal < 999 ? 49 : 0)}',
+                                    isPaid: false,
                                   ),
                                 );
                               } else if (radioValue == 'upi') {
                                 var options = {
                                   'key': key,
-                                  'amount': (subTotal + (subTotal < 999 ? 49 : 0)) * 100,
+                                  'amount':
+                                      (subTotal + (subTotal < 999 ? 49 : 0)) *
+                                          100,
                                   // (subTotal + (subTotal < 999 ? 49 : 0)) * 100,
                                   'name': 'Johar Basket',
                                   'timeout': 150, // in seconds
-                                  
                                 };
                                 _razorpay.open(options);
                               }

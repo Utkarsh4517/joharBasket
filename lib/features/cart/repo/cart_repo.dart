@@ -238,7 +238,7 @@ class CartRepo {
 
   // add cart products to order
   static Future<void> addProductsToOrder(
-      List<ProductDataModel> products, String amount, String gst) async {
+      List<ProductDataModel> products, String amount, String gst, bool isPaid) async {
     var uuid = const Uuid();
     final orderId = uuid.v1();
     print(orderId);
@@ -299,7 +299,7 @@ class CartRepo {
       await collectionReference.doc('orderDetails').set({
         'isAccepted': false,
         'isDelivered': false,
-        'payment': false,
+        'payment': isPaid,
         'userId': FirebaseAuth.instance.currentUser!.uid,
         'userName': userDocumentSnapshot['firstName'] +
             userDocumentSnapshot['lastName'],
@@ -314,7 +314,7 @@ class CartRepo {
       await adminOrderCollectionRef.doc('orderDetails').set({
         'isAccepted': false,
         'isDelivered': false,
-        'payment': false,
+        'payment': isPaid,
         'userId': FirebaseAuth.instance.currentUser!.uid,
         'userName': userDocumentSnapshot['firstName'] +
             userDocumentSnapshot['lastName'],

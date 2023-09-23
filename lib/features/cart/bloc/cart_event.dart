@@ -40,10 +40,12 @@ class CartPagePlaceOrderClickedEvent extends CartEvent {
   final List<ProductDataModel> products;
   final String amount;
   final dynamic gst;
+  final bool isPaid;
   CartPagePlaceOrderClickedEvent({
     required this.amount,
     required this.products,
     required this.gst,
+    required this.isPaid,
   });
 }
 
