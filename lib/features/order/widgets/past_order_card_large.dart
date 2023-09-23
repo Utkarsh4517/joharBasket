@@ -29,15 +29,20 @@ class PastOrderCardLarge extends StatefulWidget {
 
 class _PastOrderCardLargeState extends State<PastOrderCardLarge> {
   String deliverdOn = '';
+  String amount = '';
   // fetch product details
   fetchDetails() async {
     final delTime = await OrderRepo.fetchDeliveredOnTime(
         widget.orderIdlist[widget.indexU],
         FirebaseAuth.instance.currentUser!.uid);
     final formattedDate = DateFormat('dd MMMM yyyy').format(delTime);
-    
+    final amt = await OrderRepo.fetchPastOrderAmount(
+        widget.orderIdlist[widget.indexU],
+        FirebaseAuth.instance.currentUser!.uid);
+
     setState(() {
       deliverdOn = formattedDate;
+      amount = amt;
     });
   }
 
@@ -97,7 +102,7 @@ class _PastOrderCardLargeState extends State<PastOrderCardLarge> {
               children: [
                 const SmallTextBody(text: 'Total amount'),
                 SelectableText(
-                  '₹ ',
+                  '₹ $amount',
                   style: TextStyle(
                       color: Colors.green,
                       fontSize: getScreenWidth(context) * 0.04,

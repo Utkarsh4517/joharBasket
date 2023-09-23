@@ -160,8 +160,6 @@ class OrderRepo {
           title: 'User Cancelled Order');
     }
 
-    
-
     QuerySnapshot querySnapshot = await collectionReference.get();
     for (QueryDocumentSnapshot documentSnapshot in querySnapshot.docs) {
       await collectionReference.doc(documentSnapshot.id).delete();
@@ -287,8 +285,9 @@ class OrderRepo {
   }
 
   // fetch delivery time for past orders
-  static Future<DateTime> fetchDeliveredOnTime(String orderId, String id) async {
-        DocumentSnapshot documentSnapshot = await FirebaseFirestore.instance
+  static Future<DateTime> fetchDeliveredOnTime(
+      String orderId, String id) async {
+    DocumentSnapshot documentSnapshot = await FirebaseFirestore.instance
         .collection('users')
         .doc(id)
         .collection('order')
@@ -296,8 +295,21 @@ class OrderRepo {
         .collection(orderId)
         .doc('orderDetails')
         .get();
-        Timestamp date = documentSnapshot['deliveryTime'];
-        return date.toDate();
+    Timestamp date = documentSnapshot['deliveryTime'];
+    return date.toDate();
+  }
+
+  // fetch past order amount
+  static Future<dynamic> fetchPastOrderAmount(String orderId, String id) async {
+    DocumentSnapshot documentSnapshot = await FirebaseFirestore.instance
+        .collection('users')
+        .doc(id)
+        .collection('order')
+        .doc('pastOrders')
+        .collection(orderId)
+        .doc('orderDetails')
+        .get();
+        return documentSnapshot['amount'];
   }
 
   // fetch past orders...
@@ -349,5 +361,4 @@ class OrderRepo {
   }
 
   // fetch delivery time
-
 }
