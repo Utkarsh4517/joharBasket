@@ -23,6 +23,10 @@ class PastOrderCardLarge extends StatefulWidget {
 }
 
 class _PastOrderCardLargeState extends State<PastOrderCardLarge> {
+
+  // fetch product details
+
+  
   @override
   Widget build(BuildContext context) {
         return Container(
@@ -65,40 +69,24 @@ class _PastOrderCardLargeState extends State<PastOrderCardLarge> {
               ],
             ),
           ),
-          // Container(
-          //   margin: EdgeInsets.symmetric(
-          //       horizontal: getScreenWidth(context) * 0.04),
-          //   child: Row(
-          //     mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          //     children: [
-          //       const SmallTextBody(text: 'Total amount'),
-          //       SelectableText(
-          //         '₹ ',
-          //         style: TextStyle(
-          //             color: Colors.green,
-          //             fontSize: getScreenWidth(context) * 0.04,
-          //             fontWeight: FontWeight.bold),
-          //       )
-          //     ],
-          //   ),
-          // ),
-          // Container(
-          //   margin: EdgeInsets.symmetric(
-          //       horizontal: getScreenWidth(context) * 0.04),
-          //   child: Row(
-          //     mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          //     children: [
-          //       const SmallTextBody(text: 'Ordered by'),
-          //       SelectableText(
-          //         'ordered by',
-          //         style: TextStyle(
-          //             color: Colors.black,
-          //             fontSize: getScreenWidth(context) * 0.03,
-          //             fontWeight: FontWeight.bold),
-          //       )
-          //     ],
-          //   ),
-          // ),
+          Container(
+            margin: EdgeInsets.symmetric(
+                horizontal: getScreenWidth(context) * 0.04),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                const SmallTextBody(text: 'Total amount'),
+                SelectableText(
+                  '₹ ',
+                  style: TextStyle(
+                      color: Colors.green,
+                      fontSize: getScreenWidth(context) * 0.04,
+                      fontWeight: FontWeight.bold),
+                )
+              ],
+            ),
+          ),
+      
           Container(
             margin: EdgeInsets.only(top: getScreenWidth(context) * 0.1),
             alignment: Alignment.center,

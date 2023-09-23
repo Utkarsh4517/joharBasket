@@ -477,7 +477,6 @@ class ProfileRepo {
             },
             "to": token
           }));
-
     } catch (e) {
       print(e.toString());
     }
@@ -503,12 +502,18 @@ class ProfileRepo {
         'isDelivered': true,
         'payment': true,
       });
+      userOrderRef.doc('orderDetails').set({
+        'deliveryTime': FieldValue.serverTimestamp(),
+      }, SetOptions(merge: true));
     }
     if (gOrderRef.exists) {
       globalOrderRef.doc('orderDetails').update({
         'isDelivered': true,
         'payment': true,
       });
+      globalOrderRef.doc('orderDetails').set({
+        'deliveryTime': FieldValue.serverTimestamp(),
+      }, SetOptions(merge: true));
     }
     moveOrderToPastOrderUser(orderid);
     moveOrderToPastOrderGlobal(orderid);

@@ -180,7 +180,7 @@ class _OrderPageState extends State<OrderPage> {
                         ],
                       ),
                       SizedBox(
-                        height: getScreenheight(context) * 3,
+                        height: (getScreenheight(context) * successState.orders.length * 0.42) + (50 * successState.orders.length * 0.5),
                         child: ListView.builder(
                           itemCount: successState.orders.length,
                           scrollDirection: Axis.vertical,
