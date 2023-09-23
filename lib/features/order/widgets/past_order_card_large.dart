@@ -1,8 +1,13 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:johar/constants/dimensions.dart';
 import 'package:johar/features/cart/widgets/small_text_body.dart';
 import 'package:johar/features/order/bloc/order_bloc.dart';
+import 'package:johar/features/order/repo/order_repo.dart';
 import 'package:johar/features/order/widgets/my_timeline.dart';
+
 import 'package:johar/features/order/widgets/past_order_product_card.dart';
 
 class PastOrderCardLarge extends StatefulWidget {
@@ -23,13 +28,28 @@ class PastOrderCardLarge extends StatefulWidget {
 }
 
 class _PastOrderCardLargeState extends State<PastOrderCardLarge> {
-
+  String deliverdOn = '';
   // fetch product details
+  fetchDetails() async {
+    final delTime = await OrderRepo.fetchDeliveredOnTime(
+        widget.orderIdlist[widget.indexU],
+        FirebaseAuth.instance.currentUser!.uid);
+    final formattedDate = DateFormat('dd MMMM yyyy').format(delTime);
+    
+    setState(() {
+      deliverdOn = formattedDate;
+    });
+  }
 
-  
+  @override
+  void initState() {
+    fetchDetails();
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
-        return Container(
+    return Container(
       decoration: BoxDecoration(
           color: Colors.white, borderRadius: BorderRadius.circular(15)),
       margin: EdgeInsets.symmetric(
@@ -86,7 +106,23 @@ class _PastOrderCardLargeState extends State<PastOrderCardLarge> {
               ],
             ),
           ),
-      
+          Container(
+            margin: EdgeInsets.symmetric(
+                horizontal: getScreenWidth(context) * 0.04),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                const SmallTextBody(text: 'Delivered on'),
+                SelectableText(
+                  deliverdOn.toString(),
+                  style: TextStyle(
+                      color: Colors.black,
+                      fontSize: getScreenWidth(context) * 0.025,
+                      fontWeight: FontWeight.normal),
+                )
+              ],
+            ),
+          ),
           Container(
             margin: EdgeInsets.only(top: getScreenWidth(context) * 0.1),
             alignment: Alignment.center,

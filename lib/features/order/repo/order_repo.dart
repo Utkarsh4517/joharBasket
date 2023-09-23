@@ -286,6 +286,20 @@ class OrderRepo {
     }
   }
 
+  // fetch delivery time for past orders
+  static Future<DateTime> fetchDeliveredOnTime(String orderId, String id) async {
+        DocumentSnapshot documentSnapshot = await FirebaseFirestore.instance
+        .collection('users')
+        .doc(id)
+        .collection('order')
+        .doc('pastOrders')
+        .collection(orderId)
+        .doc('orderDetails')
+        .get();
+        Timestamp date = documentSnapshot['deliveryTime'];
+        return date.toDate();
+  }
+
   // fetch past orders...
   static Future<List<List<ProductDataModel>>> fetchPastOrders() async {
     List<List<ProductDataModel>> allOrders = [];
@@ -333,4 +347,7 @@ class OrderRepo {
       return [];
     }
   }
+
+  // fetch delivery time
+
 }
