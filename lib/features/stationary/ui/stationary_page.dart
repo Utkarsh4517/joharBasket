@@ -49,42 +49,95 @@ class _StationaryPageState extends State<StationaryPage>
             final successState = state as StationaryLoadedSuccessState;
             final searchController = TextEditingController();
 
-            return Scaffold(
-              appBar: StationaryAppBar(
-                controller: searchController,
-                successState: successState,
-              ),
-              backgroundColor: const Color.fromARGB(255, 248, 248, 248),
-              body: SafeArea(
-                child: SingleChildScrollView(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      // name and profile pic
-                      SizedBox(height: getScreenWidth(context) * 0.01),
-                      SizedBox(height: getScreenWidth(context) * 0.04),
-                      // const SearchTextField(),
-
-                      Container(
-                        margin: EdgeInsets.all(getScreenWidth(context) * 0.06),
-                        child: Text('Featured Stationary Products',
-                            style: GoogleFonts.publicSans(
-                                color: Colors.black,
-                                fontWeight: FontWeight.w800,
-                                fontSize: getScreenWidth(context) * 0.04)),
-                      ),
-
-                      SizedBox(
-                        height: getScreenWidth(context) * 0.75,
-                        child: ListView.builder(
-                          scrollDirection: Axis.horizontal,
-                          itemCount: successState.products.length,
-                          itemBuilder: (context, index) {
-                            if (successState.products[index].isFeatured ==
-                                true) {
-                              return GroceryCard(
-                                discountedPrice: successState
-                                    .products[index].discountedPrice,
+            return RefreshIndicator(
+              onRefresh: () async{
+                await Future.delayed(Duration(seconds: 1));
+                groceryBloc.add(StationaryInitialEvent());
+              },
+              child: Scaffold(
+                appBar: StationaryAppBar(
+                  controller: searchController,
+                  successState: successState,
+                ),
+                backgroundColor: const Color.fromARGB(255, 248, 248, 248),
+                body: SafeArea(
+                  child: SingleChildScrollView(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        // name and profile pic
+                        SizedBox(height: getScreenWidth(context) * 0.01),
+                        SizedBox(height: getScreenWidth(context) * 0.04),
+                        // const SearchTextField(),
+            
+                        Container(
+                          margin: EdgeInsets.all(getScreenWidth(context) * 0.06),
+                          child: Text('Featured Stationary Products',
+                              style: GoogleFonts.publicSans(
+                                  color: Colors.black,
+                                  fontWeight: FontWeight.w800,
+                                  fontSize: getScreenWidth(context) * 0.04)),
+                        ),
+            
+                        SizedBox(
+                          height: getScreenWidth(context) * 0.75,
+                          child: ListView.builder(
+                            scrollDirection: Axis.horizontal,
+                            itemCount: successState.products.length,
+                            itemBuilder: (context, index) {
+                              if (successState.products[index].isFeatured ==
+                                  true) {
+                                return GroceryCard(
+                                  discountedPrice: successState
+                                      .products[index].discountedPrice,
+                                  size: successState.products[index].size!,
+                                  bloc: groceryBloc,
+                                  gst: successState.products[index].gst,
+                                  name: successState.products[index].name,
+                                  imageUrl: successState.products[index].imageUrl,
+                                  price: successState.products[index].price,
+                                  isFeatured:
+                                      successState.products[index].isFeatured,
+                                  inStock: successState.products[index].inStock,
+                                  productId:
+                                      successState.products[index].productId,
+                                  groceryUiDataModel:
+                                      successState.products[index],
+                                  description:
+                                      successState.products[index].description,
+                                );
+                              } else {
+                                return Container();
+                              }
+                            },
+                          ),
+                        ),
+                        // shop groceries
+            
+                        Container(
+                          margin: EdgeInsets.all(getScreenWidth(context) * 0.06),
+                          child: Text('Shop Stationaries',
+                              style: GoogleFonts.publicSans(
+                                  color: Colors.black,
+                                  fontWeight: FontWeight.w800,
+                                  fontSize: getScreenWidth(context) * 0.04)),
+                        ),
+                        // gridview
+                        SizedBox(
+                          height: (successState.products.length *
+                                  getScreenWidth(context) *
+                                  0.62)
+                              .toDouble(),
+                          child: GridView.builder(
+                            physics: const NeverScrollableScrollPhysics(),
+                            gridDelegate:
+                                const SliverGridDelegateWithFixedCrossAxisCount(
+                                    crossAxisCount: 2),
+                            itemCount: successState.products.length,
+                            itemBuilder: (context, index) {
+                              return GroceryCardSmall(
+                                discountedPrice:
+                                    successState.products[index].discountedPrice,
                                 size: successState.products[index].size!,
                                 bloc: groceryBloc,
                                 gst: successState.products[index].gst,
@@ -94,63 +147,16 @@ class _StationaryPageState extends State<StationaryPage>
                                 isFeatured:
                                     successState.products[index].isFeatured,
                                 inStock: successState.products[index].inStock,
-                                productId:
-                                    successState.products[index].productId,
-                                groceryUiDataModel:
-                                    successState.products[index],
+                                productId: successState.products[index].productId,
+                                groceryUiDataModel: successState.products[index],
                                 description:
                                     successState.products[index].description,
                               );
-                            } else {
-                              return Container();
-                            }
-                          },
-                        ),
-                      ),
-                      // shop groceries
-
-                      Container(
-                        margin: EdgeInsets.all(getScreenWidth(context) * 0.06),
-                        child: Text('Shop Stationaries',
-                            style: GoogleFonts.publicSans(
-                                color: Colors.black,
-                                fontWeight: FontWeight.w800,
-                                fontSize: getScreenWidth(context) * 0.04)),
-                      ),
-                      // gridview
-                      SizedBox(
-                        height: (successState.products.length *
-                                getScreenWidth(context) *
-                                0.62)
-                            .toDouble(),
-                        child: GridView.builder(
-                          physics: const NeverScrollableScrollPhysics(),
-                          gridDelegate:
-                              const SliverGridDelegateWithFixedCrossAxisCount(
-                                  crossAxisCount: 2),
-                          itemCount: successState.products.length,
-                          itemBuilder: (context, index) {
-                            return GroceryCardSmall(
-                              discountedPrice:
-                                  successState.products[index].discountedPrice,
-                              size: successState.products[index].size!,
-                              bloc: groceryBloc,
-                              gst: successState.products[index].gst,
-                              name: successState.products[index].name,
-                              imageUrl: successState.products[index].imageUrl,
-                              price: successState.products[index].price,
-                              isFeatured:
-                                  successState.products[index].isFeatured,
-                              inStock: successState.products[index].inStock,
-                              productId: successState.products[index].productId,
-                              groceryUiDataModel: successState.products[index],
-                              description:
-                                  successState.products[index].description,
-                            );
-                          },
-                        ),
-                      )
-                    ],
+                            },
+                          ),
+                        )
+                      ],
+                    ),
                   ),
                 ),
               ),

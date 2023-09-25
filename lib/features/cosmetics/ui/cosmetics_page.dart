@@ -44,40 +44,96 @@ class _CosmeticsPageState extends State<CosmeticsPage>
           case CosmeticLoadedSuccessState:
             final successState = state as CosmeticLoadedSuccessState;
             final searchController = TextEditingController();
-            return Scaffold(
-              appBar: CosmeticAppBar(
-                controller: searchController,
-                successState: successState,
-              ),
-              backgroundColor: const Color.fromARGB(255, 248, 248, 248),
-              body: SafeArea(
-                child: SingleChildScrollView(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      // name and profile pic
-                      SizedBox(height: getScreenWidth(context) * 0.01),
-                      SizedBox(height: getScreenWidth(context) * 0.04),
-                      // const SearchTextField(),
+            return RefreshIndicator(
+              onRefresh: () async {
+                await Future.delayed(Duration(seconds: 1));
+                groceryBloc.add(CosmeticInitialEvent());
+              },
+              child: Scaffold(
+                appBar: CosmeticAppBar(
+                  controller: searchController,
+                  successState: successState,
+                ),
+                backgroundColor: const Color.fromARGB(255, 248, 248, 248),
+                body: SafeArea(
+                  child: SingleChildScrollView(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        // name and profile pic
+                        SizedBox(height: getScreenWidth(context) * 0.01),
+                        SizedBox(height: getScreenWidth(context) * 0.04),
+                        // const SearchTextField(),
 
-                      Container(
-                        margin: EdgeInsets.all(getScreenWidth(context) * 0.06),
-                        child: Text('Featured Cosmetic Products',
-                            style: GoogleFonts.publicSans(
-                                color: Colors.black,
-                                fontWeight: FontWeight.w800,
-                                fontSize: getScreenWidth(context) * 0.04)),
-                      ),
+                        Container(
+                          margin:
+                              EdgeInsets.all(getScreenWidth(context) * 0.06),
+                          child: Text('Featured Cosmetic Products',
+                              style: GoogleFonts.publicSans(
+                                  color: Colors.black,
+                                  fontWeight: FontWeight.w800,
+                                  fontSize: getScreenWidth(context) * 0.04)),
+                        ),
 
-                      SizedBox(
-                        height: getScreenWidth(context) * 0.75,
-                        child: ListView.builder(
-                          scrollDirection: Axis.horizontal,
-                          itemCount: successState.products.length,
-                          itemBuilder: (context, index) {
-                            if (successState.products[index].isFeatured ==
-                                true) {
-                              return GroceryCard(
+                        SizedBox(
+                          height: getScreenWidth(context) * 0.75,
+                          child: ListView.builder(
+                            scrollDirection: Axis.horizontal,
+                            itemCount: successState.products.length,
+                            itemBuilder: (context, index) {
+                              if (successState.products[index].isFeatured ==
+                                  true) {
+                                return GroceryCard(
+                                  discountedPrice: successState
+                                      .products[index].discountedPrice,
+                                  size: successState.products[index].size!,
+                                  bloc: groceryBloc,
+                                  gst: successState.products[index].gst,
+                                  name: successState.products[index].name,
+                                  imageUrl:
+                                      successState.products[index].imageUrl,
+                                  price: successState.products[index].price,
+                                  isFeatured:
+                                      successState.products[index].isFeatured,
+                                  inStock: successState.products[index].inStock,
+                                  productId:
+                                      successState.products[index].productId,
+                                  groceryUiDataModel:
+                                      successState.products[index],
+                                  description:
+                                      successState.products[index].description,
+                                );
+                              } else {
+                                return Container();
+                              }
+                            },
+                          ),
+                        ),
+                        // shop groceries
+
+                        Container(
+                          margin:
+                              EdgeInsets.all(getScreenWidth(context) * 0.06),
+                          child: Text('Shop Cosmetics',
+                              style: GoogleFonts.publicSans(
+                                  color: Colors.black,
+                                  fontWeight: FontWeight.w800,
+                                  fontSize: getScreenWidth(context) * 0.04)),
+                        ),
+                        // gridview
+                        SizedBox(
+                          height: (successState.products.length *
+                                  getScreenWidth(context) *
+                                  0.62)
+                              .toDouble(),
+                          child: GridView.builder(
+                            physics: const NeverScrollableScrollPhysics(),
+                            gridDelegate:
+                                const SliverGridDelegateWithFixedCrossAxisCount(
+                                    crossAxisCount: 2),
+                            itemCount: successState.products.length,
+                            itemBuilder: (context, index) {
+                              return GroceryCardSmall(
                                 discountedPrice: successState
                                     .products[index].discountedPrice,
                                 size: successState.products[index].size!,
@@ -96,56 +152,11 @@ class _CosmeticsPageState extends State<CosmeticsPage>
                                 description:
                                     successState.products[index].description,
                               );
-                            } else {
-                              return Container();
-                            }
-                          },
-                        ),
-                      ),
-                      // shop groceries
-
-                      Container(
-                        margin: EdgeInsets.all(getScreenWidth(context) * 0.06),
-                        child: Text('Shop Cosmetics',
-                            style: GoogleFonts.publicSans(
-                                color: Colors.black,
-                                fontWeight: FontWeight.w800,
-                                fontSize: getScreenWidth(context) * 0.04)),
-                      ),
-                      // gridview
-                      SizedBox(
-                        height: (successState.products.length *
-                                getScreenWidth(context) *
-                                0.62)
-                            .toDouble(),
-                        child: GridView.builder(
-                          physics: const NeverScrollableScrollPhysics(),
-                          gridDelegate:
-                              const SliverGridDelegateWithFixedCrossAxisCount(
-                                  crossAxisCount: 2),
-                          itemCount: successState.products.length,
-                          itemBuilder: (context, index) {
-                            return GroceryCardSmall(
-                              discountedPrice:
-                                  successState.products[index].discountedPrice,
-                              size: successState.products[index].size!,
-                              bloc: groceryBloc,
-                              gst: successState.products[index].gst,
-                              name: successState.products[index].name,
-                              imageUrl: successState.products[index].imageUrl,
-                              price: successState.products[index].price,
-                              isFeatured:
-                                  successState.products[index].isFeatured,
-                              inStock: successState.products[index].inStock,
-                              productId: successState.products[index].productId,
-                              groceryUiDataModel: successState.products[index],
-                              description:
-                                  successState.products[index].description,
-                            );
-                          },
-                        ),
-                      )
-                    ],
+                            },
+                          ),
+                        )
+                      ],
+                    ),
                   ),
                 ),
               ),
