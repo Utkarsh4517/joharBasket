@@ -24,6 +24,7 @@ class _StationarySearchPageState extends State<StationarySearchPage> {
   final controller = TextEditingController();
 
   List<ProductDataModel> stationaries = [];
+  List<ProductDataModel> allProducts = [];
 
   @override
   void initState() {
@@ -34,14 +35,21 @@ class _StationarySearchPageState extends State<StationarySearchPage> {
   fetchProducts() async {
     List<ProductDataModel> stationary = await GroceryRepo.fetchStationaries();
     setState(() {
-      stationaries = stationary;
+      allProducts = stationary;
+      stationaries = allProducts;
     });
   }
 
   @override
   Widget build(BuildContext context) {
     void searchProducts(String query) {
-      final suggestions = stationaries.where((grocery) {
+      if (query.isEmpty) {
+        // If the query is empty, show all products.
+        setState(() {
+          stationaries = allProducts;
+        });
+      }
+      final suggestions = allProducts.where((grocery) {
         final productTitle = grocery.name.toLowerCase();
         final input = query.toLowerCase();
         return productTitle.contains(input);

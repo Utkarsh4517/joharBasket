@@ -5,7 +5,6 @@ import 'package:johar/constants/dimensions.dart';
 import 'package:johar/features/grocery/bloc/grocery_bloc.dart';
 import 'package:johar/features/grocery/widgets/grocery_card.dart';
 import 'package:johar/features/grocery/widgets/grocery_card_small.dart';
-import 'package:johar/features/search/ui/cosmetic_search_page.dart';
 import 'package:johar/shared/cosmetic_appbar.dart';
 
 class CosmeticsPage extends StatefulWidget {

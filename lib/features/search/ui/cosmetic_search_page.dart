@@ -24,6 +24,7 @@ class _CosmeticSearchPageState extends State<CosmeticSearchPage> {
   final controller = TextEditingController();
 
   List<ProductDataModel> cosmetics = [];
+  List<ProductDataModel> allProducts = [];
 
   @override
   void initState() {
@@ -34,22 +35,30 @@ class _CosmeticSearchPageState extends State<CosmeticSearchPage> {
   fetchProducts() async {
     List<ProductDataModel> cosmetic = await GroceryRepo.fetchCosmetics();
     setState(() {
-      cosmetics = cosmetic;
+      allProducts = cosmetic;
+      cosmetics = allProducts;
     });
   }
 
   @override
   Widget build(BuildContext context) {
     void searchProducts(String query) {
-      final suggestions = cosmetics.where((grocery) {
-        final productTitle = grocery.name.toLowerCase();
-        final input = query.toLowerCase();
-        return productTitle.contains(input);
-      }).toList();
+      if (query.isEmpty) {
+        // If the query is empty, show all products.
+        setState(() {
+          cosmetics = allProducts;
+        });
+      } else {
+        final suggestions = allProducts.where((grocery) {
+          final productTitle = grocery.name.toLowerCase();
+          final input = query.toLowerCase();
+          return productTitle.contains(input);
+        }).toList();
 
-      setState(() {
-        cosmetics = suggestions;
-      });
+        setState(() {
+          cosmetics = suggestions;
+        });
+      }
     }
 
     return Scaffold(

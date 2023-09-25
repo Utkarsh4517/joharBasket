@@ -137,7 +137,7 @@ class _ProfilePageState extends State<ProfilePage> {
                           DetailsTextField(
                               controller: priceController,
                               label: 'Price including gst'),
-                           DetailsTextField(
+                          DetailsTextField(
                               controller: discountedPriceController,
                               label: 'Price after discount'),
                           DetailsTextField(
@@ -231,6 +231,7 @@ class _ProfilePageState extends State<ProfilePage> {
                           OutlinedButton(
                               onPressed: () async {
                                 imageU = await ProfileRepo.uploadImage();
+
                                 showErrorMessage();
                                 const uuid = Uuid();
                                 final productid = uuid.v1();
@@ -241,7 +242,8 @@ class _ProfilePageState extends State<ProfilePage> {
                                   inStock: double.parse(inStockController.text),
                                   price: double.parse(priceController.text),
                                   gst: double.parse(gstController.text),
-                                  discountedPrice: double.parse(discountedPriceController.text),
+                                  discountedPrice: double.parse(
+                                      discountedPriceController.text),
                                   category: radioValue,
                                   isFeatured: toggle,
                                   productId: productid,

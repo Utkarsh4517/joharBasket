@@ -23,6 +23,7 @@ class SearchPage extends StatefulWidget {
 class _SearchPageState extends State<SearchPage> {
   final controller = TextEditingController();
 
+  List<ProductDataModel> allProducts = [];
   List<ProductDataModel> groceries = [];
 
   @override
@@ -34,14 +35,20 @@ class _SearchPageState extends State<SearchPage> {
   fetchProducts() async {
     List<ProductDataModel> grocery = await GroceryRepo.fetchGroceries();
     setState(() {
-      groceries = grocery;
+      allProducts = grocery;
+      groceries =
+          allProducts; // Initialize groceries with all products initially.
     });
   }
 
-  @override
-  Widget build(BuildContext context) {
-    void searchProducts(String query) {
-      final suggestions = groceries.where((grocery) {
+  void searchProducts(String query) {
+    if (query.isEmpty) {
+      // If the query is empty, show all products.
+      setState(() {
+        groceries = allProducts;
+      });
+    } else {
+      final suggestions = allProducts.where((grocery) {
         final productTitle = grocery.name.toLowerCase();
         final input = query.toLowerCase();
         return productTitle.contains(input);
@@ -51,7 +58,10 @@ class _SearchPageState extends State<SearchPage> {
         groceries = suggestions;
       });
     }
+  }
 
+  @override
+  Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: const Color.fromARGB(255, 248, 248, 248),
       body: SafeArea(
@@ -91,11 +101,13 @@ class _SearchPageState extends State<SearchPage> {
                     return GestureDetector(
                       onTap: () {
                         Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => GroceryProductPage(
-                                      grocery: product,
-                                    )));
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => GroceryProductPage(
+                              grocery: product,
+                            ),
+                          ),
+                        );
                       },
                       child: Container(
                         margin: EdgeInsets.symmetric(
