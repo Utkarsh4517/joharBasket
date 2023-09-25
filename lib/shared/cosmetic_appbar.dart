@@ -7,7 +7,6 @@ import 'package:johar/constants/dimensions.dart';
 import 'package:johar/features/grocery/bloc/grocery_bloc.dart';
 import 'package:johar/features/grocery/widgets/topbar.dart';
 import 'package:johar/features/search/ui/cosmetic_search_page.dart';
-import 'package:johar/features/search/ui/stationary_search_page.dart';
 
 class CosmeticAppBar extends StatefulWidget implements PreferredSizeWidget {
   final TextEditingController controller;

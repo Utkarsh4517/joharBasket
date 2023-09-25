@@ -37,7 +37,7 @@ class _ProfileProductCardState extends State<ProfileProductCard> {
     final sizeController = TextEditingController();
     final discountedPriceController = TextEditingController();
     bool toggle = state.product.isFeatured;
-    String radioValue = 'grocery';
+    // String radioValue = 'grocery';
     nameController.text = productDataModel.name;
     sizeController.text = productDataModel.size!;
     discountedPriceController.text =

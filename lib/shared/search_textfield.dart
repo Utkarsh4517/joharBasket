@@ -3,12 +3,10 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:feather_icons/feather_icons.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:johar/constants/colors.dart';
 import 'package:johar/constants/dimensions.dart';
 import 'package:johar/features/grocery/bloc/grocery_bloc.dart';
-import 'package:johar/features/grocery/widgets/topbar.dart';
 import 'package:johar/model/grocery_model.dart';
 
 class SearchTextField extends StatefulWidget implements PreferredSizeWidget {

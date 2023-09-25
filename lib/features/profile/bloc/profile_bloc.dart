@@ -1,8 +1,6 @@
 import 'dart:async';
 
 import 'package:bloc/bloc.dart';
-import 'package:johar/features/order/bloc/order_bloc.dart';
-import 'package:johar/features/order/repo/order_repo.dart';
 import 'package:johar/features/profile/repo/profile_repo.dart';
 import 'package:johar/model/grocery_model.dart';
 import 'package:meta/meta.dart';

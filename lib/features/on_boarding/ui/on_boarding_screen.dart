@@ -2,9 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:johar/constants/colors.dart';
 import 'package:johar/constants/dimensions.dart';
-import 'package:johar/features/on_boarding/ui/widgets/body_text.dart';
 import 'package:johar/shared/button.dart';
-import 'package:johar/features/on_boarding/ui/widgets/head_text.dart';
 import 'package:lottie/lottie.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
