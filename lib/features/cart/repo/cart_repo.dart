@@ -1,5 +1,6 @@
 // ignore_for_file: avoid_print
 
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
@@ -237,8 +238,8 @@ class CartRepo {
   }
 
   // add cart products to order
-  static Future<void> addProductsToOrder(
-      List<ProductDataModel> products, String amount, String gst, bool isPaid) async {
+  static Future<void> addProductsToOrder(List<ProductDataModel> products,
+      String amount, String gst, bool isPaid) async {
     var uuid = const Uuid();
     final orderId = uuid.v1();
     print(orderId);
@@ -396,6 +397,40 @@ class CartRepo {
         body: 'A new order has been placed by $usrName',
         title: 'New Order',
       );
+    }
+
+    // Reduce inStock....
+
+    // loop inside three collection
+    // create three collection list
+    List collectionsToLoop = ['cosmetics', 'grocery', 'stationary'];
+    for (var collection in collectionsToLoop) {
+      for (var product in products) {
+        final docId = product.productId;
+        final quantity = product.nos;
+
+        // fetch the document with the matching product id
+        final docRef =
+            FirebaseFirestore.instance.collection(collection).doc(docId);
+        final doc = await docRef.get();
+
+        if (doc.exists) {
+          final currentStock = doc.get('inStock');
+          final newStock = currentStock - quantity;
+
+          // update the inStock of that document ...
+          try {
+            await FirebaseFirestore.instance
+                .collection(collection)
+                .doc(docId)
+                .update({
+              'inStock': newStock,
+            });
+          } catch (e) {
+            print(e.toString());
+          }
+        }
+      }
     }
   }
 
