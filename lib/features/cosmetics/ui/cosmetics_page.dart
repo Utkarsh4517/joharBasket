@@ -124,7 +124,7 @@ class _CosmeticsPageState extends State<CosmeticsPage>
                         SizedBox(
                           height: (successState.products.length *
                                   getScreenWidth(context) *
-                                  0.62)
+                                  0.35)
                               .toDouble(),
                           child: GridView.builder(
                             physics: const NeverScrollableScrollPhysics(),

@@ -126,7 +126,7 @@ class _StationaryPageState extends State<StationaryPage>
                         SizedBox(
                           height: (successState.products.length *
                                   getScreenWidth(context) *
-                                  0.62)
+                                  0.35)
                               .toDouble(),
                           child: GridView.builder(
                             physics: const NeverScrollableScrollPhysics(),

@@ -146,58 +146,42 @@ class _OrderPageState extends State<OrderPage> {
             final successState = state as OrderLoadedSuccessState;
 
             return Scaffold(
-                backgroundColor: const Color.fromARGB(255, 248, 248, 248),
-                body: SafeArea(
-                    child: SingleChildScrollView(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Container(
-                            alignment: Alignment.centerLeft,
-                            margin:
-                                EdgeInsets.all(getScreenWidth(context) * 0.06),
-                            child: Text(
-                              'Your orders!',
-                              style: GoogleFonts.publicSans(
-                                color: Colors.black,
-                                fontWeight: FontWeight.w900,
-                                fontSize: getScreenWidth(context) * 0.05,
-                              ),
-                            ),
-                          ),
-                          TextButton(
-                              onPressed: () {
-                                Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                        builder: (context) =>
-                                            const PastOrderPage()));
-                              },
-                              child: const Text('View Past Orders')),
-                        ],
-                      ),
-                      SizedBox(
-                        height: (getScreenheight(context) * successState.orders.length * 0.42) + (50 * successState.orders.length * 0.5),
-                        child: ListView.builder(
-                          itemCount: successState.orders.length,
-                          scrollDirection: Axis.vertical,
-                          physics: const NeverScrollableScrollPhysics(),
-                          itemBuilder: (context, indexU) {
-                            return OrderCardLarge(
-                              orderIdList: orderIdList,
-                              successState: successState,
-                              bloc: orderBloc,
-                              indexU: indexU,
-                            );
-                          },
-                        ),
-                      ),
-                    ],
+              backgroundColor: const Color.fromARGB(255, 248, 248, 248),
+              appBar: AppBar(
+                title: Text(
+                  'Your orders!',
+                  style: GoogleFonts.publicSans(
+                    color: Colors.black,
+                    fontWeight: FontWeight.w900,
+                    fontSize: getScreenWidth(context) * 0.05,
                   ),
-                )));
+                ),
+                actions: [
+                  TextButton(
+                      onPressed: () {
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => const PastOrderPage()));
+                      },
+                      child: const Text('View Past Orders')),
+                ],
+              ),
+              body: SafeArea(
+                child: ListView.builder(
+                  itemCount: successState.orders.length,
+                  scrollDirection: Axis.vertical,
+                  itemBuilder: (context, indexU) {
+                    return OrderCardLarge(
+                      orderIdList: orderIdList,
+                      successState: successState,
+                      bloc: orderBloc,
+                      indexU: indexU,
+                    );
+                  },
+                ),
+              ),
+            );
 
           default:
             return const Scaffold();
