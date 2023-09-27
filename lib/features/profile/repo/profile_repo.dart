@@ -118,7 +118,7 @@ class ProfileRepo {
   }
 
   static Stream<List<ProductDataModel>> getCosmeticProducts() {
-    final collection = FirebaseFirestore.instance.collection('stationary');
+    final collection = FirebaseFirestore.instance.collection('cosmetics');
     return collection.snapshots().map((snapshot) {
       return snapshot.docs.map((doc) {
         final data = doc.data();

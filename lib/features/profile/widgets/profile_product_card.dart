@@ -149,8 +149,8 @@ class _ProfileProductCardState extends State<ProfileProductCard> {
                       isFeatred: toggle,
                       name: nameController.text,
                       price: double.parse(priceController.text),
-                      discountedPrice: double.parse(discountedPriceController.text),
-
+                      discountedPrice:
+                          double.parse(discountedPriceController.text),
                     ));
                   } else if (widget.type == 'stationary') {
                     profileBloc.add(StationaryUpdateDetailsClickedEvent(
@@ -162,7 +162,8 @@ class _ProfileProductCardState extends State<ProfileProductCard> {
                       isFeatred: toggle,
                       name: nameController.text,
                       price: double.parse(priceController.text),
-                      discountedPrice: double.parse(discountedPriceController.text),
+                      discountedPrice:
+                          double.parse(discountedPriceController.text),
                     ));
                   } else if (widget.type == 'cosmetics') {
                     profileBloc.add(CosmeticUpdateClickedEvent(
@@ -174,7 +175,8 @@ class _ProfileProductCardState extends State<ProfileProductCard> {
                       isFeatred: toggle,
                       name: nameController.text,
                       price: double.parse(priceController.text),
-                      discountedPrice: double.parse(discountedPriceController.text),
+                      discountedPrice:
+                          double.parse(discountedPriceController.text),
                     ));
                   }
                 },
@@ -312,8 +314,16 @@ class _ProfileProductCardState extends State<ProfileProductCard> {
                       child: const Text('Cancel')),
                   TextButton(
                     onPressed: () {
-                      profileBloc.add(RemoveProductClickedEvent(
-                          productDataModel: widget.product));
+                      if (widget.type == 'grocery') {
+                        profileBloc.add(RemoveProductClickedEvent(
+                            productDataModel: widget.product));
+                      } else if (widget.type == 'stationary') {
+                        profileBloc.add(RemoveStationaryClickedEvent(
+                            productDataModel: widget.product));
+                      } else if (widget.type == 'cosmetics') {
+                        profileBloc.add(RemoveCosmeticClickedEvent(
+                            productDataModel: widget.product));
+                      }
                     },
                     child: const Text(
                       'Remove Product',

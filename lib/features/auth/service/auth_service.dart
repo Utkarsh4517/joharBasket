@@ -28,7 +28,7 @@ class AuthService {
           await _auth.signInWithCredential(credential);
       final User? user = userCredential.user;
       if (user != null) {
-        Navigator.pushNamed(context, 'authLoadingPage');
+        Navigator.pushReplacementNamed(context, 'authLoadingPage');
       }
       return user;
     } else {

@@ -167,7 +167,7 @@ class _OrderCardLargeState extends State<OrderCardLarge> {
                     SelectableText(
                       otp,
                       style: TextStyle(
-                        color: Colors.black,
+                        color: Colors.green,
                         fontSize: getScreenWidth(context) * 0.03,
                         fontWeight: FontWeight.bold,
                       ),
