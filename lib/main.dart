@@ -14,6 +14,8 @@ void main() async {
     options: DefaultFirebaseOptions.currentPlatform,
   );
   await FirebaseMessaging.instance.requestPermission();
+  final token = await FirebaseMessaging.instance.getToken();
+  print(token);
   await _initLocalNotifications();
 
 

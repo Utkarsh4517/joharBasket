@@ -502,18 +502,18 @@ class ProfileRepo {
         'isDelivered': true,
         'payment': true,
       });
-      userOrderRef.doc('orderDetails').set({
-        'deliveryTime': FieldValue.serverTimestamp(),
-      }, SetOptions(merge: true));
+      // userOrderRef.doc('orderDetails').set({
+      //   'deliveryTime': FieldValue.serverTimestamp(),
+      // }, SetOptions(merge: true));
     }
     if (gOrderRef.exists) {
       globalOrderRef.doc('orderDetails').update({
         'isDelivered': true,
         'payment': true,
       });
-      globalOrderRef.doc('orderDetails').set({
-        'deliveryTime': FieldValue.serverTimestamp(),
-      }, SetOptions(merge: true));
+      // globalOrderRef.doc('orderDetails').set({
+      //   'deliveryTime': FieldValue.serverTimestamp(),
+      // }, SetOptions(merge: true));
     }
     moveOrderToPastOrderUser(orderid);
     moveOrderToPastOrderGlobal(orderid);
@@ -579,6 +579,18 @@ class ProfileRepo {
         .doc(FirebaseAuth.instance.currentUser!.uid)
         .collection('orderDetails')
         .doc('pastOrderList');
+    final userCollectionRefPast = FirebaseFirestore.instance
+        .collection('users')
+        .doc(FirebaseAuth.instance.currentUser!.uid)
+        .collection('order')
+        .doc('pastOrders')
+        .collection(orderId);
+    final userCDP = await userCollectionRefPast.doc('orderDetails').get();
+    if (userCDP.exists) {
+      userCollectionRefPast.doc('orderDetails').set({
+        'deliveryTime': FieldValue.serverTimestamp(),
+      }, SetOptions(merge: true));
+    }
     final docRefPastGet = await docRefPast.get();
     if (docRefPastGet.exists) {
       List<dynamic> currentList = docRefPastGet.get('pastOrdersList');
@@ -636,6 +648,17 @@ class ProfileRepo {
 
     DocumentReference docRefPast =
         FirebaseFirestore.instance.collection('orders').doc('pastOrderList');
+
+    final globalCollectionRefPast = FirebaseFirestore.instance
+        .collection('orders')
+        .doc('pastOrders')
+        .collection(orderId);
+    final globalCDP = await globalCollectionRefPast.doc('orderDetails').get();
+    if (globalCDP.exists) {
+      globalCollectionRefPast.doc('orderDetails').set({
+        'deliveryTime': FieldValue.serverTimestamp(),
+      }, SetOptions(merge: true));
+    }
 
     final docRefPastGet = await docRefPast.get();
     if (docRefPastGet.exists) {
