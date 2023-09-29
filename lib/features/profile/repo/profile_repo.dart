@@ -288,6 +288,19 @@ class ProfileRepo {
     }
   }
 
+  static Future<DateTime> fetchDeliveredOnTime(
+      String orderId) async {
+    DocumentSnapshot documentSnapshot = await FirebaseFirestore.instance
+        .collection('orders')
+        .doc('pastOrders')
+
+        .collection(orderId)
+        .doc('orderDetails')
+        .get();
+    Timestamp date = documentSnapshot['deliveryTime'];
+    return date.toDate();
+  }
+
   // fetch orderId list
   static Future<List<dynamic>> fetchOrderIdList() async {
     DocumentSnapshot orderListSnapshot = await FirebaseFirestore.instance

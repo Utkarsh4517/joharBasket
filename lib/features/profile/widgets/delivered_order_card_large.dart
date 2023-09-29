@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:johar/constants/dimensions.dart';
 import 'package:johar/features/cart/widgets/small_text_body.dart';
 import 'package:johar/features/order/widgets/my_timeline.dart';
@@ -28,6 +29,7 @@ class _ProfileDeliveredOrderCardLargeState
     extends State<ProfileDeliveredOrderCardLarge> {
   String amountOfOrder = '';
   String orderedBy = '';
+  String deliveredOn = '';
 
   @override
   void initState() {
@@ -41,8 +43,12 @@ class _ProfileDeliveredOrderCardLargeState
         widget.orderIdlist[widget.indexU]);
     final name = await ProfileRepo.fetchUsernameDelivered(
         widget.orderIdlist[widget.indexU]);
+    final delTime = await ProfileRepo.fetchDeliveredOnTime(
+        widget.orderIdlist[widget.indexU]);
+    final formattedDate = DateFormat('dd MMMM yyyy').format(delTime);
     if (mounted) {
       setState(() {
+        deliveredOn = formattedDate;
         orderedBy = name;
         amountOfOrder = amount;
       });
@@ -118,6 +124,23 @@ class _ProfileDeliveredOrderCardLargeState
                 const SmallTextBody(text: 'Ordered by'),
                 SelectableText(
                   orderedBy,
+                  style: TextStyle(
+                      color: Colors.black,
+                      fontSize: getScreenWidth(context) * 0.03,
+                      fontWeight: FontWeight.bold),
+                )
+              ],
+            ),
+          ),
+           Container(
+            margin: EdgeInsets.symmetric(
+                horizontal: getScreenWidth(context) * 0.04),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                const SmallTextBody(text: 'Delivered On'),
+                SelectableText(
+                  deliveredOn,
                   style: TextStyle(
                       color: Colors.black,
                       fontSize: getScreenWidth(context) * 0.03,
