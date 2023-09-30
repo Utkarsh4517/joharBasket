@@ -1,6 +1,7 @@
 import 'package:feather_icons/feather_icons.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:johar/constants/dimensions.dart';
 import 'package:johar/features/cart/ui/cart_page.dart';
 import 'package:johar/features/cosmetics/ui/cosmetics_page.dart';
@@ -23,12 +24,12 @@ class _NavBarState extends State<NavBar> {
     List<BottomNavigationBarItem> bottomNavItems = <BottomNavigationBarItem>[
       const BottomNavigationBarItem(
           icon: Icon(
-            FeatherIcons.home,
+            FontAwesomeIcons.carrot,
           ),
           label: 'Grocery'),
       const BottomNavigationBarItem(
           icon: Icon(
-            FeatherIcons.book,
+            FontAwesomeIcons.book,
           ),
           label: 'Stationary'),
       const BottomNavigationBarItem(

@@ -392,7 +392,7 @@ class _GroceryProductPageState extends State<GroceryProductPage> {
                               onTap: () {
                                 groceryBloc.add(GroceryCardClickedEvent(
                                     clickedGrocery: optionProduct));
-                                Navigator.push(
+                                Navigator.pushReplacement(
                                     context,
                                     MaterialPageRoute(
                                         builder: (context) =>

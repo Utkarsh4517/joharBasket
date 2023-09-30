@@ -543,7 +543,9 @@ class _CartPageState extends State<CartPage> {
                                   grd: linerGrdR))
 
                         // Place Order
+
                         else if (isDeliver != null && isDeliver == true)
+
                           GestureDetector(
                             onTap: () {
                               if (radioValue == 'cod') {
@@ -579,6 +581,8 @@ class _CartPageState extends State<CartPage> {
                               ),
                             ),
                           ),
+                        SizedBox(height: getScreenWidth(context)*0.1),
+
                       ],
                     ),
                   ),
