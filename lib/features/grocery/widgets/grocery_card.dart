@@ -129,8 +129,8 @@ class GroceryCard extends StatelessWidget {
                     ),
                   ),
                   GestureDetector(
-                    onTap: () => bloc.add(GroceryCardCartButtonClickedEvent(
-                        cartClickedGrocery: groceryUiDataModel)),
+                    // onTap: () => bloc.add(GroceryCardCartButtonClickedEvent(
+                    //     cartClickedGrocery: groceryUiDataModel)),
                     child: Container(
                       width: getScreenWidth(context) * 0.13,
                       height: getScreenWidth(context) * 0.12,

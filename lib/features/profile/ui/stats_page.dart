@@ -6,6 +6,7 @@ import 'package:johar/features/profile/bloc/profile_bloc.dart';
 import 'package:johar/features/profile/repo/profile_repo.dart';
 import 'package:johar/features/profile/widgets/delivered_order_card_large.dart';
 import 'package:johar/features/profile/widgets/stats_card.dart';
+import 'package:johar/model/grocery_model.dart';
 
 class ProfileStatsPage extends StatefulWidget {
   const ProfileStatsPage({super.key});
@@ -23,7 +24,8 @@ class _ProfileStatsPageState extends State<ProfileStatsPage> {
   dynamic cancelledOrders = 0;
   dynamic totalAmount = 0;
   dynamic gstCollected = 0;
-
+  DateTime? startDate;
+  DateTime? endDate;
   @override
   void initState() {
     profileBloc.add(StatsPageInitialEvent());
@@ -52,6 +54,7 @@ class _ProfileStatsPageState extends State<ProfileStatsPage> {
       });
     }
   }
+
 
   @override
   Widget build(BuildContext context) {

@@ -528,7 +528,7 @@ class ProfileRepo {
       //   'deliveryTime': FieldValue.serverTimestamp(),
       // }, SetOptions(merge: true));
     }
-    moveOrderToPastOrderUser(orderid);
+    moveOrderToPastOrderUser(orderid, userId);
     moveOrderToPastOrderGlobal(orderid);
 
     // get the user fcm token....
@@ -545,11 +545,11 @@ class ProfileRepo {
   }
 
   // move order to past order for user
-  static Future<void> moveOrderToPastOrderUser(String orderId) async {
+  static Future<void> moveOrderToPastOrderUser(String orderId, String userId) async {
     // Source collection reference
     CollectionReference sourceCollection = FirebaseFirestore.instance
         .collection('users')
-        .doc(FirebaseAuth.instance.currentUser!.uid)
+        .doc(userId)
         .collection('order')
         .doc('myOrders')
         .collection(orderId);
@@ -570,7 +570,7 @@ class ProfileRepo {
 
       DocumentReference targetDocument = FirebaseFirestore.instance
           .collection('users')
-          .doc(FirebaseAuth.instance.currentUser!.uid)
+          .doc(userId)
           .collection('order')
           .doc('pastOrders')
           .collection(orderId)
@@ -584,17 +584,17 @@ class ProfileRepo {
     // move orderId from orderDetails, order to pastOrderList
     DocumentReference docRef = FirebaseFirestore.instance
         .collection('users')
-        .doc(FirebaseAuth.instance.currentUser!.uid)
+        .doc(userId)
         .collection('orderDetails')
         .doc('orders');
     DocumentReference docRefPast = FirebaseFirestore.instance
         .collection('users')
-        .doc(FirebaseAuth.instance.currentUser!.uid)
+        .doc(userId)
         .collection('orderDetails')
         .doc('pastOrderList');
     final userCollectionRefPast = FirebaseFirestore.instance
         .collection('users')
-        .doc(FirebaseAuth.instance.currentUser!.uid)
+        .doc(userId)
         .collection('order')
         .doc('pastOrders')
         .collection(orderId);
@@ -611,7 +611,7 @@ class ProfileRepo {
 
       await FirebaseFirestore.instance
           .collection('users')
-          .doc(FirebaseAuth.instance.currentUser!.uid)
+          .doc(userId)
           .collection('orderDetails')
           .doc('pastOrderList')
           .update({
@@ -620,7 +620,7 @@ class ProfileRepo {
     } else {
       await FirebaseFirestore.instance
           .collection('users')
-          .doc(FirebaseAuth.instance.currentUser!.uid)
+          .doc(userId)
           .collection('orderDetails')
           .doc('pastOrderList')
           .set({

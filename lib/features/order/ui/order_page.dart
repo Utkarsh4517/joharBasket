@@ -20,6 +20,7 @@ class _OrderPageState extends State<OrderPage> {
   final OrderBloc orderBloc = OrderBloc();
   final CartBloc cartBloc = CartBloc();
   List<dynamic> orderIdList = [];
+  List<dynamic> pastOrderIdList = [];
 
   @override
   void initState() {
@@ -30,6 +31,7 @@ class _OrderPageState extends State<OrderPage> {
 
   fetchOrderIds() async {
     orderIdList = await OrderRepo.fetchOrderIdList();
+    pastOrderIdList = await OrderRepo.fetchPastOrderIdList();
   }
 
   @override
@@ -126,17 +128,18 @@ class _OrderPageState extends State<OrderPage> {
                         ),
                       ),
                     ),
-                    TextButton(
-                      onPressed: () {
-                        Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => const PastOrderPage()));
-                      },
-                      child: const Text(
-                        'View Past Orders',
+                    if (pastOrderIdList.length != 0)
+                      TextButton(
+                        onPressed: () {
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => const PastOrderPage()));
+                        },
+                        child: const Text(
+                          'View Past Orders',
+                        ),
                       ),
-                    ),
                   ],
                 ),
               ),

@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -71,7 +73,8 @@ class _ProfileOrderCardLargeState extends State<ProfileOrderCardLarge> {
     final pin =
         await ProfileRepo.fetchPincode(widget.orderIdList[widget.indexU]);
     final id = await ProfileRepo.fetchUserid(widget.orderIdList[widget.indexU]);
-    final otpGen = await OrderRepo.fetchOTP(widget.orderIdList[widget.indexU], id);
+    final otpGen =
+        await OrderRepo.fetchOTP(widget.orderIdList[widget.indexU], id);
 
     if (mounted) {
       setState(() {
@@ -171,6 +174,8 @@ class _ProfileOrderCardLargeState extends State<ProfileOrderCardLarge> {
                         if (otpController.text == otp) {
                           profileBloc.add(DeliveryConfirmedEvent(
                               orderId: state.orderId, userId: state.userId));
+                              print('state user id is ${state.userId}');
+                              print('state orderId is ${state.orderId}');
                           showTopSnackBar(
                             Overlay.of(context),
                             const CustomSnackBar.success(
@@ -442,6 +447,8 @@ class _ProfileOrderCardLargeState extends State<ProfileOrderCardLarge> {
                         orderId: widget.orderIdList[widget.indexU],
                         userId: userId,
                       ));
+                      print('user id is $userId');
+                      print(widget.orderIdList[widget.indexU]);
                     },
                     child: Container(
                       margin: EdgeInsets.symmetric(
