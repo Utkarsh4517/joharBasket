@@ -15,6 +15,7 @@ import 'package:johar/features/profile/widgets/profile_product_order_card.dart';
 import 'package:johar/shared/button.dart';
 import 'package:top_snackbar_flutter/custom_snack_bar.dart';
 import 'package:top_snackbar_flutter/top_snack_bar.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class ProfileOrderCardLarge extends StatefulWidget {
   final List orderIdList;
@@ -349,7 +350,10 @@ class _ProfileOrderCardLargeState extends State<ProfileOrderCardLarge> {
                     children: [
                       const SmallTextBody(text: 'Mobile Number'),
                       TextButton(
-                          onPressed: () {},
+                          onPressed: () {
+                            Uri phoneno = Uri.parse('tel:$userMobile');
+                            launchUrl(phoneno);
+                          },
                           child: Text(
                             userMobile,
                             style: TextStyle(

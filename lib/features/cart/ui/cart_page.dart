@@ -14,6 +14,7 @@ import 'package:johar/features/cart/widgets/small_text_body.dart';
 import 'package:johar/shared/button.dart';
 import 'package:lottie/lottie.dart';
 import 'package:razorpay_flutter/razorpay_flutter.dart';
+import 'package:status_alert/status_alert.dart';
 // import 'package:razorpay_flutter/razorpay_flutter.dart';
 
 class CartPage extends StatefulWidget {
@@ -122,7 +123,7 @@ class _CartPageState extends State<CartPage> {
     super.dispose();
   }
 
-  String radioValue = 'upi';
+  String radioValue = 'cod';
 
   @override
   Widget build(BuildContext context) {
@@ -510,12 +511,22 @@ class _CartPageState extends State<CartPage> {
                                 value: 'upi',
                                 groupValue: radioValue,
                                 onChanged: (value) {
+                                  // Open a dialog box to show that we will soon launch upi option soon
+                                  StatusAlert.show(
+                                    context,
+                                    duration: Duration(seconds: 2),
+                                    title: 'Stay tuned',
+                                    subtitle: 'We are soon going to launch our other payment options!!',
+                                    configuration:
+                                        IconConfiguration(icon: Icons.payment),
+                                    maxWidth: 300,
+                                  );
                                   setState(() {
-                                    radioValue = value.toString();
+                                    // radioValue = value.toString();
                                   });
                                 },
-                                title:
-                                    const SmallTextBody(text: 'Pay Using UPI'),
+                                title: const SmallTextBody(
+                                    text: 'Pay Using UPI (Coming soon)'),
                               ),
                               RadioListTile(
                                 controlAffinity:
@@ -545,7 +556,6 @@ class _CartPageState extends State<CartPage> {
                         // Place Order
 
                         else if (isDeliver != null && isDeliver == true)
-
                           GestureDetector(
                             onTap: () {
                               if (radioValue == 'cod') {
@@ -581,8 +591,7 @@ class _CartPageState extends State<CartPage> {
                               ),
                             ),
                           ),
-                        SizedBox(height: getScreenWidth(context)*0.1),
-
+                        SizedBox(height: getScreenWidth(context) * 0.1),
                       ],
                     ),
                   ),
