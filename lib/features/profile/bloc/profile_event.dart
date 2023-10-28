@@ -195,4 +195,16 @@ class DeliveryConfirmedEvent extends ProfileEvent {
   });
 }
 
+class NotificationButtonClickedEvent extends ProfileEvent {}
+
+class SendNotification extends ProfileEvent {
+  final String notfTitle;
+  final String notfDesc;
+
+  SendNotification({
+    required this.notfTitle,
+    required this.notfDesc,
+  });
+}
+
 class StatsPageInitialEvent extends ProfileEvent {}

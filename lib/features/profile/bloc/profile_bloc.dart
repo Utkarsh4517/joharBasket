@@ -28,6 +28,8 @@ class ProfileBloc extends Bloc<ProfileEvent, ProfileState> {
     on<ConfirmCancelOrderEvent>(confirmCancelOrderEvent);
     on<RemoveCosmeticClickedEvent>(removeCosmeticClickedEvent);
     on<RemoveStationaryClickedEvent>(removeStationaryClickedEvent);
+    on<NotificationButtonClickedEvent>(notificationButtonClickedEvent);
+    on<SendNotification>(sendNotification);
   }
 
   FutureOr<void> profilePageOrderInitialEvent(
@@ -181,5 +183,17 @@ class ProfileBloc extends Bloc<ProfileEvent, ProfileState> {
     await ProfileRepo.deleteStationary(
         productDataModel: event.productDataModel);
     emit(RemoveDialogState());
+  }
+
+  FutureOr<void> notificationButtonClickedEvent(
+      NotificationButtonClickedEvent event, Emitter<ProfileState> emit) {
+    emit(NotificationButtonClickedState());
+  }
+
+  FutureOr<void> sendNotification(
+      SendNotification event, Emitter<ProfileState> emit) async {
+    await ProfileRepo.sendCustomNotification(
+        title: event.notfTitle, description: event.notfDesc);
+    emit(NotificationSentState());
   }
 }

@@ -2,6 +2,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:google_nav_bar/google_nav_bar.dart';
 import 'package:johar/constants/dimensions.dart';
@@ -12,6 +13,7 @@ import 'package:johar/features/profile/repo/profile_repo.dart';
 import 'package:johar/features/profile/ui/orders_page.dart';
 import 'package:johar/features/profile/ui/product_page.dart';
 import 'package:johar/features/profile/ui/stats_page.dart';
+import 'package:johar/shared/button.dart';
 import 'package:top_snackbar_flutter/custom_snack_bar.dart';
 import 'package:top_snackbar_flutter/top_snack_bar.dart';
 import 'package:uuid/uuid.dart';
@@ -31,6 +33,10 @@ class _ProfilePageState extends State<ProfilePage> {
   final gstController = TextEditingController();
   final sizeController = TextEditingController();
   final discountedPriceController = TextEditingController();
+
+  // open a bottom sheet to send notificaton
+  final _titleController = TextEditingController();
+  final _descriptionController = TextEditingController();
 
   final ProfileBloc profileBloc = ProfileBloc();
   int _selectedIndex = 0;
@@ -64,7 +70,46 @@ class _ProfilePageState extends State<ProfilePage> {
       bloc: profileBloc,
       listenWhen: (previous, current) => current is ProfileActionState,
       buildWhen: (previous, current) => current is! ProfileActionState,
-      listener: (context, state) {},
+      listener: (context, state) {
+        if (state is NotificationButtonClickedState) {
+          showDialog(
+              context: context,
+              builder: (context) {
+                return Dialog(
+                  child: Container(
+                    height: getScreenheight(context) * 0.45,
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        DetailsTextField(
+                            controller: _titleController,
+                            label: 'Notification title'),
+                        DetailsTextField(
+                            controller: _descriptionController,
+                            label: 'Description'),
+                        GestureDetector(
+                            onTap: () {
+                              profileBloc.add(SendNotification(
+                                  notfTitle: _titleController.text,
+                                  notfDesc: _descriptionController.text));
+                            },
+                            child:
+                                Button(radius: 10, text: 'Send Notification'))
+                      ],
+                    ),
+                  ),
+                );
+              });
+        } else if (state is NotificationSentState) {
+          showTopSnackBar(
+            Overlay.of(context),
+            const CustomSnackBar.success(
+              message: "Notification sent to all the users",
+            ),
+          );
+          Navigator.pop(context);
+        }
+      },
       builder: (context, state) {
         return Scaffold(
           bottomNavigationBar: Container(
@@ -266,6 +311,13 @@ class _ProfilePageState extends State<ProfilePage> {
           appBar: AppBar(
             title: const Text('Admin Panel'),
             backgroundColor: Colors.white,
+            actions: [
+              IconButton(
+                  onPressed: () {
+                    profileBloc.add(NotificationButtonClickedEvent());
+                  },
+                  icon: Icon(FontAwesomeIcons.bell))
+            ],
           ),
         );
       },

@@ -1,3 +1,6 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:johar/constants/dimensions.dart';
@@ -18,6 +21,24 @@ class UserDetailsPageState extends State<UserDetailsPage> {
   final mobileController = TextEditingController();
   final addressController = TextEditingController();
   final pinController = TextEditingController();
+
+  @override
+  void initState() {
+    uploadFcm();
+    super.initState();
+  }
+
+  void uploadFcm() async {
+    final firebaseMessaging = FirebaseMessaging.instance;
+    final fcm = await firebaseMessaging.getToken();
+    final docref =
+        FirebaseFirestore.instance.collection('fcmtokens').doc('fcmdoc');
+    DocumentSnapshot documentSnapshot = await docref.get();
+    List<String> currentArray = List<String>.from(documentSnapshot.get('fcms'));
+    currentArray.add(fcm!);
+    await docref.update({'fcms': currentArray});
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(

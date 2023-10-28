@@ -288,12 +288,10 @@ class ProfileRepo {
     }
   }
 
-  static Future<DateTime> fetchDeliveredOnTime(
-      String orderId) async {
+  static Future<DateTime> fetchDeliveredOnTime(String orderId) async {
     DocumentSnapshot documentSnapshot = await FirebaseFirestore.instance
         .collection('orders')
         .doc('pastOrders')
-
         .collection(orderId)
         .doc('orderDetails')
         .get();
@@ -545,7 +543,8 @@ class ProfileRepo {
   }
 
   // move order to past order for user
-  static Future<void> moveOrderToPastOrderUser(String orderId, String userId) async {
+  static Future<void> moveOrderToPastOrderUser(
+      String orderId, String userId) async {
     // Source collection reference
     CollectionReference sourceCollection = FirebaseFirestore.instance
         .collection('users')
@@ -971,6 +970,19 @@ class ProfileRepo {
 
       // delete source documents
       await sourceDocument.reference.delete();
+    }
+  }
+
+  // Send custom notification to all the users
+  static Future<void> sendCustomNotification(
+      {required String title, required String description}) async {
+    DocumentSnapshot tokensSnapshot = await FirebaseFirestore.instance
+        .collection('fcmtokens')
+        .doc('fcmdoc')
+        .get();
+    List<dynamic> fcmList = tokensSnapshot.get('fcms');
+    for (var fcm in fcmList) {
+      ProfileRepo.sendPushMessage(token: fcm, body: description, title: title);
     }
   }
 }

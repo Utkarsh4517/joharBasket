@@ -2,6 +2,7 @@ import 'package:feather_icons/feather_icons.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:johar/constants/colors.dart';
 import 'package:johar/constants/dimensions.dart';
 import 'package:johar/features/cart/ui/cart_page.dart';
 import 'package:johar/features/cosmetics/ui/cosmetics_page.dart';
@@ -24,7 +25,7 @@ class _NavBarState extends State<NavBar> {
     List<BottomNavigationBarItem> bottomNavItems = <BottomNavigationBarItem>[
       const BottomNavigationBarItem(
           icon: Icon(
-            FontAwesomeIcons.carrot,
+            FontAwesomeIcons.bagShopping,
           ),
           label: 'Grocery'),
       const BottomNavigationBarItem(
@@ -34,7 +35,7 @@ class _NavBarState extends State<NavBar> {
           label: 'Stationary'),
       const BottomNavigationBarItem(
           icon: Icon(
-            FeatherIcons.watch,
+            FontAwesomeIcons.gem,
           ),
           label: 'Cosmetics'),
       const BottomNavigationBarItem(
@@ -75,7 +76,7 @@ class _NavBarState extends State<NavBar> {
             child: ClipRRect(
               borderRadius: BorderRadius.circular(20),
               child: BottomNavigationBar(
-                backgroundColor: const Color.fromARGB(255, 46, 52, 68),
+                backgroundColor: orangeColor,
                 items: bottomNavItems,
                 currentIndex: state.tabIndex,
                 selectedItemColor: Colors.white,
@@ -85,7 +86,7 @@ class _NavBarState extends State<NavBar> {
                 unselectedFontSize: 10,
                 type: BottomNavigationBarType.fixed,
                 // selectedItemColor: blackColor,
-                unselectedItemColor: Colors.white.withAlpha(85),
+                unselectedItemColor: Colors.black.withAlpha(95),
                 onTap: (index) {
                   _pageController.jumpToPage(index);
                 },

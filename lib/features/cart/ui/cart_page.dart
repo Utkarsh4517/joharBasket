@@ -460,15 +460,17 @@ class _CartPageState extends State<CartPage> {
                         ),
                         //update details button
                         GestureDetector(
-                          onTap: () => cartBloc.add(
-                            CartPageUpdateDetailsClickedEvent(
-                              firstName: firstNameController.text,
-                              lastName: lastNameController.text,
-                              mobileNumber: mobileController.text,
-                              pincode: pincodeController.text,
-                              address: addressController.text,
-                            ),
-                          ),
+                          onTap: () {
+                            cartBloc.add(
+                              CartPageUpdateDetailsClickedEvent(
+                                firstName: firstNameController.text,
+                                lastName: lastNameController.text,
+                                mobileNumber: mobileController.text,
+                                pincode: pincodeController.text,
+                                address: addressController.text,
+                              ),
+                            );
+                          },
                           child: Container(
                             alignment: Alignment.center,
                             child: const Button(
@@ -516,7 +518,8 @@ class _CartPageState extends State<CartPage> {
                                     context,
                                     duration: Duration(seconds: 2),
                                     title: 'Stay tuned',
-                                    subtitle: 'We are soon going to launch our other payment options!!',
+                                    subtitle:
+                                        'We are soon going to launch our other payment options!!',
                                     configuration:
                                         IconConfiguration(icon: Icons.payment),
                                     maxWidth: 300,

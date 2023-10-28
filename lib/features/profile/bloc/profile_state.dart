@@ -75,3 +75,7 @@ class ConfirmDeliveryDialogState extends ProfileActionState {
 }
 
 class DeliveryConfirmedState extends ProfileActionState {}
+
+class NotificationButtonClickedState extends ProfileActionState {}
+
+class NotificationSentState extends ProfileActionState {}

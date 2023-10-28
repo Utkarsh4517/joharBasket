@@ -6,7 +6,6 @@ import 'package:johar/features/profile/bloc/profile_bloc.dart';
 import 'package:johar/features/profile/repo/profile_repo.dart';
 import 'package:johar/features/profile/widgets/delivered_order_card_large.dart';
 import 'package:johar/features/profile/widgets/stats_card.dart';
-import 'package:johar/model/grocery_model.dart';
 
 class ProfileStatsPage extends StatefulWidget {
   const ProfileStatsPage({super.key});
