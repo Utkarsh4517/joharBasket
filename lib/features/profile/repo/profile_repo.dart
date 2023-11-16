@@ -3,7 +3,6 @@ import 'dart:io';
 import 'dart:math';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:image/image.dart' as img;
@@ -14,6 +13,37 @@ class ProfileRepo {
   static Future<String> uploadImage() async {
     final ImagePicker imagePicker = ImagePicker();
     final XFile? file = await imagePicker.pickImage(source: ImageSource.camera);
+
+    if (file == null) return '';
+
+    try {
+      final File imageFile = File(file.path);
+
+      // Compress the image
+      final decodedImage = img.decodeImage(imageFile.readAsBytesSync());
+      final compressedImage = img.encodeJpg(decodedImage!,
+          quality: 15); // Adjust the quality as needed
+
+      final String fileName = DateTime.now().millisecondsSinceEpoch.toString();
+      final Reference referenceRoot = FirebaseStorage.instance.ref();
+      final Reference referenceDirImage = referenceRoot.child('images');
+      final Reference referenceImageToUpload =
+          referenceDirImage.child('$fileName.jpg');
+
+      await referenceImageToUpload
+          .putData(compressedImage); // Use putData instead of putFile
+
+      final String imageUrl = await referenceImageToUpload.getDownloadURL();
+      return imageUrl;
+    } catch (e) {
+      print('Error uploading image: $e');
+      return '';
+    }
+  }
+
+    static Future<String> selectImage() async {
+    final ImagePicker imagePicker = ImagePicker();
+    final XFile? file = await imagePicker.pickImage(source: ImageSource.gallery);
 
     if (file == null) return '';
 

@@ -9,7 +9,7 @@
       "client_info": {
         "mobilesdk_app_id": "1:900355893748:android:68441b4fe8292112cf71a1",
         "android_client_info": {
-          "package_name": "com.example.johar"
+          "package_name": "com.opxica.johar"
         }
       },
       "oauth_client": [
@@ -17,7 +17,7 @@
           "client_id": "900355893748-3phg5r9gft3f2og8nr7g18fp80hrbr1e.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
-            "package_name": "com.example.johar",
+            "package_name": "com.opxica.johar",
             "certificate_hash": "41dd3638fb552c37a6fd4eded7e3d6161e1507ee"
           }
         },
@@ -42,7 +42,7 @@
               "client_id": "900355893748-k9g9rm1hp23qtjbsav28vm0bthb7tcqm.apps.googleusercontent.com",
               "client_type": 2,
               "ios_info": {
-                "bundle_id": "com.example.johar.RunnerTests"
+                "bundle_id": "com.opxica.johar.RunnerTests"
               }
             }
           ]

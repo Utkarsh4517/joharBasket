@@ -273,31 +273,64 @@ class _ProfilePageState extends State<ProfilePage> {
                           ),
 
                           // Image  uploader
-                          OutlinedButton(
-                              onPressed: () async {
-                                imageU = await ProfileRepo.uploadImage();
 
-                                showErrorMessage();
-                                const uuid = Uuid();
-                                final productid = uuid.v1();
-                                profileBloc.add(AddProductClickedEvent(
-                                  name: nameController.text,
-                                  description: descriptionController.text,
-                                  imageUrl: imageU,
-                                  inStock: double.parse(inStockController.text),
-                                  price: double.parse(priceController.text),
-                                  gst: double.parse(gstController.text),
-                                  discountedPrice: double.parse(
-                                      discountedPriceController.text),
-                                  category: radioValue,
-                                  isFeatured: toggle,
-                                  productId: productid,
-                                  size: sizeController.text.toString(),
-                                ));
-                                showSuccessMessage();
-                                Navigator.pop(context);
-                              },
-                              child: const Text('Upload image of product')),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                            children: [
+                              OutlinedButton(
+                                  onPressed: () async {
+                                    imageU = await ProfileRepo.selectImage();
+
+                                    showErrorMessage();
+                                    const uuid = Uuid();
+                                    final productid = uuid.v1();
+                                    profileBloc.add(AddProductClickedEvent(
+                                      name: nameController.text,
+                                      description: descriptionController.text,
+                                      imageUrl: imageU,
+                                      inStock:
+                                          double.parse(inStockController.text),
+                                      price: double.parse(priceController.text),
+                                      gst: double.parse(gstController.text),
+                                      discountedPrice: double.parse(
+                                          discountedPriceController.text),
+                                      category: radioValue,
+                                      isFeatured: toggle,
+                                      productId: productid,
+                                      size: sizeController.text.toString(),
+                                    ));
+                                    showSuccessMessage();
+                                    Navigator.pop(context);
+                                  },
+                                  child: Text('Select Image')),
+                              OutlinedButton(
+                                  onPressed: () async {
+                                    imageU = await ProfileRepo.uploadImage();
+
+                                    showErrorMessage();
+                                    const uuid = Uuid();
+                                    final productid = uuid.v1();
+                                    profileBloc.add(AddProductClickedEvent(
+                                      name: nameController.text,
+                                      description: descriptionController.text,
+                                      imageUrl: imageU,
+                                      inStock:
+                                          double.parse(inStockController.text),
+                                      price: double.parse(priceController.text),
+                                      gst: double.parse(gstController.text),
+                                      discountedPrice: double.parse(
+                                          discountedPriceController.text),
+                                      category: radioValue,
+                                      isFeatured: toggle,
+                                      productId: productid,
+                                      size: sizeController.text.toString(),
+                                    ));
+                                    showSuccessMessage();
+                                    Navigator.pop(context);
+                                  },
+                                  child: const Text('Open camera')),
+                            ],
+                          ),
                           SizedBox(height: getScreenWidth(context) * 0.1),
                         ],
                       ),
