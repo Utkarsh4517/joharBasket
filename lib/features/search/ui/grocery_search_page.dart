@@ -122,8 +122,9 @@ class _SearchPageState extends State<SearchPage> {
                           children: [
                             CachedNetworkImage(
                               imageUrl: product.imageUrl,
-                              fit: BoxFit.cover,
+                              fit: BoxFit.fitHeight,
                               width: getScreenWidth(context) * 0.2,
+                              height: getScreenheight(context) * 0.1,
                             ),
                             Text(
                               product.name,

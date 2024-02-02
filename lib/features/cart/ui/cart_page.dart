@@ -9,13 +9,12 @@ import 'package:johar/constants/razorpay.dart';
 import 'package:johar/features/auth/widgets/details_text_field.dart';
 import 'package:johar/features/cart/bloc/cart_bloc.dart';
 import 'package:johar/features/cart/repo/cart_repo.dart';
+import 'package:johar/features/cart/repo/razorpay_api.dart';
 import 'package:johar/features/cart/widgets/cart_card.dart';
 import 'package:johar/features/cart/widgets/small_text_body.dart';
 import 'package:johar/shared/button.dart';
 import 'package:lottie/lottie.dart';
 import 'package:razorpay_flutter/razorpay_flutter.dart';
-import 'package:status_alert/status_alert.dart';
-// import 'package:razorpay_flutter/razorpay_flutter.dart';
 
 class CartPage extends StatefulWidget {
   const CartPage({super.key});
@@ -26,8 +25,7 @@ class CartPage extends StatefulWidget {
 
 class _CartPageState extends State<CartPage> {
   // razor pay instance
-
-  var _razorpay = Razorpay();
+  // var _razorpay;
 
   final CartBloc cartBloc = CartBloc();
   final firstNameController = TextEditingController();
@@ -45,9 +43,10 @@ class _CartPageState extends State<CartPage> {
     cartBloc.add(CartInitialEvent());
     fetchSubtotalAndGST();
     fetchUserDetails();
-    _razorpay.on(Razorpay.EVENT_PAYMENT_SUCCESS, _handlePaymentSuccess);
-    _razorpay.on(Razorpay.EVENT_PAYMENT_ERROR, _handlePaymentError);
-    _razorpay.on(Razorpay.EVENT_EXTERNAL_WALLET, _handleExternalWallet);
+    // _razorpay = Razorpay();
+    // _razorpay.on(Razorpay.EVENT_PAYMENT_SUCCESS, _handlePaymentSuccess);
+    // _razorpay.on(Razorpay.EVENT_PAYMENT_ERROR, _handlePaymentError);
+    // _razorpay.on(Razorpay.EVENT_EXTERNAL_WALLET, _handleExternalWallet);
 
     super.initState();
   }
@@ -72,6 +71,7 @@ class _CartPageState extends State<CartPage> {
 
   void _handleExternalWallet(ExternalWalletResponse response) {
     // Do something when an external wallet was selected
+    print('wallet ${response.walletName}');
   }
 
   fetchSubtotalAndGST() async {
@@ -119,7 +119,7 @@ class _CartPageState extends State<CartPage> {
     pincodeController.dispose();
     addressController.dispose();
     mobileController.dispose();
-    _razorpay.clear();
+    // _razorpay.clear();
     super.dispose();
   }
 
@@ -514,22 +514,22 @@ class _CartPageState extends State<CartPage> {
                                 groupValue: radioValue,
                                 onChanged: (value) {
                                   // Open a dialog box to show that we will soon launch upi option soon
-                                  StatusAlert.show(
-                                    context,
-                                    duration: Duration(seconds: 2),
-                                    title: 'Stay tuned',
-                                    subtitle:
-                                        'We are soon going to launch our other payment options!!',
-                                    configuration:
-                                        IconConfiguration(icon: Icons.payment),
-                                    maxWidth: 300,
-                                  );
+                                  // StatusAlert.show(
+                                  //   context,
+                                  //   duration: Duration(seconds: 2),
+                                  //   title: 'Stay tuned',
+                                  //   subtitle:
+                                  //       'We are soon going to launch our other payment options!!',
+                                  //   configuration:
+                                  //       IconConfiguration(icon: Icons.payment),
+                                  //   maxWidth: 300,
+                                  // );
                                   setState(() {
-                                    // radioValue = value.toString();
+                                    radioValue = value.toString();
                                   });
                                 },
-                                title: const SmallTextBody(
-                                    text: 'Pay Using UPI (Coming soon)'),
+                                title:
+                                    const SmallTextBody(text: 'Pay Using UPI'),
                               ),
                               RadioListTile(
                                 controlAffinity:
@@ -560,7 +560,7 @@ class _CartPageState extends State<CartPage> {
 
                         else if (isDeliver != null && isDeliver == true)
                           GestureDetector(
-                            onTap: () {
+                            onTap: () async {
                               if (radioValue == 'cod') {
                                 cartBloc.add(
                                   CartPagePlaceOrderClickedEvent(
@@ -572,16 +572,37 @@ class _CartPageState extends State<CartPage> {
                                   ),
                                 );
                               } else if (radioValue == 'upi') {
+                                final order_id =
+                                    await RazorpayAPI.createRazorpayOrder(
+                                        amount: (subTotal +
+                                                (subTotal < 999 ? 49 : 0)) *
+                                            100);
+                                print('order id is $order_id');
+                                Razorpay razorpay = Razorpay();
                                 var options = {
                                   'key': key,
                                   'amount':
                                       (subTotal + (subTotal < 999 ? 49 : 0)) *
                                           100,
-                                  // (subTotal + (subTotal < 999 ? 49 : 0)) * 100,
                                   'name': 'Johar Basket',
-                                  'timeout': 150, // in seconds
+                                  'order_id': order_id,
+                                  'retry': {'enabled': true, 'max_count': 1},
+                                  'send_sms_hash': true,
+                                  'prefill': {
+                                    'contact': '',
+                                    'email': ''
+                                  },
+                                  'external': {
+                                    'wallets': ['paytm']
+                                  }
                                 };
-                                _razorpay.open(options);
+                                razorpay.on(Razorpay.EVENT_PAYMENT_ERROR,
+                                    _handlePaymentError);
+                                razorpay.on(Razorpay.EVENT_PAYMENT_SUCCESS,
+                                    _handlePaymentSuccess);
+                                razorpay.on(Razorpay.EVENT_EXTERNAL_WALLET,
+                                    _handleExternalWallet);
+                                razorpay.open(options);
                               }
                             },
                             child: Container(

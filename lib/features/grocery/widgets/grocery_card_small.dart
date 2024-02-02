@@ -61,11 +61,10 @@ class GroceryCardSmall extends StatelessWidget {
         elevation: 0,
         child: Container(
           decoration: BoxDecoration(borderRadius: BorderRadius.circular(20)),
-          // width: getScreenWidth(context) * 0.2,
-          //  height: getScreenWidth(context) * 0.62,
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
+              SizedBox(height: 5),
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
@@ -77,7 +76,8 @@ class GroceryCardSmall extends StatelessWidget {
                       child: CachedNetworkImage(
                         imageUrl: imageUrl,
                         width: getScreenWidth(context) * 0.18,
-                        fit: BoxFit.cover,
+                        height: getScreenheight(context) * 0.11,
+                        fit: BoxFit.fitHeight,
                         placeholder: (context, url) =>
                             const CircularProgressIndicator(),
                       ),

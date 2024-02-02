@@ -113,11 +113,12 @@ class _CartCardState extends State<CartCard> {
       child: Row(
         children: [
           Container(
-            margin: EdgeInsets.only(left: getScreenWidth(context) * 0.02),
+            margin: EdgeInsets.only(left: getScreenWidth(context) * 0.02, top: 10, bottom: 10),
             width: getScreenWidth(context) * 0.2,
             child: CachedNetworkImage(
               imageUrl: widget.imageUrl,
-              fit: BoxFit.cover,
+              fit: BoxFit.fitHeight,
+              height: getScreenheight(context) * 0.085,
               placeholder: (context, url) => const CircularProgressIndicator(),
             ),
           ),

@@ -152,12 +152,14 @@ class _GroceryProductPageState extends State<GroceryProductPage> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                // SizedBox(height: getScreenWidth(context) * 0.05),
+                SizedBox(height: getScreenWidth(context) * 0.05),
                 Stack(
                   children: [
                     SizedBox(
                         width: getScreenWidth(context) * 1,
                         child: CachedNetworkImage(
+                          height: getScreenheight(context) * 0.4,
+                          fit: BoxFit.fitHeight,
                           imageUrl: widget.grocery.imageUrl,
                           placeholder: (context, url) =>
                               const CircularProgressIndicator(),
