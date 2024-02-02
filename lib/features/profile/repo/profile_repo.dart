@@ -7,6 +7,7 @@ import 'package:firebase_storage/firebase_storage.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:image/image.dart' as img;
 import 'package:http/http.dart' as http;
+import 'package:johar/features/bill/repo/bill_repo.dart';
 import 'package:johar/model/grocery_model.dart';
 
 class ProfileRepo {
@@ -41,9 +42,10 @@ class ProfileRepo {
     }
   }
 
-    static Future<String> selectImage() async {
+  static Future<String> selectImage() async {
     final ImagePicker imagePicker = ImagePicker();
-    final XFile? file = await imagePicker.pickImage(source: ImageSource.gallery);
+    final XFile? file =
+        await imagePicker.pickImage(source: ImageSource.gallery);
 
     if (file == null) return '';
 
@@ -449,6 +451,7 @@ class ProfileRepo {
   // order accepted by admin
   static Future<void> orderAccepted(
       String userId, String orderid, String deliveryTime) async {
+    await BillRepo.invoiceUpdate();
     // generate otp
     final random = Random();
     final code = random.nextInt(900000) + 100000;

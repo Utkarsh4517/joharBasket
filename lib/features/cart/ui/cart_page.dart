@@ -7,6 +7,7 @@ import 'package:johar/constants/colors.dart';
 import 'package:johar/constants/dimensions.dart';
 import 'package:johar/constants/razorpay.dart';
 import 'package:johar/features/auth/widgets/details_text_field.dart';
+import 'package:johar/features/bill/service/bill_service.dart';
 import 'package:johar/features/cart/bloc/cart_bloc.dart';
 import 'package:johar/features/cart/repo/cart_repo.dart';
 import 'package:johar/features/cart/repo/razorpay_api.dart';
@@ -38,6 +39,7 @@ class _CartPageState extends State<CartPage> {
   dynamic subTotal = 0;
   dynamic gst = 0;
   dynamic priceWithoutDiscount = 0;
+  final billService = BillService();
   @override
   void initState() {
     cartBloc.add(CartInitialEvent());
@@ -588,10 +590,7 @@ class _CartPageState extends State<CartPage> {
                                   'order_id': order_id,
                                   'retry': {'enabled': true, 'max_count': 1},
                                   'send_sms_hash': true,
-                                  'prefill': {
-                                    'contact': '',
-                                    'email': ''
-                                  },
+                                  'prefill': {'contact': '', 'email': ''},
                                   'external': {
                                     'wallets': ['paytm']
                                   }
@@ -603,6 +602,7 @@ class _CartPageState extends State<CartPage> {
                                 razorpay.on(Razorpay.EVENT_EXTERNAL_WALLET,
                                     _handleExternalWallet);
                                 razorpay.open(options);
+                                
                               }
                             },
                             child: Container(

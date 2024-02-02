@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:johar/constants/dimensions.dart';
+import 'package:johar/features/bill/service/bill_service.dart';
 import 'package:johar/features/cart/widgets/small_text_body.dart';
 import 'package:johar/features/order/widgets/my_timeline.dart';
 import 'package:johar/features/profile/bloc/profile_bloc.dart';
@@ -30,6 +31,8 @@ class _ProfileDeliveredOrderCardLargeState
   String amountOfOrder = '';
   String orderedBy = '';
   String deliveredOn = '';
+
+  final billService = BillService();
 
   @override
   void initState() {
@@ -132,7 +135,7 @@ class _ProfileDeliveredOrderCardLargeState
               ],
             ),
           ),
-           Container(
+          Container(
             margin: EdgeInsets.symmetric(
                 horizontal: getScreenWidth(context) * 0.04),
             child: Row(
@@ -147,6 +150,24 @@ class _ProfileDeliveredOrderCardLargeState
                       fontWeight: FontWeight.bold),
                 )
               ],
+            ),
+          ),
+          Container(
+            margin: EdgeInsets.only(left: getScreenWidth(context) * 0.02),
+            child: TextButton(
+              onPressed: () async {
+                final data = await billService.generatePdfDeliveredOrder(
+                  orderIdList: widget.orderIdlist,
+                  indexU: widget.indexU,
+                  successState: widget.successState,
+                  total: amountOfOrder,
+                );
+                billService.savePdfFile(filename: 'johar_bill', byteList: data);
+              },
+              child: Text(
+                'View receipt',
+                style: TextStyle(fontSize: 12),
+              ),
             ),
           ),
           Container(

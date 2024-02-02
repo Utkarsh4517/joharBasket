@@ -2,6 +2,8 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:johar/constants/dimensions.dart';
+import 'package:johar/features/bill/repo/bill_repo.dart';
+import 'package:johar/features/bill/service/bill_service.dart';
 import 'package:johar/features/cart/widgets/small_text_body.dart';
 import 'package:johar/features/order/bloc/order_bloc.dart';
 import 'package:johar/features/order/repo/order_repo.dart';
@@ -33,6 +35,9 @@ class _OrderCardLargeState extends State<OrderCardLarge> {
   String amountOfOrder = '';
   String deliveryTime = '';
   String otp = '';
+  String invoice = '';
+
+  final billService = BillService();
 
   @override
   void initState() {
@@ -56,6 +61,7 @@ class _OrderCardLargeState extends State<OrderCardLarge> {
       widget.orderIdList[widget.indexU],
       FirebaseAuth.instance.currentUser!.uid,
     );
+    final invoiceNo = await BillRepo.getInvoiceNo();
 
     if (mounted) {
       setState(() {
@@ -65,6 +71,7 @@ class _OrderCardLargeState extends State<OrderCardLarge> {
         amountOfOrder = amount;
         deliveryTime = time;
         otp = otpGen;
+        invoice = invoiceNo.toString();
       });
     }
   }
@@ -156,6 +163,7 @@ class _OrderCardLargeState extends State<OrderCardLarge> {
                 ],
               ),
             ),
+
             if (!isOrderDelivered && isOrderAccepted)
               Container(
                 margin: EdgeInsets.symmetric(
@@ -201,6 +209,28 @@ class _OrderCardLargeState extends State<OrderCardLarge> {
                       fontWeight: FontWeight.bold,
                       color: Colors.green,
                       fontSize: getScreenWidth(context) * 0.03),
+                ),
+              ),
+
+            if (isOrderAccepted)
+              Container(
+                margin: EdgeInsets.only(left: getScreenWidth(context) * 0.02),
+                child: TextButton(
+                  onPressed: () async {
+                    final data = await billService.generatePdfCustomer(
+                      orderIdList: widget.orderIdList,
+                      bloc: widget.bloc,
+                      indexU: widget.indexU,
+                      successState: widget.successState,
+                      total: amountOfOrder,
+                    );
+                    billService.savePdfFile(
+                        filename: 'johar_bill', byteList: data);
+                  },
+                  child: Text(
+                    'View receipt',
+                    style: TextStyle(fontSize: 12),
+                  ),
                 ),
               ),
 

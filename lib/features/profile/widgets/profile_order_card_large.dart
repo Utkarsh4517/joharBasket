@@ -1,10 +1,10 @@
-
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:johar/constants/colors.dart';
 import 'package:johar/constants/dimensions.dart';
 import 'package:johar/features/auth/widgets/details_text_field.dart';
+import 'package:johar/features/bill/service/bill_service.dart';
 import 'package:johar/features/cart/widgets/small_text_body.dart';
 import 'package:johar/features/order/repo/order_repo.dart';
 import 'package:johar/features/profile/bloc/profile_bloc.dart';
@@ -46,6 +46,8 @@ class _ProfileOrderCardLargeState extends State<ProfileOrderCardLarge> {
   String userId = '';
   String otp = '';
   final otpController = TextEditingController();
+
+  final billService = BillService();
 
   @override
   void initState() {
@@ -174,8 +176,8 @@ class _ProfileOrderCardLargeState extends State<ProfileOrderCardLarge> {
                         if (otpController.text == otp) {
                           profileBloc.add(DeliveryConfirmedEvent(
                               orderId: state.orderId, userId: state.userId));
-                              print('state user id is ${state.userId}');
-                              print('state orderId is ${state.orderId}');
+                          print('state user id is ${state.userId}');
+                          print('state orderId is ${state.orderId}');
                           showTopSnackBar(
                             Overlay.of(context),
                             const CustomSnackBar.success(
@@ -403,6 +405,26 @@ class _ProfileOrderCardLargeState extends State<ProfileOrderCardLarge> {
                     ],
                   ),
                 ),
+                if (isOrderAccepted)
+                  Container(
+                    margin:
+                        EdgeInsets.only(left: getScreenWidth(context) * 0.02),
+                    child: TextButton(
+                      onPressed: () async {
+                        final data = await billService.generatePdfAdminPanel(
+                            orderIdList: widget.orderIdList,
+                            indexU: widget.indexU,
+                            successState: widget.successState,
+                            total: amountOfOrder,);
+                        billService.savePdfFile(
+                            filename: 'johar_bill', byteList: data);
+                      },
+                      child: Text(
+                        'View receipt',
+                        style: TextStyle(fontSize: 12),
+                      ),
+                    ),
+                  ),
                 if (!isOrderAccepted)
                   GestureDetector(
                     onTap: () {
