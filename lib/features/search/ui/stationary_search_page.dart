@@ -122,26 +122,39 @@ class _StationarySearchPageState extends State<StationarySearchPage> {
                               width: getScreenWidth(context) * 0.2,
                               height: getScreenheight(context) * 0.1,
                             ),
-                            Text(
-                              product.name,
-                              style: GoogleFonts.publicSans(
-                                color: blackColor,
-                                fontWeight: FontWeight.bold,
-                              ),
-                            ),
-                            Text(
-                              ' ',
-                              style: GoogleFonts.publicSans(
-                                color: blackColor,
-                                fontWeight: FontWeight.bold,
-                              ),
-                            ),
-                            Text(
-                              product.size!,
-                              style: GoogleFonts.publicSans(
-                                color: blackColor,
-                                fontWeight: FontWeight.bold,
-                              ),
+                            Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Container(
+                                  margin: EdgeInsets.only(left: 10),
+                                  width: getScreenWidth(context) * 0.65,
+                                  child: Text(
+                                    overflow: TextOverflow.clip,
+                                    product.name,
+                                    style: GoogleFonts.publicSans(
+                                      color: blackColor,
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  ),
+                                ),
+                                Text(
+                                  ' ',
+                                  style: GoogleFonts.publicSans(
+                                    color: blackColor,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                ),
+                                Padding(
+                                  padding: EdgeInsets.only(left: 10),
+                                  child: Text(
+                                    product.size!,
+                                    style: GoogleFonts.publicSans(
+                                      color: blackColor,
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  ),
+                                ),
+                              ],
                             ),
                           ],
                         ),

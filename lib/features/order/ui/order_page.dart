@@ -156,7 +156,7 @@ class _OrderPageState extends State<OrderPage> {
                   style: GoogleFonts.publicSans(
                     color: Colors.black,
                     fontWeight: FontWeight.w900,
-                    fontSize: getScreenWidth(context) * 0.05,
+                    fontSize: getScreenWidth(context) * 0.035,
                   ),
                 ),
                 actions: [
@@ -167,7 +167,7 @@ class _OrderPageState extends State<OrderPage> {
                             MaterialPageRoute(
                                 builder: (context) => const PastOrderPage()));
                       },
-                      child: const Text('View Past Orders')),
+                      child:  Text('View Past Orders', style: TextStyle(fontSize: getScreenWidth(context) * 0.04),)),
                 ],
               ),
               body: SafeArea(

@@ -171,6 +171,9 @@ class _ProfileDeliveredOrderCardLargeState
             ),
           ),
           Container(
+            constraints: BoxConstraints(
+                maxWidth: getScreenWidth(context) * 0.85
+              ),
             margin: EdgeInsets.only(top: getScreenWidth(context) * 0.1),
             alignment: Alignment.center,
             height: getScreenWidth(context) * 0.15,

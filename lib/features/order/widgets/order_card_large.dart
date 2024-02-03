@@ -140,7 +140,7 @@ class _OrderCardLargeState extends State<OrderCardLarge> {
                     '${widget.orderIdList[widget.indexU]}',
                     style: TextStyle(
                         color: Colors.black,
-                        fontSize: getScreenWidth(context) * 0.025),
+                        fontSize: 8),
                   )
                 ],
               ),
@@ -157,7 +157,7 @@ class _OrderCardLargeState extends State<OrderCardLarge> {
                     '₹ $amountOfOrder',
                     style: TextStyle(
                         color: isPaymentReceived ? Colors.green : Colors.red,
-                        fontSize: getScreenWidth(context) * 0.04,
+                        fontSize: 14,
                         fontWeight: FontWeight.bold),
                   )
                 ],
@@ -176,7 +176,7 @@ class _OrderCardLargeState extends State<OrderCardLarge> {
                       otp,
                       style: TextStyle(
                         color: Colors.green,
-                        fontSize: getScreenWidth(context) * 0.03,
+                        fontSize: 12,
                         fontWeight: FontWeight.bold,
                       ),
                     )
@@ -192,8 +192,8 @@ class _OrderCardLargeState extends State<OrderCardLarge> {
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    const Text('Expected delivery time'),
-                    Text(deliveryTime)
+                    const Text('Expected delivery time', style: TextStyle(fontSize: 8),),
+                    Text(deliveryTime, style: TextStyle(fontSize: 8),)
                   ],
                 ),
               ),
@@ -208,7 +208,7 @@ class _OrderCardLargeState extends State<OrderCardLarge> {
                   style: GoogleFonts.publicSans(
                       fontWeight: FontWeight.bold,
                       color: Colors.green,
-                      fontSize: getScreenWidth(context) * 0.03),
+                      fontSize: 10),
                 ),
               ),
 
@@ -235,6 +235,9 @@ class _OrderCardLargeState extends State<OrderCardLarge> {
               ),
 
             Container(
+              constraints: BoxConstraints(
+                maxWidth: getScreenWidth(context) * 0.85
+              ),
               margin: EdgeInsets.only(top: getScreenWidth(context) * 0.1),
               alignment: Alignment.center,
               height: getScreenWidth(context) * 0.15,

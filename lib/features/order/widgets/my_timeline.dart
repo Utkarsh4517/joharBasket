@@ -21,6 +21,7 @@ class MyTimeLine extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return TimelineTile(
+    
       axis: TimelineAxis.horizontal,
       beforeLineStyle:
           LineStyle(color: isPast ? Colors.green : Colors.green[100]!),
