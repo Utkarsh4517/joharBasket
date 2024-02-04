@@ -64,7 +64,6 @@ class GroceryCardSmall extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              SizedBox(height: 5),
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
@@ -97,7 +96,7 @@ class GroceryCardSmall extends StatelessWidget {
                     child: Container(
                       width: getScreenWidth(context) * 0.2,
                       margin: EdgeInsets.symmetric(
-                          horizontal: getScreenWidth(context) * 0.03),
+                          horizontal: getScreenWidth(context) * 0.03).copyWith(bottom: 10),
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
@@ -108,7 +107,7 @@ class GroceryCardSmall extends StatelessWidget {
                             style: GoogleFonts.publicSans(
                                 color: Colors.black,
                                 fontWeight: FontWeight.w900,
-                                fontSize: getScreenWidth(context) * 0.025),
+                                fontSize: 10),
                           ),
                           Text(
                             size,
@@ -117,26 +116,27 @@ class GroceryCardSmall extends StatelessWidget {
                             style: GoogleFonts.publicSans(
                                 color: Colors.black,
                                 fontWeight: FontWeight.w900,
-                                fontSize: getScreenWidth(context) * 0.028),
+                                fontSize: 10),
                           ),
-                          SizedBox(height: getScreenWidth(context) * 0.02),
+                          SizedBox(height: getScreenWidth(context) * 0.01),
                           Text(
                             '₹ $discountedPrice',
                             style: GoogleFonts.publicSans(
                                 color: const Color(0xff57C373),
                                 fontWeight: FontWeight.w900,
-                                fontSize: getScreenWidth(context) * 0.037),
+                                fontSize: 12),
                           )
                         ],
                       ),
                     ),
                   ),
                   GestureDetector(
-                    // onTap: () => bloc.add(GroceryCardCartButtonClickedEvent(
-                    //     cartClickedGrocery: groceryUiDataModel)),
+                    onTap: () => bloc.add(GroceryCardCartButtonClickedEvent(
+                        cartClickedGrocery: groceryUiDataModel)),
                     child: Container(
                       width: getScreenWidth(context) * 0.1,
                       height: getScreenWidth(context) * 0.1,
+                      margin: EdgeInsets.only(bottom: 10),
                       decoration: const BoxDecoration(
                         color: Color(0xffFF8615),
                         borderRadius: BorderRadius.only(

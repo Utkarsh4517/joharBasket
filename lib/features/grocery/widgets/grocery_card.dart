@@ -59,7 +59,7 @@ class GroceryCard extends StatelessWidget {
         child: Container(
           decoration: BoxDecoration(borderRadius: BorderRadius.circular(20)),
           width: getScreenWidth(context) * 0.5,
-          height: getScreenWidth(context) * 0.72,
+          // height: getScreenWidth(context) * 0.72,
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
@@ -105,7 +105,7 @@ class GroceryCard extends StatelessWidget {
                             style: GoogleFonts.publicSans(
                                 color: Colors.black,
                                 fontWeight: FontWeight.w900,
-                                fontSize: getScreenWidth(context) * 0.035),
+                                fontSize: 12),
                           ),
                           Text(
                             size,
@@ -114,9 +114,9 @@ class GroceryCard extends StatelessWidget {
                             style: GoogleFonts.publicSans(
                                 color: Colors.black,
                                 fontWeight: FontWeight.w900,
-                                fontSize: getScreenWidth(context) * 0.035),
+                                fontSize: 10),
                           ),
-                          SizedBox(height: getScreenWidth(context) * 0.02),
+                          SizedBox(height: 10),
                           Text(
                             '₹ $discountedPrice',
                             style: GoogleFonts.publicSans(
@@ -129,8 +129,8 @@ class GroceryCard extends StatelessWidget {
                     ),
                   ),
                   GestureDetector(
-                    // onTap: () => bloc.add(GroceryCardCartButtonClickedEvent(
-                    //     cartClickedGrocery: groceryUiDataModel)),
+                    onTap: () => bloc.add(GroceryCardCartButtonClickedEvent(
+                        cartClickedGrocery: groceryUiDataModel)),
                     child: Container(
                       width: getScreenWidth(context) * 0.13,
                       height: getScreenWidth(context) * 0.12,
