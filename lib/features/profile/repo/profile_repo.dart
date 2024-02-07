@@ -8,6 +8,7 @@ import 'package:image_picker/image_picker.dart';
 import 'package:image/image.dart' as img;
 import 'package:http/http.dart' as http;
 import 'package:johar/features/bill/repo/bill_repo.dart';
+import 'package:johar/model/coupon_model.dart';
 import 'package:johar/model/grocery_model.dart';
 
 class ProfileRepo {
@@ -122,6 +123,23 @@ class ProfileRepo {
           inStock: data['inStock'],
           size: data['size'],
           discountedPrice: data['discountedPrice'],
+        );
+      }).toList();
+    });
+  }
+
+  static Stream<List<CouponModel>> getCoupons() {
+    final collection = FirebaseFirestore.instance.collection('coupons');
+    return collection.snapshots().map((snapshot) {
+      return snapshot.docs.map((doc) {
+        final data = doc.data();
+        return CouponModel(
+          type: data['type'],
+          couponCode: data['couponCode'],
+          discount: data['discount'],
+          onOrderAbove: data['onOrderAbove'],
+          flatOff: data['flatOff'],
+          upto: data['upto'],
         );
       }).toList();
     });
@@ -258,6 +276,15 @@ class ProfileRepo {
     final document = FirebaseFirestore.instance
         .collection('grocery')
         .doc(productDataModel.productId);
+
+    await document.delete();
+  }
+
+    static Future<void> deleteCoupon(
+      {required CouponModel couponModel}) async {
+    final document = FirebaseFirestore.instance
+        .collection('coupons')
+        .doc(couponModel.couponCode);
 
     await document.delete();
   }
@@ -1017,5 +1044,26 @@ class ProfileRepo {
     for (var fcm in fcmList) {
       ProfileRepo.sendPushMessage(token: fcm, body: description, title: title);
     }
+  }
+
+  static Future<void> addNewCoupon({
+    required String type,
+    required String couponCode,
+    required double flatOff,
+    required double onOrderAbove,
+    required double discount,
+    required double upto,
+  }) async {
+    DocumentReference documentReference =
+        FirebaseFirestore.instance.collection('coupons').doc(couponCode);
+    Map<String, dynamic> coupon = {
+      'type': type,
+      'couponCode': couponCode,
+      'flatOff': flatOff,
+      'onOrderAbove': onOrderAbove,
+      'discount': discount,
+      'upto': upto,
+    };
+    documentReference.set(coupon);
   }
 }

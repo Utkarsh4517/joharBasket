@@ -79,3 +79,5 @@ class DeliveryConfirmedState extends ProfileActionState {}
 class NotificationButtonClickedState extends ProfileActionState {}
 
 class NotificationSentState extends ProfileActionState {}
+
+class CouponAddedState extends ProfileActionState {}

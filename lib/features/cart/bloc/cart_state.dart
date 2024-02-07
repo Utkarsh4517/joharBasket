@@ -51,7 +51,7 @@ class CartBillRefreshState extends CartActionState {
   });
 }
 
-class CartPagePlaceOrderSuccessfulState extends CartActionState{}
+class CartPagePlaceOrderSuccessfulState extends CartActionState {}
 
 class CartEmptiedState extends CartActionState {}
 
@@ -62,3 +62,12 @@ class CartPageUserDetailsUpdatedSuccessState extends CartActionState {}
 class VerifyQuantityState extends CartActionState {}
 
 class BillRefreshEverySecondState extends CartActionState {}
+
+class CouponVerifedState extends CartActionState {
+  final CouponModel couponModel;
+  CouponVerifedState({
+    required this.couponModel,
+  });
+}
+
+class CouponUnverifiedState extends CartActionState {}

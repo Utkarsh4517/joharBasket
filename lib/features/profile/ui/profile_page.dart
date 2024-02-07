@@ -10,6 +10,7 @@ import 'package:johar/features/auth/widgets/details_text_field.dart';
 import 'package:johar/features/cart/widgets/small_text_body.dart';
 import 'package:johar/features/profile/bloc/profile_bloc.dart';
 import 'package:johar/features/profile/repo/profile_repo.dart';
+import 'package:johar/features/profile/ui/coupon_page.dart';
 import 'package:johar/features/profile/ui/orders_page.dart';
 import 'package:johar/features/profile/ui/product_page.dart';
 import 'package:johar/features/profile/ui/stats_page.dart';
@@ -63,6 +64,7 @@ class _ProfilePageState extends State<ProfilePage> {
       ProfileProductPage(),
       ProfileStatsPage(),
       ProfileOrderPage(),
+      CouponPage(),
     ];
 
     String radioValue = 'grocery';
@@ -140,6 +142,10 @@ class _ProfilePageState extends State<ProfilePage> {
                 GButton(
                   icon: Icons.shopping_cart_checkout,
                   text: 'Orders',
+                ),
+                 GButton(
+                  icon: Icons.discount,
+                  text: 'Coupons',
                 ),
               ],
             ),

@@ -65,3 +65,10 @@ class CartPageUpdateDetailsClickedEvent extends CartEvent {
 }
 
 class RefreshBillSummeryEverySecondEvent extends CartEvent {}
+
+class CouponCodeApplyClickedEvent extends CartEvent {
+  final String couponCode;
+  CouponCodeApplyClickedEvent({
+    required this.couponCode,
+  });
+}

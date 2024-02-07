@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:bloc/bloc.dart';
 import 'package:johar/features/profile/repo/profile_repo.dart';
+import 'package:johar/model/coupon_model.dart';
 import 'package:johar/model/grocery_model.dart';
 import 'package:meta/meta.dart';
 
@@ -30,6 +31,8 @@ class ProfileBloc extends Bloc<ProfileEvent, ProfileState> {
     on<RemoveStationaryClickedEvent>(removeStationaryClickedEvent);
     on<NotificationButtonClickedEvent>(notificationButtonClickedEvent);
     on<SendNotification>(sendNotification);
+    on<AddCouponClickedEvent>(addCouponClickedEvent);
+    on<CouponDeleteClickedEvent>(couponDeleteClickedEvent);
   }
 
   FutureOr<void> profilePageOrderInitialEvent(
@@ -195,5 +198,22 @@ class ProfileBloc extends Bloc<ProfileEvent, ProfileState> {
     await ProfileRepo.sendCustomNotification(
         title: event.notfTitle, description: event.notfDesc);
     emit(NotificationSentState());
+  }
+
+  FutureOr<void> addCouponClickedEvent(
+      AddCouponClickedEvent event, Emitter<ProfileState> emit) async {
+    await ProfileRepo.addNewCoupon(
+        type: event.type,
+        couponCode: event.couponCode,
+        flatOff: event.flatOff,
+        onOrderAbove: event.onOrderAbove,
+        discount: event.discount,
+        upto: event.upto);
+    emit(CouponAddedState());
+  }
+
+  FutureOr<void> couponDeleteClickedEvent(
+      CouponDeleteClickedEvent event, Emitter<ProfileState> emit) async {
+    await ProfileRepo.deleteCoupon(couponModel: event.couponModel);
   }
 }

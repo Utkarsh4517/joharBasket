@@ -4,6 +4,7 @@ import 'dart:async';
 
 import 'package:bloc/bloc.dart';
 import 'package:johar/features/cart/repo/cart_repo.dart';
+import 'package:johar/model/coupon_model.dart';
 import 'package:johar/model/grocery_model.dart';
 import 'package:meta/meta.dart';
 
@@ -20,6 +21,7 @@ class CartBloc extends Bloc<CartEvent, CartState> {
 
     on<CartPagePlaceOrderClickedEvent>(cartPagePlaceOrderClickedEvent);
     on<CartPageUpdateDetailsClickedEvent>(cartPageUpdateDetailsClickedEvent);
+    on<CouponCodeApplyClickedEvent>(couponCodeApplyClickedEvent);
   }
 
   FutureOr<void> cartInitialEvent(
@@ -94,5 +96,15 @@ class CartBloc extends Bloc<CartEvent, CartState> {
       pinCode: event.pincode,
     );
     emit(CartPageUserDetailsUpdatedSuccessState());
+  }
+
+  FutureOr<void> couponCodeApplyClickedEvent(
+      CouponCodeApplyClickedEvent event, Emitter<CartState> emit) async {
+    final coupon = await CartRepo.verifyCoupon(couponCode: event.couponCode);
+    if (coupon != null) {
+      emit(CouponVerifedState(couponModel: coupon));
+    } else {
+      emit(CouponUnverifiedState());
+    }
   }
 }

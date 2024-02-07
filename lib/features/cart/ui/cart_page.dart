@@ -15,7 +15,10 @@ import 'package:johar/features/cart/widgets/cart_card.dart';
 import 'package:johar/features/cart/widgets/small_text_body.dart';
 import 'package:johar/shared/button.dart';
 import 'package:lottie/lottie.dart';
+import 'package:modular_ui/modular_ui.dart';
 import 'package:razorpay_flutter/razorpay_flutter.dart';
+import 'package:top_snackbar_flutter/custom_snack_bar.dart';
+import 'package:top_snackbar_flutter/top_snack_bar.dart';
 
 class CartPage extends StatefulWidget {
   const CartPage({super.key});
@@ -34,8 +37,10 @@ class _CartPageState extends State<CartPage> {
   final mobileController = TextEditingController();
   final addressController = TextEditingController();
   final pincodeController = TextEditingController();
+  final couponController = TextEditingController();
 
   bool? isDeliver;
+  bool couponCodeApplied = false;
   dynamic subTotal = 0;
   dynamic gst = 0;
   dynamic priceWithoutDiscount = 0;
@@ -168,6 +173,59 @@ class _CartPageState extends State<CartPage> {
           fetchUserDetails();
         } else if (state is BillRefreshEverySecondState) {
           fetchSubtotalAndGST();
+        } else if (state is CouponVerifedState) {
+          if (state.couponModel.type == 'flat off on order above') {
+            if (subTotal > state.couponModel.onOrderAbove) {
+              setState(() {
+                subTotal = subTotal - state.couponModel.flatOff;
+                couponCodeApplied = true;
+              });
+              showTopSnackBar(
+                Overlay.of(context),
+                CustomSnackBar.success(
+                  message:
+                      "Congratulations you saved ${state.couponModel.flatOff}",
+                ),
+              );
+            } else {
+              showTopSnackBar(
+                Overlay.of(context),
+                CustomSnackBar.error(
+                  message: "Coupon code is invalid",
+                ),
+              );
+            }
+          } else if (state.couponModel.type == '% discount upto') {
+            if (subTotal < state.couponModel.upto) {
+              double discountedPrice =
+                  subTotal * (state.couponModel.discount / 100);
+              setState(() {
+                subTotal = subTotal - discountedPrice;
+                couponCodeApplied = true;
+              });
+              showTopSnackBar(
+                Overlay.of(context),
+                CustomSnackBar.success(
+                  message:
+                      "Congratulations you got a discount of ${state.couponModel.discount}%",
+                ),
+              );
+            } else {
+              showTopSnackBar(
+                Overlay.of(context),
+                CustomSnackBar.error(
+                  message: "Coupon code is invalid",
+                ),
+              );
+            }
+          }
+        } else if (state is CouponUnverifiedState) {
+          showTopSnackBar(
+            Overlay.of(context),
+            CustomSnackBar.error(
+              message: "Coupon code is invalid",
+            ),
+          );
         }
       },
       builder: (context, state) {
@@ -376,6 +434,38 @@ class _CartPageState extends State<CartPage> {
                             ],
                           ),
                         ),
+                        if (!couponCodeApplied)
+                          Container(
+                            decoration: BoxDecoration(
+                              color: Colors.white,
+                              borderRadius: BorderRadius.circular(15),
+                            ),
+                            margin:
+                                EdgeInsets.all(getScreenWidth(context) * 0.06),
+                            padding:
+                                EdgeInsets.all(getScreenWidth(context) * 0.04),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                const SmallTextBody(text: 'Apply coupon'),
+                                DetailsTextField(
+                                    controller: couponController,
+                                    label: 'Coupon Code',
+                                    hMargin: 0,
+                                    vMargin: 0.02),
+                                SizedBox(height: 10),
+                                MUISecondaryBlockButton(
+                                  text: 'Apply',
+                                  onPressed: () {
+                                    if (couponController.text.isNotEmpty) {
+                                      cartBloc.add(CouponCodeApplyClickedEvent(
+                                          couponCode: couponController.text));
+                                    }
+                                  },
+                                )
+                              ],
+                            ),
+                          ),
 
                         // Delivery Details
                         Container(
@@ -550,6 +640,7 @@ class _CartPageState extends State<CartPage> {
                             ],
                           ),
                         ),
+
                         if (isDeliver != null && isDeliver == false)
                           Container(
                               alignment: Alignment.center,
@@ -602,7 +693,6 @@ class _CartPageState extends State<CartPage> {
                                 razorpay.on(Razorpay.EVENT_EXTERNAL_WALLET,
                                     _handleExternalWallet);
                                 razorpay.open(options);
-                                
                               }
                             },
                             child: Container(

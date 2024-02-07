@@ -5,6 +5,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:johar/features/profile/repo/profile_repo.dart';
+import 'package:johar/model/coupon_model.dart';
 import 'package:johar/model/grocery_model.dart';
 import 'package:uuid/uuid.dart';
 
@@ -468,5 +469,21 @@ class CartRepo {
       'userExists': true,
       'fcm': fcmToken,
     });
+  }
+
+  static Future<CouponModel?> verifyCoupon({required String couponCode}) async {
+ CollectionReference coupons = FirebaseFirestore.instance.collection('coupons');
+
+  try {
+    var docSnapshot = await coupons.doc(couponCode).get();
+    if (docSnapshot.exists) {
+      return CouponModel.fromMap(docSnapshot.data() as Map<String, dynamic>);
+    } else {
+      return null;
+    }
+  } catch (e) {
+    print('Error fetching coupon: $e');
+    return null;
+  }
   }
 }

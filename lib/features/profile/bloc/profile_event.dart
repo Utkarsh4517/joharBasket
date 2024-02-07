@@ -208,3 +208,27 @@ class SendNotification extends ProfileEvent {
 }
 
 class StatsPageInitialEvent extends ProfileEvent {}
+
+class AddCouponClickedEvent extends ProfileEvent {
+  final String type;
+  final String couponCode;
+  final double flatOff;
+  final double onOrderAbove;
+  final double discount;
+  final double upto;
+  AddCouponClickedEvent({
+    required this.type,
+    required this.couponCode,
+    required this.flatOff,
+    required this.onOrderAbove,
+    required this.discount,
+    required this.upto,
+  });
+}
+
+class CouponDeleteClickedEvent extends ProfileEvent {
+  final CouponModel couponModel;
+  CouponDeleteClickedEvent({
+    required this.couponModel,
+  });
+}
