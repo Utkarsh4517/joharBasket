@@ -11,6 +11,7 @@ import 'package:johar/features/bill/service/bill_service.dart';
 import 'package:johar/features/cart/bloc/cart_bloc.dart';
 import 'package:johar/features/cart/repo/cart_repo.dart';
 import 'package:johar/features/cart/repo/razorpay_api.dart';
+import 'package:johar/features/cart/ui/apply_coupons_page.dart';
 import 'package:johar/features/cart/widgets/cart_card.dart';
 import 'package:johar/features/cart/widgets/small_text_body.dart';
 import 'package:johar/shared/button.dart';
@@ -110,8 +111,7 @@ class _CartPageState extends State<CartPage> {
       });
     }
 
-    bool deliver =
-        await CartRepo.doWeDeliverHere(pincodeController.text.toString());
+    bool deliver = await CartRepo.doWeDeliverHere(pincodeController.text.toString());
     if (mounted) {
       setState(() {
         isDeliver = deliver;
@@ -161,15 +161,13 @@ class _CartPageState extends State<CartPage> {
                 );
               });
         } else if (state is CartPagePlaceOrderSuccessfulState) {
-          ScaffoldMessenger.of(context).showSnackBar(
-              const SnackBar(content: Text('Order Placed Successfully')));
+          ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Order Placed Successfully')));
         } else if (state is CartEmptiedState) {
           Navigator.pop(context);
           Navigator.pushReplacementNamed(context, '/');
         } else if (state is CartPageUserDetailsUpdatedSuccessState) {
           Navigator.pop(context);
-          ScaffoldMessenger.of(context).showSnackBar(
-              const SnackBar(content: Text('User Details Updated!')));
+          ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('User Details Updated!')));
           fetchUserDetails();
         } else if (state is BillRefreshEverySecondState) {
           fetchSubtotalAndGST();
@@ -180,11 +178,80 @@ class _CartPageState extends State<CartPage> {
                 subTotal = subTotal - state.couponModel.flatOff;
                 couponCodeApplied = true;
               });
-              showTopSnackBar(
-                Overlay.of(context),
-                CustomSnackBar.success(
-                  message:
-                      "Congratulations you saved ${state.couponModel.flatOff}",
+              showGeneralDialog(
+                context: context,
+                pageBuilder: (context, _, __) => StatefulBuilder(
+                  builder: (BuildContext context, StateSetter setState) {
+                    return AnimatedContainer(
+                      duration: const Duration(milliseconds: 3000),
+                      padding: EdgeInsets.all(
+                        getScreenWidth(context) * 0.05,
+                      ),
+                      margin: EdgeInsets.symmetric(
+                        horizontal: getScreenWidth(context) * 0.15,
+                        vertical: getScreenheight(context) * 0.35,
+                      ),
+                      decoration: const BoxDecoration(color: Colors.white, borderRadius: BorderRadius.all(Radius.circular(25))),
+                      child: Scaffold(
+                        backgroundColor: Colors.transparent,
+                        body: Stack(
+                          alignment: Alignment.center,
+                          children: [
+                            Column(
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                              children: [
+                                Container(
+                                  alignment: Alignment.center,
+                                  width: getScreenWidth(context) * 0.2,
+                                  height: getScreenWidth(context) * 0.2,
+                                  child: Lottie.asset('assets/svgs/v.json'),
+                                ),
+                                Container(
+                                  alignment: Alignment.center,
+                                  child: Text(
+                                    "'${state.couponModel.couponCode}' applied",
+                                    style: GoogleFonts.poppins(
+                                      fontWeight: FontWeight.w600,
+                                      fontSize: getScreenWidth(context) * 0.03,
+                                    ),
+                                  ),
+                                ),
+                                Container(
+                                  alignment: Alignment.center,
+                                  child: Text(
+                                    "You saved ₹${state.couponModel.flatOff}",
+                                    style: GoogleFonts.poppins(
+                                      fontWeight: FontWeight.w700,
+                                      fontSize: getScreenWidth(context) * 0.035,
+                                    ),
+                                  ),
+                                ),
+                                Container(
+                                  alignment: Alignment.center,
+                                  child: Text(
+                                    "with this coupon code.",
+                                    style: GoogleFonts.poppins(
+                                      fontWeight: FontWeight.w600,
+                                      fontSize: getScreenWidth(context) * 0.03,
+                                    ),
+                                  ),
+                                ),
+                                MUITextButton(
+                                  onPressed: () {
+                                    Navigator.pop(context);
+                                  },
+                                  text: 'Wohooo, Thanks',
+                                  textColor: Colors.redAccent,
+                                  bgColor: Colors.grey.shade200,
+                                )
+                              ],
+                            )
+                          ],
+                        ),
+                      ),
+                    );
+                  },
                 ),
               );
             } else {
@@ -197,17 +264,85 @@ class _CartPageState extends State<CartPage> {
             }
           } else if (state.couponModel.type == '% discount upto') {
             if (subTotal < state.couponModel.upto) {
-              double discountedPrice =
-                  subTotal * (state.couponModel.discount / 100);
+              double discountedPrice = subTotal * (state.couponModel.discount / 100);
               setState(() {
                 subTotal = subTotal - discountedPrice;
                 couponCodeApplied = true;
               });
-              showTopSnackBar(
-                Overlay.of(context),
-                CustomSnackBar.success(
-                  message:
-                      "Congratulations you got a discount of ${state.couponModel.discount}%",
+              showGeneralDialog(
+                context: context,
+                pageBuilder: (context, _, __) => StatefulBuilder(
+                  builder: (BuildContext context, StateSetter setState) {
+                    return AnimatedContainer(
+                      duration: const Duration(milliseconds: 3000),
+                      padding: EdgeInsets.all(
+                        getScreenWidth(context) * 0.05,
+                      ),
+                      margin: EdgeInsets.symmetric(
+                        horizontal: getScreenWidth(context) * 0.15,
+                        vertical: getScreenheight(context) * 0.35,
+                      ),
+                      decoration: const BoxDecoration(color: Colors.white, borderRadius: BorderRadius.all(Radius.circular(25))),
+                      child: Scaffold(
+                        backgroundColor: Colors.transparent,
+                        body: Stack(
+                          alignment: Alignment.center,
+                          children: [
+                            Column(
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                              children: [
+                                Container(
+                                  alignment: Alignment.center,
+                                  width: getScreenWidth(context) * 0.2,
+                                  height: getScreenWidth(context) * 0.2,
+                                  child: Lottie.asset('assets/svgs/v.json'),
+                                ),
+                                Container(
+                                  alignment: Alignment.center,
+                                  child: Text(
+                                    "'${state.couponModel.couponCode}' applied",
+                                    style: GoogleFonts.poppins(
+                                      fontWeight: FontWeight.w600,
+                                      fontSize: getScreenWidth(context) * 0.03,
+                                    ),
+                                  ),
+                                ),
+                                Container(
+                                  alignment: Alignment.center,
+                                  child: Text(
+                                    "You saved ₹$discountedPrice",
+                                    style: GoogleFonts.poppins(
+                                      fontWeight: FontWeight.w700,
+                                      fontSize: getScreenWidth(context) * 0.035,
+                                    ),
+                                  ),
+                                ),
+                                Container(
+                                  alignment: Alignment.center,
+                                  child: Text(
+                                    "with this coupon code.",
+                                    style: GoogleFonts.poppins(
+                                      fontWeight: FontWeight.w600,
+                                      fontSize: getScreenWidth(context) * 0.03,
+                                    ),
+                                  ),
+                                ),
+                                MUITextButton(
+                                  onPressed: () {
+                                    Navigator.pop(context);
+                                  },
+                                  text: 'Wohooo, Thanks',
+                                  textColor: Colors.redAccent,
+                                  bgColor: Colors.grey.shade200,
+                                )
+                              ],
+                            )
+                          ],
+                        ),
+                      ),
+                    );
+                  },
                 ),
               );
             } else {
@@ -245,17 +380,13 @@ class _CartPageState extends State<CartPage> {
                       margin: EdgeInsets.all(getScreenWidth(context) * 0.06),
                       child: Text(
                         'Your cart!',
-                        style: GoogleFonts.publicSans(
-                            color: Colors.black,
-                            fontWeight: FontWeight.w900,
-                            fontSize: getScreenWidth(context) * 0.09),
+                        style: GoogleFonts.publicSans(color: Colors.black, fontWeight: FontWeight.w900, fontSize: getScreenWidth(context) * 0.09),
                       ),
                     ),
                     SizedBox(height: getScreenheight(context) * 0.15),
                     Container(
                       alignment: Alignment.bottomCenter,
-                      child: Lottie.asset('assets/svgs/animation_cart1.json',
-                          width: getScreenWidth(context) * 0.5),
+                      child: Lottie.asset('assets/svgs/animation_cart1.json', width: getScreenWidth(context) * 0.5),
                     ),
                   ],
                 ),
@@ -272,21 +403,14 @@ class _CartPageState extends State<CartPage> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Container(
-                          margin:
-                              EdgeInsets.all(getScreenWidth(context) * 0.06),
+                          margin: EdgeInsets.all(getScreenWidth(context) * 0.06),
                           child: Text(
                             'Your cart!',
-                            style: GoogleFonts.publicSans(
-                                color: Colors.black,
-                                fontWeight: FontWeight.w900,
-                                fontSize: getScreenWidth(context) * 0.09),
+                            style: GoogleFonts.publicSans(color: Colors.black, fontWeight: FontWeight.w900, fontSize: getScreenWidth(context) * 0.09),
                           ),
                         ),
                         SizedBox(
-                          height: (successState.products.length *
-                                  0.3 *
-                                  getScreenWidth(context))
-                              .toDouble(),
+                          height: (successState.products.length * 0.3 * getScreenWidth(context)).toDouble(),
                           child: ListView.builder(
                             scrollDirection: Axis.vertical,
                             physics: const NeverScrollableScrollPhysics(),
@@ -295,8 +419,7 @@ class _CartPageState extends State<CartPage> {
                               return Dismissible(
                                 key: UniqueKey(),
                                 onDismissed: (direction) {
-                                  cartBloc.add(CartRemoveProductEvent(
-                                      product: successState.products[index]));
+                                  cartBloc.add(CartRemoveProductEvent(product: successState.products[index]));
                                   setState(() {
                                     successState.products.removeAt(index);
                                   });
@@ -304,23 +427,17 @@ class _CartPageState extends State<CartPage> {
                                 },
                                 child: CartCard(
                                   size: successState.products[index].size!,
-                                  discountedPrice: successState
-                                      .products[index].discountedPrice,
+                                  discountedPrice: successState.products[index].discountedPrice,
                                   bloc: cartBloc,
                                   gst: successState.products[index].gst,
                                   name: successState.products[index].name,
-                                  imageUrl:
-                                      successState.products[index].imageUrl,
+                                  imageUrl: successState.products[index].imageUrl,
                                   price: successState.products[index].price,
-                                  isFeatured:
-                                      successState.products[index].isFeatured,
+                                  isFeatured: successState.products[index].isFeatured,
                                   inStock: successState.products[index].inStock,
-                                  productId:
-                                      successState.products[index].productId,
-                                  productDataModel:
-                                      successState.products[index],
-                                  description:
-                                      successState.products[index].description,
+                                  productId: successState.products[index].productId,
+                                  productDataModel: successState.products[index],
+                                  description: successState.products[index].description,
                                   nos: successState.products[index].nos,
                                 ),
                               );
@@ -330,8 +447,7 @@ class _CartPageState extends State<CartPage> {
 
                         // Bill summary
                         Container(
-                          margin: EdgeInsets.symmetric(
-                              horizontal: getScreenWidth(context) * 0.06),
+                          margin: EdgeInsets.symmetric(horizontal: getScreenWidth(context) * 0.06),
                           child: Text(
                             'Bill summary',
                             style: GoogleFonts.publicSans(
@@ -343,9 +459,7 @@ class _CartPageState extends State<CartPage> {
                         ),
 
                         Container(
-                          margin: EdgeInsets.symmetric(
-                                  horizontal: getScreenWidth(context) * 0.08)
-                              .copyWith(top: getScreenWidth(context) * 0.06),
+                          margin: EdgeInsets.symmetric(horizontal: getScreenWidth(context) * 0.08).copyWith(top: getScreenWidth(context) * 0.06),
                           child: Text(
                             'Get free delivery on order above ₹999',
                             style: GoogleFonts.publicSans(
@@ -357,120 +471,101 @@ class _CartPageState extends State<CartPage> {
                         ),
 
                         Container(
-                          margin:
-                              EdgeInsets.all(getScreenWidth(context) * 0.06),
-                          padding:
-                              EdgeInsets.all(getScreenWidth(context) * 0.04),
-                          decoration: BoxDecoration(
-                              color: Colors.white,
-                              borderRadius: BorderRadius.circular(15)),
+                          margin: EdgeInsets.all(getScreenWidth(context) * 0.06),
+                          padding: EdgeInsets.all(getScreenWidth(context) * 0.04),
+                          decoration: BoxDecoration(color: Colors.white, borderRadius: BorderRadius.circular(15)),
                           child: Column(
                             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                             children: [
                               // total
                               Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
+                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                 children: [
                                   const SmallTextBody(text: 'Total'),
-                                  SmallTextBody(
-                                      text: '₹ $priceWithoutDiscount'),
+                                  SmallTextBody(text: '₹ $priceWithoutDiscount'),
                                 ],
                               ),
 
                               // discount
 
                               Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
+                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                 children: [
                                   const SmallTextBody(
                                     text: 'Total Savings',
                                     color: Colors.green,
                                   ),
                                   SmallTextBody(
-                                    text:
-                                        '₹ ${priceWithoutDiscount - subTotal}',
+                                    text: '₹ ${priceWithoutDiscount - subTotal}',
                                     color: Colors.green,
                                   ),
                                 ],
                               ),
 
                               Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
+                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                 children: [
                                   const SmallTextBody(text: 'Sub total'),
                                   SmallTextBody(text: '₹ $subTotal'),
                                 ],
                               ),
-                              // Row(
-                              //   mainAxisAlignment:
-                              //       MainAxisAlignment.spaceBetween,
-                              //   children: [
-                              //     const SmallTextBody(text: 'GST (included)'),
-                              //     SmallTextBody(text: '₹ $gst'),
-                              //   ],
-                              // ),
+
                               Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
+                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                 children: [
                                   const SmallTextBody(text: 'Delivery charges'),
-                                  SmallTextBody(
-                                      text: subTotal < 999 ? '₹ 49' : '₹ 0'),
+                                  SmallTextBody(text: subTotal < 999 ? '₹ 49' : '₹ 0'),
                                 ],
                               ),
                               Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
+                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                 children: [
                                   const SmallTextBody(text: 'Grand Total'),
-                                  SmallTextBody(
-                                      text:
-                                          '₹ ${subTotal + (subTotal < 999 ? 49 : 0)}'),
+                                  SmallTextBody(text: '₹ ${subTotal + (subTotal < 999 ? 49 : 0)}'),
                                 ],
                               ),
                             ],
                           ),
                         ),
+
                         if (!couponCodeApplied)
-                          Container(
-                            decoration: BoxDecoration(
-                              color: Colors.white,
-                              borderRadius: BorderRadius.circular(15),
-                            ),
-                            margin:
-                                EdgeInsets.all(getScreenWidth(context) * 0.06),
-                            padding:
-                                EdgeInsets.all(getScreenWidth(context) * 0.04),
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                const SmallTextBody(text: 'Apply coupon'),
-                                DetailsTextField(
-                                    controller: couponController,
-                                    label: 'Coupon Code',
-                                    hMargin: 0,
-                                    vMargin: 0.02),
-                                SizedBox(height: 10),
-                                MUISecondaryBlockButton(
-                                  text: 'Apply',
-                                  onPressed: () {
-                                    if (couponController.text.isNotEmpty) {
-                                      cartBloc.add(CouponCodeApplyClickedEvent(
-                                          couponCode: couponController.text));
-                                    }
-                                  },
-                                )
-                              ],
+                          GestureDetector(
+                            onTapDown: (_) {
+                              Navigator.push(context, MaterialPageRoute(builder: (context) => ApplyCouponsPage(cartBloc: cartBloc)));
+                            },
+                            child: Container(
+                              padding: EdgeInsets.all(getScreenWidth(context) * 0.05),
+                              margin: EdgeInsets.symmetric(horizontal: getScreenWidth(context) * 0.05),
+                              decoration: BoxDecoration(color: Colors.white, borderRadius: BorderRadius.circular(15)),
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Column(
+                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    children: [
+                                      Text(
+                                        'Want an extra discount?',
+                                        style: GoogleFonts.poppins(color: Colors.black, fontWeight: FontWeight.bold, fontSize: getScreenWidth(context) * 0.03),
+                                      ),
+                                      Text(
+                                        'View all coupons',
+                                        style: GoogleFonts.poppins(color: Colors.black, fontSize: getScreenWidth(context) * 0.025),
+                                      )
+                                    ],
+                                  ),
+                                  Container(
+                                      width: getScreenWidth(context) * 0.1,
+                                      height: getScreenWidth(context) * 0.1,
+                                      padding: EdgeInsets.symmetric(horizontal: getScreenWidth(context) * 0.02, vertical: getScreenWidth(context) * 0.008),
+                                      child: Lottie.asset('assets/svgs/save_money.json'))
+                                ],
+                              ),
                             ),
                           ),
 
                         // Delivery Details
                         Container(
-                          margin: EdgeInsets.symmetric(
-                              horizontal: getScreenWidth(context) * 0.06),
+                          margin: EdgeInsets.symmetric(horizontal: getScreenWidth(context) * 0.06),
                           child: Text(
                             'Delivery Details',
                             style: GoogleFonts.publicSans(
@@ -485,33 +580,18 @@ class _CartPageState extends State<CartPage> {
                             color: Colors.white,
                             borderRadius: BorderRadius.circular(15),
                           ),
-                          margin:
-                              EdgeInsets.all(getScreenWidth(context) * 0.06),
-                          padding:
-                              EdgeInsets.all(getScreenWidth(context) * 0.04),
+                          margin: EdgeInsets.all(getScreenWidth(context) * 0.06),
+                          padding: EdgeInsets.all(getScreenWidth(context) * 0.04),
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               const SmallTextBody(text: 'Deliver For'),
-                              DetailsTextField(
-                                  controller: firstNameController,
-                                  label: 'First name',
-                                  hMargin: 0,
-                                  vMargin: 0.02),
-                              DetailsTextField(
-                                  controller: lastNameController,
-                                  label: 'Last name',
-                                  hMargin: 0,
-                                  vMargin: 0.02),
+                              DetailsTextField(controller: firstNameController, label: 'First name', hMargin: 0, vMargin: 0.02),
+                              DetailsTextField(controller: lastNameController, label: 'Last name', hMargin: 0, vMargin: 0.02),
                               const SmallTextBody(text: 'Contact'),
-                              DetailsTextField(
-                                  controller: mobileController,
-                                  label: 'Contact number',
-                                  hMargin: 0,
-                                  vMargin: 0.02),
+                              DetailsTextField(controller: mobileController, label: 'Contact number', hMargin: 0, vMargin: 0.02),
                               Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
+                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                 children: [
                                   const SmallTextBody(text: 'Pincode'),
                                   if (isDeliver != null && isDeliver == true)
@@ -520,8 +600,7 @@ class _CartPageState extends State<CartPage> {
                                       style: GoogleFonts.publicSans(
                                         color: Colors.green,
                                         fontWeight: FontWeight.bold,
-                                        fontSize:
-                                            getScreenWidth(context) * 0.03,
+                                        fontSize: getScreenWidth(context) * 0.03,
                                       ),
                                     ),
                                   if (isDeliver != null && isDeliver == false)
@@ -530,23 +609,14 @@ class _CartPageState extends State<CartPage> {
                                       style: GoogleFonts.publicSans(
                                         color: Colors.red,
                                         fontWeight: FontWeight.bold,
-                                        fontSize:
-                                            getScreenWidth(context) * 0.025,
+                                        fontSize: getScreenWidth(context) * 0.025,
                                       ),
                                     ),
                                 ],
                               ),
-                              DetailsTextField(
-                                  controller: pincodeController,
-                                  label: 'Pincode',
-                                  hMargin: 0,
-                                  vMargin: 0.02),
+                              DetailsTextField(controller: pincodeController, label: 'Pincode', hMargin: 0, vMargin: 0.02),
                               const SmallTextBody(text: 'Delivery Address'),
-                              DetailsTextField(
-                                  controller: addressController,
-                                  label: 'Address',
-                                  hMargin: 0,
-                                  vMargin: 0.02),
+                              DetailsTextField(controller: addressController, label: 'Address', hMargin: 0, vMargin: 0.02),
                             ],
                           ),
                         ),
@@ -574,9 +644,7 @@ class _CartPageState extends State<CartPage> {
                           ),
                         ),
                         Container(
-                          margin: EdgeInsets.symmetric(
-                                  horizontal: getScreenWidth(context) * 0.06)
-                              .copyWith(
+                          margin: EdgeInsets.symmetric(horizontal: getScreenWidth(context) * 0.06).copyWith(
                             top: getScreenWidth(context) * 0.05,
                           ),
                           child: Text(
@@ -589,18 +657,13 @@ class _CartPageState extends State<CartPage> {
                           ),
                         ),
                         Container(
-                          decoration: BoxDecoration(
-                              color: Colors.white,
-                              borderRadius: BorderRadius.circular(15)),
-                          margin:
-                              EdgeInsets.all(getScreenWidth(context) * 0.06),
-                          padding:
-                              EdgeInsets.all(getScreenWidth(context) * 0.02),
+                          decoration: BoxDecoration(color: Colors.white, borderRadius: BorderRadius.circular(15)),
+                          margin: EdgeInsets.all(getScreenWidth(context) * 0.06),
+                          padding: EdgeInsets.all(getScreenWidth(context) * 0.02),
                           child: Column(
                             children: [
                               RadioListTile(
-                                controlAffinity:
-                                    ListTileControlAffinity.trailing,
+                                controlAffinity: ListTileControlAffinity.trailing,
                                 activeColor: Colors.green,
                                 value: 'upi',
                                 groupValue: radioValue,
@@ -620,12 +683,10 @@ class _CartPageState extends State<CartPage> {
                                     radioValue = value.toString();
                                   });
                                 },
-                                title:
-                                    const SmallTextBody(text: 'Pay Using UPI'),
+                                title: const SmallTextBody(text: 'Pay Using UPI'),
                               ),
                               RadioListTile(
-                                controlAffinity:
-                                    ListTileControlAffinity.trailing,
+                                controlAffinity: ListTileControlAffinity.trailing,
                                 activeColor: Colors.green,
                                 value: 'cod',
                                 groupValue: radioValue,
@@ -634,20 +695,14 @@ class _CartPageState extends State<CartPage> {
                                     radioValue = value.toString();
                                   });
                                 },
-                                title: const SmallTextBody(
-                                    text: 'Cash on delivery'),
+                                title: const SmallTextBody(text: 'Cash on delivery'),
                               )
                             ],
                           ),
                         ),
 
                         if (isDeliver != null && isDeliver == false)
-                          Container(
-                              alignment: Alignment.center,
-                              child: const Button(
-                                  radius: 10,
-                                  text: 'Please change the delivery location',
-                                  grd: linerGrdR))
+                          Container(alignment: Alignment.center, child: const Button(radius: 10, text: 'Please change the delivery location', grd: linerGrdR))
 
                         // Place Order
 
@@ -659,24 +714,17 @@ class _CartPageState extends State<CartPage> {
                                   CartPagePlaceOrderClickedEvent(
                                     products: successState.products,
                                     gst: '$gst',
-                                    amount:
-                                        '${subTotal + (subTotal < 999 ? 49 : 0)}',
+                                    amount: '${subTotal + (subTotal < 999 ? 49 : 0)}',
                                     isPaid: false,
                                   ),
                                 );
                               } else if (radioValue == 'upi') {
-                                final order_id =
-                                    await RazorpayAPI.createRazorpayOrder(
-                                        amount: (subTotal +
-                                                (subTotal < 999 ? 49 : 0)) *
-                                            100);
+                                final order_id = await RazorpayAPI.createRazorpayOrder(amount: (subTotal + (subTotal < 999 ? 49 : 0)) * 100);
                                 print('order id is $order_id');
                                 Razorpay razorpay = Razorpay();
                                 var options = {
                                   'key': key,
-                                  'amount':
-                                      (subTotal + (subTotal < 999 ? 49 : 0)) *
-                                          100,
+                                  'amount': (subTotal + (subTotal < 999 ? 49 : 0)) * 100,
                                   'name': 'Johar Basket',
                                   'order_id': order_id,
                                   'retry': {'enabled': true, 'max_count': 1},
@@ -686,12 +734,9 @@ class _CartPageState extends State<CartPage> {
                                     'wallets': ['paytm']
                                   }
                                 };
-                                razorpay.on(Razorpay.EVENT_PAYMENT_ERROR,
-                                    _handlePaymentError);
-                                razorpay.on(Razorpay.EVENT_PAYMENT_SUCCESS,
-                                    _handlePaymentSuccess);
-                                razorpay.on(Razorpay.EVENT_EXTERNAL_WALLET,
-                                    _handleExternalWallet);
+                                razorpay.on(Razorpay.EVENT_PAYMENT_ERROR, _handlePaymentError);
+                                razorpay.on(Razorpay.EVENT_PAYMENT_SUCCESS, _handlePaymentSuccess);
+                                razorpay.on(Razorpay.EVENT_EXTERNAL_WALLET, _handleExternalWallet);
                                 razorpay.open(options);
                               }
                             },

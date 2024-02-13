@@ -44,7 +44,7 @@ dependencies:
   firebase_core: ^2.15.1
   firebase_auth: ^4.7.3
   google_sign_in: ^6.1.4
-  lottie: ^2.6.0
+  lottie: ^3.0.0
   cloud_firestore: ^4.8.5
   cached_network_image: ^3.3.0
   http: ^1.1.0
@@ -79,7 +79,7 @@ dev_dependencies:
 flutter_icons:
   android: "launcher_icon"
   ios: true
-  image_path: "assets/img/johar.png"
+  image_path: "assets/img/jb.png"
   # The "flutter_lints" package below contains a set of recommended lints to
   # encourage good coding practices. The lint set provided by the package is
   # activated in the `analysis_options.yaml` file located at the root of your

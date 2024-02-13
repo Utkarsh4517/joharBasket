@@ -36,8 +36,7 @@ class _CouponPageState extends State<CouponPage> {
       },
       builder: (context, state) {
         return Scaffold(
-          floatingActionButtonLocation:
-              FloatingActionButtonLocation.miniStartDocked,
+          floatingActionButtonLocation: FloatingActionButtonLocation.miniStartDocked,
           floatingActionButton: Container(
             margin: EdgeInsets.only(bottom: 15),
             child: FloatingActionButton.extended(
@@ -49,12 +48,10 @@ class _CouponPageState extends State<CouponPage> {
                         builder: (BuildContext context, StateSetter setState) {
                           return Container(
                             width: double.infinity,
-                            padding: EdgeInsets.symmetric(
-                                horizontal: getScreenWidth(context) * 0.05),
+                            padding: EdgeInsets.symmetric(horizontal: getScreenWidth(context) * 0.05),
                             decoration: BoxDecoration(
                               color: Colors.white,
-                              borderRadius: BorderRadius.vertical(
-                                  top: Radius.circular(20)),
+                              borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
                             ),
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
@@ -64,11 +61,7 @@ class _CouponPageState extends State<CouponPage> {
                                   width: double.infinity,
                                   child: DropdownButton<String>(
                                       value: coupon_type,
-                                      items: <String>[
-                                        'flat off on order above',
-                                        '% discount upto'
-                                      ].map<DropdownMenuItem<String>>(
-                                          (String value) {
+                                      items: <String>['flat off on order above', '% discount upto'].map<DropdownMenuItem<String>>((String value) {
                                         return DropdownMenuItem<String>(
                                           value: value,
                                           child: Text(value),
@@ -85,54 +78,31 @@ class _CouponPageState extends State<CouponPage> {
                                   controller: couponController,
                                   filledColor: Colors.white,
                                 ),
-                                if (coupon_type == 'flat off on order above')
-                                  MUIPrimaryInputField(
-                                      hintText: 'Flat off',
-                                      controller: flatOffController,
-                                      filledColor: Colors.white),
-                                if (coupon_type == 'flat off on order above')
-                                  MUIPrimaryInputField(
-                                      hintText: 'On order above',
-                                      controller: onOrderAboveController,
-                                      filledColor: Colors.white),
-                                if (coupon_type == '% discount upto')
-                                  MUIPrimaryInputField(
-                                      hintText: 'Discount in percentage',
-                                      controller: discountController,
-                                      filledColor: Colors.white),
-                                if (coupon_type == '% discount upto')
-                                  MUIPrimaryInputField(
-                                      hintText: 'Upto',
-                                      controller: uptoController,
-                                      filledColor: Colors.white),
-                                SizedBox(
-                                    height: getScreenheight(context) * 0.05),
+                                if (coupon_type == 'flat off on order above') MUIPrimaryInputField(hintText: 'Flat off', controller: flatOffController, filledColor: Colors.white),
+                                if (coupon_type == 'flat off on order above') MUIPrimaryInputField(hintText: 'On order above', controller: onOrderAboveController, filledColor: Colors.white),
+                                if (coupon_type == '% discount upto') MUIPrimaryInputField(hintText: 'Discount in percentage', controller: discountController, filledColor: Colors.white),
+                                if (coupon_type == '% discount upto') MUIPrimaryInputField(hintText: 'Upto', controller: uptoController, filledColor: Colors.white),
+                                SizedBox(height: getScreenheight(context) * 0.05),
                                 Center(
                                   child: MUISecondaryButton(
                                       text: 'Create Coupon',
                                       onPressed: () {
-                                        if (coupon_type ==
-                                            'flat off on order above') {
+                                        if (coupon_type == 'flat off on order above') {
                                           profileBloc.add(AddCouponClickedEvent(
                                               type: coupon_type,
                                               couponCode: couponController.text,
-                                              flatOff: double.parse(
-                                                  flatOffController.text),
-                                              onOrderAbove: double.parse(
-                                                  onOrderAboveController.text),
+                                              flatOff: double.parse(flatOffController.text),
+                                              onOrderAbove: double.parse(onOrderAboveController.text),
                                               discount: 0,
                                               upto: 0));
-                                        } else if (coupon_type ==
-                                            '% discount upto') {
+                                        } else if (coupon_type == '% discount upto') {
                                           profileBloc.add(AddCouponClickedEvent(
                                             type: coupon_type,
                                             couponCode: couponController.text,
                                             flatOff: 0,
                                             onOrderAbove: 0,
-                                            discount: double.parse(
-                                                discountController.text),
-                                            upto: double.parse(
-                                                uptoController.text),
+                                            discount: double.parse(discountController.text),
+                                            upto: double.parse(uptoController.text),
                                           ));
                                         }
                                       }),
@@ -155,24 +125,20 @@ class _CouponPageState extends State<CouponPage> {
             child: StreamBuilder(
                 stream: couponStream,
                 builder: (context, snapshot) {
+                  print(snapshot.data);
                   if (snapshot.hasData) {
                     List<CouponModel> coupons = snapshot.data!;
+                    print(coupons.length);
                     return ListView.builder(
                         itemCount: coupons.length,
                         itemBuilder: (context, index) {
                           CouponModel coupon = coupons[index];
                           return Container(
-                            decoration: BoxDecoration(
-                                color: Colors.cyan.shade200,
-                                borderRadius: BorderRadius.circular(15)),
-                            margin: EdgeInsets.symmetric(
-                                    horizontal: getScreenWidth(context) * 0.05)
-                                .copyWith(
+                            decoration: BoxDecoration(color: Colors.cyan.shade200, borderRadius: BorderRadius.circular(15)),
+                            margin: EdgeInsets.symmetric(horizontal: getScreenWidth(context) * 0.05).copyWith(
                               bottom: 5,
                             ),
-                            padding: EdgeInsets.symmetric(
-                                vertical: getScreenWidth(context) * 0.04,
-                                horizontal: 5),
+                            padding: EdgeInsets.symmetric(vertical: getScreenWidth(context) * 0.04, horizontal: 5),
                             child: Row(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
@@ -180,19 +146,13 @@ class _CouponPageState extends State<CouponPage> {
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
                                     Text('Coupon Code: ${coupon.couponCode}'),
-                                    if (coupon.type ==
-                                        'flat off on order above')
-                                      Text(
-                                          'Flat off: ${coupon.flatOff} on order above ${coupon.onOrderAbove}'),
-                                    if (coupon.type == '% discount upto')
-                                      Text(
-                                          'Discount: ${coupon.discount}% on order upto ${coupon.upto}'),
+                                    if (coupon.type == 'flat off on order above') Text('Flat off: ${coupon.flatOff} on order above ${coupon.onOrderAbove}'),
+                                    if (coupon.type == '% discount upto') Text('Discount: ${coupon.discount}% on order upto ${coupon.upto}'),
                                   ],
                                 ),
                                 IconButton(
                                     onPressed: () {
-                                      profileBloc.add(CouponDeleteClickedEvent(
-                                          couponModel: coupon));
+                                      profileBloc.add(CouponDeleteClickedEvent(couponModel: coupon));
                                     },
                                     icon: Icon(Icons.delete))
                               ],
