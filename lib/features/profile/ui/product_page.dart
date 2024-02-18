@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:johar/constants/dimensions.dart';
-import 'package:johar/features/cart/widgets/small_text_body.dart';
 import 'package:johar/features/profile/bloc/profile_bloc.dart';
 import 'package:johar/features/profile/repo/profile_repo.dart';
 import 'package:johar/features/profile/widgets/profile_product_card.dart';
