@@ -16,8 +16,7 @@ class GroceryPage extends StatefulWidget {
   State<GroceryPage> createState() => _GroceryPageState();
 }
 
-class _GroceryPageState extends State<GroceryPage>
-    with AutomaticKeepAliveClientMixin {
+class _GroceryPageState extends State<GroceryPage> with AutomaticKeepAliveClientMixin {
   @override
   bool get wantKeepAlive => true;
   @override
@@ -27,14 +26,19 @@ class _GroceryPageState extends State<GroceryPage>
     super.initState();
   }
 
+  double _calculateHeight(BuildContext context) {
+    final double itemHeight = getScreenheight(context) * 0.15;
+    final int crossAxisCount = 2;
+    final int itemCount = 10;
+    final double totalHeight = (itemCount / crossAxisCount).ceil() * itemHeight + ((itemCount / crossAxisCount) - 1) * 8;
+    return totalHeight;
+  }
+
   String firstName = '';
   String lastName = '';
 
   void getUserName() async {
-    DocumentSnapshot snapshot = await FirebaseFirestore.instance
-        .collection('users')
-        .doc(FirebaseAuth.instance.currentUser!.uid)
-        .get();
+    DocumentSnapshot snapshot = await FirebaseFirestore.instance.collection('users').doc(FirebaseAuth.instance.currentUser!.uid).get();
 
     if (snapshot.exists) {
       String name1 = snapshot.get('firstName');
@@ -57,8 +61,7 @@ class _GroceryPageState extends State<GroceryPage>
       buildWhen: (previous, current) => current is! GroceryActionState,
       listener: (context, state) {
         if (state is GroceryAddToCartButtonClickedState) {
-          ScaffoldMessenger.of(context).showSnackBar(
-              const SnackBar(content: Text('Product added to cart')));
+          ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Product added to cart')));
         }
       },
       builder: (context, state) {
@@ -72,7 +75,7 @@ class _GroceryPageState extends State<GroceryPage>
             final searchController = TextEditingController();
 
             return RefreshIndicator(
-              onRefresh: () async{
+              onRefresh: () async {
                 await Future.delayed(Duration(seconds: 1));
                 groceryBloc.add(GroceryInitialEvent());
               },
@@ -89,39 +92,29 @@ class _GroceryPageState extends State<GroceryPage>
                       children: [
                         Container(
                           margin: EdgeInsets.all(getScreenWidth(context) * 0.06),
-                          child: Text('Featured Groceries',
-                              style: GoogleFonts.publicSans(
-                                  color: Colors.black,
-                                  fontWeight: FontWeight.w800,
-                                  fontSize: getScreenWidth(context) * 0.04)),
+                          child: Text('Featured Groceries', style: GoogleFonts.publicSans(color: Colors.black, fontWeight: FontWeight.w800, fontSize: getScreenWidth(context) * 0.04)),
                         ),
-            
+
                         SizedBox(
                           height: getScreenWidth(context) * 0.75,
                           child: ListView.builder(
                             scrollDirection: Axis.horizontal,
                             itemCount: successState.products.length,
                             itemBuilder: (context, index) {
-                              if (successState.products[index].isFeatured ==
-                                  true) {
+                              if (successState.products[index].isFeatured == true) {
                                 return GroceryCard(
-                                  discountedPrice: successState
-                                      .products[index].discountedPrice,
+                                  discountedPrice: successState.products[index].discountedPrice,
                                   size: successState.products[index].size!,
                                   bloc: groceryBloc,
                                   gst: successState.products[index].gst,
                                   name: successState.products[index].name,
                                   imageUrl: successState.products[index].imageUrl,
                                   price: successState.products[index].price,
-                                  isFeatured:
-                                      successState.products[index].isFeatured,
+                                  isFeatured: successState.products[index].isFeatured,
                                   inStock: successState.products[index].inStock,
-                                  productId:
-                                      successState.products[index].productId,
-                                  groceryUiDataModel:
-                                      successState.products[index],
-                                  description:
-                                      successState.products[index].description,
+                                  productId: successState.products[index].productId,
+                                  groceryUiDataModel: successState.products[index],
+                                  description: successState.products[index].description,
                                 );
                               } else {
                                 return Container();
@@ -130,44 +123,32 @@ class _GroceryPageState extends State<GroceryPage>
                           ),
                         ),
                         // shop groceries
-            
+
                         Container(
                           margin: EdgeInsets.all(getScreenWidth(context) * 0.06),
-                          child: Text('Shop Groceries',
-                              style: GoogleFonts.publicSans(
-                                  color: Colors.black,
-                                  fontWeight: FontWeight.w800,
-                                  fontSize: getScreenWidth(context) * 0.04)),
+                          child: Text('Shop Groceries', style: GoogleFonts.publicSans(color: Colors.black, fontWeight: FontWeight.w800, fontSize: getScreenWidth(context) * 0.04)),
                         ),
                         // gridview
                         SizedBox(
-                          height: (successState.products.length *
-                                  getScreenWidth(context) *
-                                  0.28)
-                              .toDouble(),
+                          height: (successState.products.length * getScreenWidth(context) * 0.35).toDouble(),
                           child: GridView.builder(
                             physics: const NeverScrollableScrollPhysics(),
-                            gridDelegate:
-                                const SliverGridDelegateWithFixedCrossAxisCount(
-                                    crossAxisCount: 2),
+                            gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 2),
                             itemCount: successState.products.length,
                             itemBuilder: (context, index) {
                               return GroceryCardSmall(
-                                discountedPrice:
-                                    successState.products[index].discountedPrice,
+                                discountedPrice: successState.products[index].discountedPrice,
                                 size: successState.products[index].size!,
                                 bloc: groceryBloc,
                                 gst: successState.products[index].gst,
                                 name: successState.products[index].name,
                                 imageUrl: successState.products[index].imageUrl,
                                 price: successState.products[index].price,
-                                isFeatured:
-                                    successState.products[index].isFeatured,
+                                isFeatured: successState.products[index].isFeatured,
                                 inStock: successState.products[index].inStock,
                                 productId: successState.products[index].productId,
                                 groceryUiDataModel: successState.products[index],
-                                description:
-                                    successState.products[index].description,
+                                description: successState.products[index].description,
                               );
                             },
                           ),

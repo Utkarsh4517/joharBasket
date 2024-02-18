@@ -83,6 +83,9 @@ class _CosmeticsPageState extends State<CosmeticsPage>
                             itemBuilder: (context, index) {
                               if (successState.products[index].isFeatured ==
                                   true) {
+                                    setState(() {
+                                      
+                                    });
                                 return GroceryCard(
                                   discountedPrice: successState
                                       .products[index].discountedPrice,

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:intl/intl.dart';
 import 'package:johar/constants/colors.dart';
 import 'package:johar/constants/dimensions.dart';
 import 'package:johar/features/auth/widgets/details_text_field.dart';
@@ -58,25 +59,17 @@ class _ProfileOrderCardLargeState extends State<ProfileOrderCardLarge> {
   final ProfileBloc profileBloc = ProfileBloc();
 
   fetchDetails() async {
-    final isAccepted =
-        await ProfileRepo.isOrderAccepted(widget.orderIdList[widget.indexU]);
-    final isDelivered =
-        await ProfileRepo.isOrderDelivered(widget.orderIdList[widget.indexU]);
-    final isPay =
-        await ProfileRepo.isPaymentReceived(widget.orderIdList[widget.indexU]);
-    final amount =
-        await ProfileRepo.fetchAmountOfOrder(widget.orderIdList[widget.indexU]);
-    final mobileNo = await ProfileRepo.orderedByMobileNumber(
-        widget.orderIdList[widget.indexU]);
+    final isAccepted = await ProfileRepo.isOrderAccepted(widget.orderIdList[widget.indexU]);
+    final isDelivered = await ProfileRepo.isOrderDelivered(widget.orderIdList[widget.indexU]);
+    final isPay = await ProfileRepo.isPaymentReceived(widget.orderIdList[widget.indexU]);
+    final amount = await ProfileRepo.fetchAmountOfOrder(widget.orderIdList[widget.indexU]);
+    final mobileNo = await ProfileRepo.orderedByMobileNumber(widget.orderIdList[widget.indexU]);
     final name = await ProfileRepo.orderedBy(widget.orderIdList[widget.indexU]);
 
-    final addr =
-        await ProfileRepo.fetchAddress(widget.orderIdList[widget.indexU]);
-    final pin =
-        await ProfileRepo.fetchPincode(widget.orderIdList[widget.indexU]);
+    final addr = await ProfileRepo.fetchAddress(widget.orderIdList[widget.indexU]);
+    final pin = await ProfileRepo.fetchPincode(widget.orderIdList[widget.indexU]);
     final id = await ProfileRepo.fetchUserid(widget.orderIdList[widget.indexU]);
-    final otpGen =
-        await OrderRepo.fetchOTP(widget.orderIdList[widget.indexU], id);
+    final otpGen = await OrderRepo.fetchOTP(widget.orderIdList[widget.indexU], id);
 
     if (mounted) {
       setState(() {
@@ -94,6 +87,40 @@ class _ProfileOrderCardLargeState extends State<ProfileOrderCardLarge> {
     }
   }
 
+  DateTime? _selectedDate;
+
+  Future<void> _selectDate(BuildContext context) async {
+    var picked = await showDatePicker(
+      builder: (context, child) {
+        return Theme(
+          data: Theme.of(context).copyWith(
+            colorScheme: const ColorScheme.light(
+              primary: Color.fromRGBO(74, 81, 248, 1),
+              onPrimary: Colors.white,
+              onSurface: Colors.black,
+            ),
+            textButtonTheme: TextButtonThemeData(
+              style: TextButton.styleFrom(
+                foregroundColor: const Color.fromRGBO(74, 81, 248, 1), // button text color
+              ),
+            ),
+          ),
+          child: child!,
+        );
+      },
+      context: context,
+      initialDate: _selectedDate,
+      firstDate: DateTime.now(),
+      lastDate: DateTime(DateTime.now().year, DateTime.now().month + 6, DateTime.now().day),
+    );
+
+    if (picked != null && picked != _selectedDate) {
+      setState(() {
+        _selectedDate = picked;
+      });
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return BlocConsumer<ProfileBloc, ProfileState>(
@@ -102,44 +129,49 @@ class _ProfileOrderCardLargeState extends State<ProfileOrderCardLarge> {
       buildWhen: (previous, current) => current is! ProfileActionState,
       listener: (context, state) {
         if (state is ProfilePageShowAcceptOrderDialog) {
-          final deliveryTimeController = TextEditingController();
-          showDialog(
-            context: context,
-            builder: (context) => Dialog(
-              child: SizedBox(
-                height: getScreenWidth(context) * 0.75,
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  children: [
-                    Text(
-                      'Enter the expected delivery time',
-                      style: TextStyle(
-                        color: Colors.black,
-                        fontWeight: FontWeight.bold,
-                        fontSize: getScreenWidth(context) * 0.04,
-                      ),
-                    ),
-                    DetailsTextField(
-                        controller: deliveryTimeController,
-                        label: 'by date, time'),
-                    GestureDetector(
-                      onTap: () => profileBloc.add(ConfirmOrderClickedEvent(
-                        orderId: widget.orderIdList[widget.indexU],
-                        userId: userId,
-                        deliveryTime: deliveryTimeController.text,
-                      )),
-                      child: const Button(
-                        radius: 15,
-                        text: 'Confirm',
-                        paddingH: 0.28,
-                        paddingV: 0.032,
-                      ),
-                    )
-                  ],
-                ),
-              ),
-            ),
-          );
+          _selectDate(context).then((_) {
+            profileBloc.add(ConfirmOrderClickedEvent(
+              orderId: widget.orderIdList[widget.indexU],
+              userId: userId,
+              deliveryTime: DateFormat('dd MMM').format(_selectedDate!),
+            ));
+          });
+
+          // showDialog(
+          //   context: context,
+          //   builder: (context) => Dialog(
+          //     child: SizedBox(
+          //       height: getScreenWidth(context) * 0.75,
+          //       child: Column(
+          //         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          //         children: [
+          //           Text(
+          //             'Enter the expected delivery time',
+          //             style: TextStyle(
+          //               color: Colors.black,
+          //               fontWeight: FontWeight.bold,
+          //               fontSize: getScreenWidth(context) * 0.04,
+          //             ),
+          //           ),
+          //           DetailsTextField(controller: deliveryTimeController, label: 'by date, time'),
+          //           GestureDetector(
+          //             onTap: () => profileBloc.add(ConfirmOrderClickedEvent(
+          //               orderId: widget.orderIdList[widget.indexU],
+          //               userId: userId,
+          //               deliveryTime: deliveryTimeController.text,
+          //             )),
+          //             child: const Button(
+          //               radius: 15,
+          //               text: 'Confirm',
+          //               paddingH: 0.28,
+          //               paddingV: 0.032,
+          //             ),
+          //           )
+          //         ],
+          //       ),
+          //     ),
+          //   ),
+          // );
         } else if (state is OrderAcceptedSuccessState) {
           Navigator.pop(context);
           showTopSnackBar(
@@ -174,8 +206,7 @@ class _ProfileOrderCardLargeState extends State<ProfileOrderCardLarge> {
                     GestureDetector(
                       onTap: () {
                         if (otpController.text == otp) {
-                          profileBloc.add(DeliveryConfirmedEvent(
-                              orderId: state.orderId, userId: state.userId));
+                          profileBloc.add(DeliveryConfirmedEvent(orderId: state.orderId, userId: state.userId));
                           print('state user id is ${state.userId}');
                           print('state orderId is ${state.orderId}');
                           showTopSnackBar(
@@ -237,8 +268,7 @@ class _ProfileOrderCardLargeState extends State<ProfileOrderCardLarge> {
                       ),
                       TextButton(
                         onPressed: () {
-                          profileBloc.add(ConfirmCancelOrderEvent(
-                              orderId: state.orderId, userId: userId));
+                          profileBloc.add(ConfirmCancelOrderEvent(orderId: state.orderId, userId: userId));
                           // orderBloc.add(
                           //     ConfirmCancelOrderEvent(orderId: state.orderId));
                         },
@@ -268,18 +298,13 @@ class _ProfileOrderCardLargeState extends State<ProfileOrderCardLarge> {
       builder: (context, state) {
         if (!isOrderDelivered) {
           return Container(
-            decoration: BoxDecoration(
-                color: Colors.white, borderRadius: BorderRadius.circular(15)),
-            margin: EdgeInsets.symmetric(
-                horizontal: getScreenWidth(context) * 0.06,
-                vertical: getScreenWidth(context) * 0.02),
+            decoration: BoxDecoration(color: Colors.white, borderRadius: BorderRadius.circular(15)),
+            margin: EdgeInsets.symmetric(horizontal: getScreenWidth(context) * 0.06, vertical: getScreenWidth(context) * 0.02),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 SizedBox(
-                  height: widget.successState.orders[widget.indexU].length *
-                      0.3 *
-                      getScreenWidth(context),
+                  height: widget.successState.orders[widget.indexU].length * 0.3 * getScreenWidth(context),
                   child: ListView.builder(
                     physics: const NeverScrollableScrollPhysics(),
                     itemCount: widget.successState.orders[widget.indexU].length,
@@ -293,59 +318,46 @@ class _ProfileOrderCardLargeState extends State<ProfileOrderCardLarge> {
                   ),
                 ),
                 Container(
-                  margin: EdgeInsets.symmetric(
-                      horizontal: getScreenWidth(context) * 0.04),
+                  margin: EdgeInsets.symmetric(horizontal: getScreenWidth(context) * 0.04),
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       const SmallTextBody(text: 'Order ID'),
                       SelectableText(
                         '${widget.orderIdList[widget.indexU]}',
-                        style: TextStyle(
-                            color: Colors.black,
-                            fontSize: getScreenWidth(context) * 0.025),
+                        style: TextStyle(color: Colors.black, fontSize: getScreenWidth(context) * 0.025),
                       )
                     ],
                   ),
                 ),
                 Container(
-                  margin: EdgeInsets.symmetric(
-                      horizontal: getScreenWidth(context) * 0.04),
+                  margin: EdgeInsets.symmetric(horizontal: getScreenWidth(context) * 0.04),
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       const SmallTextBody(text: 'Total amount'),
                       SelectableText(
                         '₹ $amountOfOrder',
-                        style: TextStyle(
-                            color:
-                                isPaymentReceived ? Colors.green : Colors.red,
-                            fontSize: getScreenWidth(context) * 0.04,
-                            fontWeight: FontWeight.bold),
+                        style: TextStyle(color: isPaymentReceived ? Colors.green : Colors.red, fontSize: getScreenWidth(context) * 0.04, fontWeight: FontWeight.bold),
                       )
                     ],
                   ),
                 ),
                 Container(
-                  margin: EdgeInsets.symmetric(
-                      horizontal: getScreenWidth(context) * 0.04),
+                  margin: EdgeInsets.symmetric(horizontal: getScreenWidth(context) * 0.04),
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       const SmallTextBody(text: 'Ordered by'),
                       SelectableText(
                         userName,
-                        style: TextStyle(
-                            color: Colors.black,
-                            fontSize: getScreenWidth(context) * 0.03,
-                            fontWeight: FontWeight.bold),
+                        style: TextStyle(color: Colors.black, fontSize: getScreenWidth(context) * 0.03, fontWeight: FontWeight.bold),
                       )
                     ],
                   ),
                 ),
                 Container(
-                  margin: EdgeInsets.symmetric(
-                      horizontal: getScreenWidth(context) * 0.04),
+                  margin: EdgeInsets.symmetric(horizontal: getScreenWidth(context) * 0.04),
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
@@ -357,10 +369,7 @@ class _ProfileOrderCardLargeState extends State<ProfileOrderCardLarge> {
                           },
                           child: Text(
                             userMobile,
-                            style: TextStyle(
-                                color: Colors.black,
-                                fontSize: getScreenWidth(context) * 0.03,
-                                fontWeight: FontWeight.bold),
+                            style: TextStyle(color: Colors.black, fontSize: getScreenWidth(context) * 0.03, fontWeight: FontWeight.bold),
                           )),
                     ],
                   ),
@@ -379,45 +388,37 @@ class _ProfileOrderCardLargeState extends State<ProfileOrderCardLarge> {
                         width: getScreenWidth(context) * 0.5,
                         child: Text(
                           address,
-                          style: TextStyle(
-                              color: Colors.black,
-                              fontSize: getScreenWidth(context) * 0.03,
-                              fontWeight: FontWeight.normal),
+                          style: TextStyle(color: Colors.black, fontSize: getScreenWidth(context) * 0.03, fontWeight: FontWeight.normal),
                         ),
                       ),
                     ],
                   ),
                 ),
                 Container(
-                  margin: EdgeInsets.symmetric(
-                      horizontal: getScreenWidth(context) * 0.04),
+                  margin: EdgeInsets.symmetric(horizontal: getScreenWidth(context) * 0.04),
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       const SmallTextBody(text: 'Pincode'),
                       Text(
                         pincode,
-                        style: TextStyle(
-                            color: Colors.black,
-                            fontSize: getScreenWidth(context) * 0.03,
-                            fontWeight: FontWeight.bold),
+                        style: TextStyle(color: Colors.black, fontSize: getScreenWidth(context) * 0.03, fontWeight: FontWeight.bold),
                       ),
                     ],
                   ),
                 ),
                 if (isOrderAccepted)
                   Container(
-                    margin:
-                        EdgeInsets.only(left: getScreenWidth(context) * 0.02),
+                    margin: EdgeInsets.only(left: getScreenWidth(context) * 0.02),
                     child: TextButton(
                       onPressed: () async {
                         final data = await billService.generatePdfAdminPanel(
-                            orderIdList: widget.orderIdList,
-                            indexU: widget.indexU,
-                            successState: widget.successState,
-                            total: amountOfOrder,);
-                        billService.savePdfFile(
-                            filename: 'johar_bill', byteList: data);
+                          orderIdList: widget.orderIdList,
+                          indexU: widget.indexU,
+                          successState: widget.successState,
+                          total: amountOfOrder,
+                        );
+                        billService.savePdfFile(filename: 'johar_bill', byteList: data);
                       },
                       child: Text(
                         'View receipt',
@@ -434,8 +435,7 @@ class _ProfileOrderCardLargeState extends State<ProfileOrderCardLarge> {
                       ));
                     },
                     child: Container(
-                      margin: EdgeInsets.symmetric(
-                          vertical: getScreenWidth(context) * 0.03),
+                      margin: EdgeInsets.symmetric(vertical: getScreenWidth(context) * 0.03),
                       alignment: Alignment.center,
                       child: const Button(
                         radius: 15,
@@ -453,8 +453,7 @@ class _ProfileOrderCardLargeState extends State<ProfileOrderCardLarge> {
                     ));
                   },
                   child: Container(
-                    margin: EdgeInsets.symmetric(
-                        vertical: getScreenWidth(context) * 0.03),
+                    margin: EdgeInsets.symmetric(vertical: getScreenWidth(context) * 0.03),
                     alignment: Alignment.center,
                     child: const Button(
                       grd: linerGrdR,
@@ -476,8 +475,7 @@ class _ProfileOrderCardLargeState extends State<ProfileOrderCardLarge> {
                       print(widget.orderIdList[widget.indexU]);
                     },
                     child: Container(
-                      margin: EdgeInsets.symmetric(
-                          vertical: getScreenWidth(context) * 0.03),
+                      margin: EdgeInsets.symmetric(vertical: getScreenWidth(context) * 0.03),
                       alignment: Alignment.center,
                       child: const Button(
                         radius: 15,

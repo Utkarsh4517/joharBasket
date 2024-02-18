@@ -15,8 +15,7 @@ class ProfileBloc extends Bloc<ProfileEvent, ProfileState> {
     on<AddProductClickedEvent>(addProductClickedEvent);
     on<ProductEditButtonClickedEvent>(productEditButtonClickedEvent);
     on<ProductUpdateDetailsClickedEvent>(productUpdateDetailsClickedEvent);
-    on<StationaryUpdateDetailsClickedEvent>(
-        stationaryUpdateDetailsClickedEvent);
+    on<StationaryUpdateDetailsClickedEvent>(stationaryUpdateDetailsClickedEvent);
     on<CosmeticUpdateClickedEvent>(cosmeticUpdateClickedEvent);
     on<ProductDeleteButtonClickedEvent>(productDeleteButtonClickedEvent);
     on<RemoveProductClickedEvent>(removeProductClickedEvent);
@@ -35,11 +34,9 @@ class ProfileBloc extends Bloc<ProfileEvent, ProfileState> {
     on<CouponDeleteClickedEvent>(couponDeleteClickedEvent);
   }
 
-  FutureOr<void> profilePageOrderInitialEvent(
-      ProfilePageOrderInitialEvent event, Emitter<ProfileState> emit) async {
+  FutureOr<void> profilePageOrderInitialEvent(ProfilePageOrderInitialEvent event, Emitter<ProfileState> emit) async {
     emit(OrderPageFetchingState());
-    List<List<ProductDataModel>> orders =
-        await ProfileRepo.fetchCurrentOrders();
+    List<List<ProductDataModel>> orders = await ProfileRepo.fetchCurrentOrders();
 
     if (orders.isEmpty) {
       emit(OrderIsEmptyState());
@@ -48,8 +45,7 @@ class ProfileBloc extends Bloc<ProfileEvent, ProfileState> {
     }
   }
 
-  FutureOr<void> addProductClickedEvent(
-      AddProductClickedEvent event, Emitter<ProfileState> emit) async {
+  FutureOr<void> addProductClickedEvent(AddProductClickedEvent event, Emitter<ProfileState> emit) async {
     await ProfileRepo.addNewProduct(
         collectionName: event.category,
         name: event.name,
@@ -64,14 +60,11 @@ class ProfileBloc extends Bloc<ProfileEvent, ProfileState> {
         discountedPrice: event.discountedPrice);
   }
 
-  FutureOr<void> productEditButtonClickedEvent(
-      ProductEditButtonClickedEvent event, Emitter<ProfileState> emit) {
+  FutureOr<void> productEditButtonClickedEvent(ProductEditButtonClickedEvent event, Emitter<ProfileState> emit) {
     emit(ProductEditButtonClickedState(product: event.product));
   }
 
-  FutureOr<void> productUpdateDetailsClickedEvent(
-      ProductUpdateDetailsClickedEvent event,
-      Emitter<ProfileState> emit) async {
+  FutureOr<void> productUpdateDetailsClickedEvent(ProductUpdateDetailsClickedEvent event, Emitter<ProfileState> emit) async {
     await ProfileRepo.updateProductDetails(
       productDataModel: event.product,
       inStock: event.inStock,
@@ -86,65 +79,51 @@ class ProfileBloc extends Bloc<ProfileEvent, ProfileState> {
     emit(ProductDetailsUpdatedState());
   }
 
-  FutureOr<void> productDeleteButtonClickedEvent(
-      ProductDeleteButtonClickedEvent event, Emitter<ProfileState> emit) {
+  FutureOr<void> productDeleteButtonClickedEvent(ProductDeleteButtonClickedEvent event, Emitter<ProfileState> emit) {
     emit(ShowDeleteDialogState());
   }
 
-  FutureOr<void> removeProductClickedEvent(
-      RemoveProductClickedEvent event, Emitter<ProfileState> emit) async {
+  FutureOr<void> removeProductClickedEvent(RemoveProductClickedEvent event, Emitter<ProfileState> emit) async {
     await ProfileRepo.deleteProduct(productDataModel: event.productDataModel);
     emit(RemoveDialogState());
   }
 
-  FutureOr<void> acceptOrderClickedEvent(
-      AcceptOrderClickedEvent event, Emitter<ProfileState> emit) {
-    emit(ProfilePageShowAcceptOrderDialog(
-        orderId: event.orderId, userId: event.userId));
+  FutureOr<void> acceptOrderClickedEvent(AcceptOrderClickedEvent event, Emitter<ProfileState> emit) {
+    print('heelo aapka kya naam hai hamse kya kaam hai');
+    emit(ProfilePageShowAcceptOrderDialog(orderId: event.orderId, userId: event.userId));
   }
 
-  FutureOr<void> confirmOrderClickedEvent(
-      ConfirmOrderClickedEvent event, Emitter<ProfileState> emit) async {
-    await ProfileRepo.orderAccepted(
-        event.userId, event.orderId, event.deliveryTime);
+  FutureOr<void> confirmOrderClickedEvent(ConfirmOrderClickedEvent event, Emitter<ProfileState> emit) async {
+    await ProfileRepo.orderAccepted(event.userId, event.orderId, event.deliveryTime);
     emit(OrderAcceptedSuccessState());
   }
 
-  FutureOr<void> showConfirmDeliveryDialogEvent(
-      ShowConfirmDeliveryDialogEvent event, Emitter<ProfileState> emit) {
-    emit(ConfirmDeliveryDialogState(
-        orderId: event.orderId, userId: event.userId));
+  FutureOr<void> showConfirmDeliveryDialogEvent(ShowConfirmDeliveryDialogEvent event, Emitter<ProfileState> emit) {
+    emit(ConfirmDeliveryDialogState(orderId: event.orderId, userId: event.userId));
   }
 
-  FutureOr<void> deliveryConfirmedEvent(
-      DeliveryConfirmedEvent event, Emitter<ProfileState> emit) async {
+  FutureOr<void> deliveryConfirmedEvent(DeliveryConfirmedEvent event, Emitter<ProfileState> emit) async {
     await ProfileRepo.orderDelivered(event.userId, event.orderId);
     emit(DeliveryConfirmedState());
   }
 
-  FutureOr<void> statsPageInitialEvent(
-      StatsPageInitialEvent event, Emitter<ProfileState> emit) async {
+  FutureOr<void> statsPageInitialEvent(StatsPageInitialEvent event, Emitter<ProfileState> emit) async {
     emit(StatsPageFetchingState());
     // await
     List<List<ProductDataModel>> orders = await ProfileRepo.fetchPastOrders();
     emit(StatsPageOrderDeliveredSuccessState(orders: orders));
   }
 
-  FutureOr<void> cancelOrderClickedEvent(
-      CancelOrderClickedEvent event, Emitter<ProfileState> emit) {
-    emit(ProfilePageShowCancelOrderDialogBoxState(
-        orderId: event.orderId, userId: event.orderId));
+  FutureOr<void> cancelOrderClickedEvent(CancelOrderClickedEvent event, Emitter<ProfileState> emit) {
+    emit(ProfilePageShowCancelOrderDialogBoxState(orderId: event.orderId, userId: event.orderId));
   }
 
-  FutureOr<void> confirmCancelOrderEvent(
-      ConfirmCancelOrderEvent event, Emitter<ProfileState> emit) async {
+  FutureOr<void> confirmCancelOrderEvent(ConfirmCancelOrderEvent event, Emitter<ProfileState> emit) async {
     await ProfileRepo.cancelOrder(event.orderId, event.userId);
     emit(ProfilePageOrderCancelSuccessfulState());
   }
 
-  FutureOr<void> stationaryUpdateDetailsClickedEvent(
-      StationaryUpdateDetailsClickedEvent event,
-      Emitter<ProfileState> emit) async {
+  FutureOr<void> stationaryUpdateDetailsClickedEvent(StationaryUpdateDetailsClickedEvent event, Emitter<ProfileState> emit) async {
     await ProfileRepo.updateStationaryDetails(
       productDataModel: event.product,
       inStock: event.inStock,
@@ -159,8 +138,7 @@ class ProfileBloc extends Bloc<ProfileEvent, ProfileState> {
     emit(ProductDetailsUpdatedState());
   }
 
-  FutureOr<void> cosmeticUpdateClickedEvent(
-      CosmeticUpdateClickedEvent event, Emitter<ProfileState> emit) async {
+  FutureOr<void> cosmeticUpdateClickedEvent(CosmeticUpdateClickedEvent event, Emitter<ProfileState> emit) async {
     await ProfileRepo.updateCosmeticsDetails(
       productDataModel: event.product,
       inStock: event.inStock,
@@ -175,45 +153,31 @@ class ProfileBloc extends Bloc<ProfileEvent, ProfileState> {
     emit(ProductDetailsUpdatedState());
   }
 
-  FutureOr<void> removeCosmeticClickedEvent(
-      RemoveCosmeticClickedEvent event, Emitter<ProfileState> emit) async {
+  FutureOr<void> removeCosmeticClickedEvent(RemoveCosmeticClickedEvent event, Emitter<ProfileState> emit) async {
     await ProfileRepo.deleteCosmetic(productDataModel: event.productDataModel);
     emit(RemoveDialogState());
   }
 
-  FutureOr<void> removeStationaryClickedEvent(
-      RemoveStationaryClickedEvent event, Emitter<ProfileState> emit) async {
-    await ProfileRepo.deleteStationary(
-        productDataModel: event.productDataModel);
+  FutureOr<void> removeStationaryClickedEvent(RemoveStationaryClickedEvent event, Emitter<ProfileState> emit) async {
+    await ProfileRepo.deleteStationary(productDataModel: event.productDataModel);
     emit(RemoveDialogState());
   }
 
-  FutureOr<void> notificationButtonClickedEvent(
-      NotificationButtonClickedEvent event, Emitter<ProfileState> emit) {
+  FutureOr<void> notificationButtonClickedEvent(NotificationButtonClickedEvent event, Emitter<ProfileState> emit) {
     emit(NotificationButtonClickedState());
   }
 
-  FutureOr<void> sendNotification(
-      SendNotification event, Emitter<ProfileState> emit) async {
-    await ProfileRepo.sendCustomNotification(
-        title: event.notfTitle, description: event.notfDesc);
+  FutureOr<void> sendNotification(SendNotification event, Emitter<ProfileState> emit) async {
+    await ProfileRepo.sendCustomNotification(title: event.notfTitle, description: event.notfDesc);
     emit(NotificationSentState());
   }
 
-  FutureOr<void> addCouponClickedEvent(
-      AddCouponClickedEvent event, Emitter<ProfileState> emit) async {
-    await ProfileRepo.addNewCoupon(
-        type: event.type,
-        couponCode: event.couponCode,
-        flatOff: event.flatOff,
-        onOrderAbove: event.onOrderAbove,
-        discount: event.discount,
-        upto: event.upto);
+  FutureOr<void> addCouponClickedEvent(AddCouponClickedEvent event, Emitter<ProfileState> emit) async {
+    await ProfileRepo.addNewCoupon(type: event.type, couponCode: event.couponCode, flatOff: event.flatOff, onOrderAbove: event.onOrderAbove, discount: event.discount, upto: event.upto);
     emit(CouponAddedState());
   }
 
-  FutureOr<void> couponDeleteClickedEvent(
-      CouponDeleteClickedEvent event, Emitter<ProfileState> emit) async {
+  FutureOr<void> couponDeleteClickedEvent(CouponDeleteClickedEvent event, Emitter<ProfileState> emit) async {
     await ProfileRepo.deleteCoupon(couponModel: event.couponModel);
   }
 }

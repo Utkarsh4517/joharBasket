@@ -162,10 +162,74 @@ class _CartPageState extends State<CartPage> {
                 );
               });
         } else if (state is CartPagePlaceOrderSuccessfulState) {
-          ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Order Placed Successfully')));
+          showGeneralDialog(
+            context: context,
+            pageBuilder: (context, _, __) => StatefulBuilder(
+              builder: (BuildContext context, StateSetter setState) {
+                return AnimatedContainer(
+                  duration: const Duration(milliseconds: 3000),
+                  padding: EdgeInsets.all(
+                    getScreenWidth(context) * 0.05,
+                  ),
+                  margin: EdgeInsets.symmetric(
+                    horizontal: getScreenWidth(context) * 0.15,
+                    vertical: getScreenheight(context) * 0.35,
+                  ),
+                  decoration: const BoxDecoration(color: Colors.white, borderRadius: BorderRadius.all(Radius.circular(25))),
+                  child: Scaffold(
+                    backgroundColor: Colors.transparent,
+                    body: Stack(
+                      alignment: Alignment.center,
+                      children: [
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                          children: [
+                            Container(
+                              alignment: Alignment.center,
+                              width: getScreenWidth(context) * 0.2,
+                              height: getScreenWidth(context) * 0.2,
+                              child: Lottie.asset('assets/svgs/order_placed.json'),
+                            ),
+                            Container(
+                              alignment: Alignment.center,
+                              child: Text(
+                                "Congratulations!",
+                                style: GoogleFonts.poppins(
+                                  fontWeight: FontWeight.w700,
+                                  fontSize: getScreenWidth(context) * 0.038,
+                                  color: Colors.green,
+                                ),
+                              ),
+                            ),
+                            Container(
+                              alignment: Alignment.center,
+                              child: Text(
+                                "Your order has been placed",
+                                style: GoogleFonts.poppins(fontWeight: FontWeight.w700, fontSize: getScreenWidth(context) * 0.03),
+                              ),
+                            ),
+                            MUITextButton(
+                              onPressed: () {
+                                Navigator.pop(context);
+                                Navigator.pushReplacementNamed(context, '/');
+                              },
+                              text: 'Done',
+                              textColor: Colors.redAccent,
+                              bgColor: Colors.grey.shade200,
+                            )
+                          ],
+                        )
+                      ],
+                    ),
+                  ),
+                );
+              },
+            ),
+          );
         } else if (state is CartEmptiedState) {
-          Navigator.pop(context);
-          Navigator.pushReplacementNamed(context, '/');
+          // Navigator.pop(context);
+          // Navigator.pushReplacementNamed(context, '/');
         } else if (state is CartPageUserDetailsUpdatedSuccessState) {
           Navigator.pop(context);
           ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('User Details Updated!')));
@@ -727,7 +791,7 @@ class _CartPageState extends State<CartPage> {
                                   CartPagePlaceOrderClickedEvent(
                                     products: successState.products,
                                     gst: '$gst',
-                                    amount: '${subTotal + (subTotal < 999 ? 49 : 0)}',
+                                    amount: '${subTotal + (subTotal < 999 ? 49 : 0) - couponDiscount}',
                                     isPaid: false,
                                   ),
                                 );
@@ -737,7 +801,7 @@ class _CartPageState extends State<CartPage> {
                                 Razorpay razorpay = Razorpay();
                                 var options = {
                                   'key': key,
-                                  'amount': (subTotal + (subTotal < 999 ? 49 : 0)) * 100,
+                                  'amount': (subTotal + (subTotal < 999 ? 49 : 0) - couponDiscount) * 100,
                                   'name': 'Johar Basket',
                                   'order_id': order_id,
                                   'retry': {'enabled': true, 'max_count': 1},

@@ -170,7 +170,7 @@ class _OrderCardLargeState extends State<OrderCardLarge> {
                     ),
                     Text(
                       deliveryTime,
-                      style: TextStyle(fontSize: 8),
+                      style: TextStyle(fontSize: 12),
                     )
                   ],
                 ),
