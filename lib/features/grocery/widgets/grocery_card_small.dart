@@ -40,6 +40,7 @@ class GroceryCardSmall extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final discountPercentage = ((price - discountedPrice) / 100);
     void clicked() {
       bloc.add(GroceryCardClickedEvent(clickedGrocery: groceryUiDataModel));
       Navigator.push(
@@ -50,113 +51,131 @@ class GroceryCardSmall extends StatelessWidget {
                   )));
     }
 
-    return Container(
-      margin: EdgeInsets.symmetric(
-          horizontal: getScreenWidth(context) * 0.05,
-          vertical: getScreenWidth(context) * 0.01),
-      child: Card(
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
-        color: Colors.white,
-        surfaceTintColor: Colors.white,
-        elevation: 0,
-        child: Container(
-          decoration: BoxDecoration(borderRadius: BorderRadius.circular(20)),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
+    return Stack(
+      children: [
+        Container(
+          margin: EdgeInsets.symmetric(horizontal: getScreenWidth(context) * 0.05, vertical: getScreenWidth(context) * 0.01),
+          child: Card(
+            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+            color: Colors.white,
+            surfaceTintColor: Colors.white,
+            elevation: 0,
+            child: Container(
+              decoration: BoxDecoration(borderRadius: BorderRadius.circular(20)),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  GestureDetector(
-                    onTap: () {
-                      clicked();
-                    },
-                    child: ClipRRect(
-                      child: CachedNetworkImage(
-                        imageUrl: imageUrl,
-                        width: getScreenWidth(context) * 0.18,
-                        height: getScreenheight(context) * 0.11,
-                        fit: BoxFit.fitHeight,
-                        placeholder: (context, url) =>
-                            const CircularProgressIndicator(),
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-              const SizedBox(height: 10),
-              Row(
-                crossAxisAlignment: CrossAxisAlignment.end,
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  GestureDetector(
-                    onTap: () {
-                      clicked();
-                    },
-                    child: Container(
-                      width: getScreenWidth(context) * 0.2,
-                      margin: EdgeInsets.symmetric(
-                          horizontal: getScreenWidth(context) * 0.03).copyWith(bottom: 10),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            name,
-                            maxLines: 2,
-                            overflow: TextOverflow.ellipsis,
-                            style: GoogleFonts.publicSans(
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      GestureDetector(
+                        onTap: () {
+                          clicked();
+                        },
+                        child: ClipRRect(
+                          child: CachedNetworkImage(
+                            imageUrl: imageUrl,
+                            width: getScreenWidth(context) * 0.18,
+                            height: getScreenheight(context) * 0.11,
+                            fit: BoxFit.fitHeight,
+                            placeholder: (context, url) => SizedBox(
+                              width: getScreenWidth(context) * 0.05,
+                              height: getScreenWidth(context) * 0.05,
+                              child: const CircularProgressIndicator(
+                              
                                 color: Colors.black,
-                                fontWeight: FontWeight.w900,
-                                fontSize: 10),
+                              ),
+                            ),
                           ),
-                          Text(
-                            size,
-                            maxLines: 2,
-                            overflow: TextOverflow.ellipsis,
-                            style: GoogleFonts.publicSans(
-                                color: Colors.black,
-                                fontWeight: FontWeight.w900,
-                                fontSize: 10),
-                          ),
-                          SizedBox(height: getScreenWidth(context) * 0.01),
-                          Text(
-                            '₹ $discountedPrice',
-                            style: GoogleFonts.publicSans(
-                                color: const Color(0xff57C373),
-                                fontWeight: FontWeight.w900,
-                                fontSize: 12),
-                          )
-                        ],
-                      ),
-                    ),
-                  ),
-                  GestureDetector(
-                    onTap: () => bloc.add(GroceryCardCartButtonClickedEvent(
-                        cartClickedGrocery: groceryUiDataModel)),
-                    child: Container(
-                      width: getScreenWidth(context) * 0.1,
-                      height: getScreenWidth(context) * 0.1,
-                      margin: EdgeInsets.only(bottom: 10),
-                      decoration: const BoxDecoration(
-                        color: Color(0xffFF8615),
-                        borderRadius: BorderRadius.only(
-                            topLeft: Radius.circular(15),
-                            bottomLeft: Radius.circular(15)),
-                      ),
-                      child: const Center(
-                        child: Icon(
-                          Icons.shopping_bag,
-                          color: Colors.white,
                         ),
                       ),
-                    ),
+                    ],
+                  ),
+                  const SizedBox(height: 10),
+                  Row(
+                    crossAxisAlignment: CrossAxisAlignment.end,
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      GestureDetector(
+                        onTap: () {
+                          clicked();
+                        },
+                        child: Container(
+                          width: getScreenWidth(context) * 0.2,
+                          margin: EdgeInsets.symmetric(horizontal: getScreenWidth(context) * 0.03).copyWith(bottom: 10),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                name,
+                                maxLines: 2,
+                                overflow: TextOverflow.ellipsis,
+                                style: GoogleFonts.publicSans(color: Colors.black, fontWeight: FontWeight.w900, fontSize: 10),
+                              ),
+                              Text(
+                                size,
+                                maxLines: 2,
+                                overflow: TextOverflow.ellipsis,
+                                style: GoogleFonts.publicSans(color: Colors.black, fontWeight: FontWeight.w900, fontSize: 10),
+                              ),
+                              SizedBox(height: getScreenWidth(context) * 0.01),
+                              Text(
+                                '₹ $discountedPrice',
+                                style: GoogleFonts.publicSans(color: const Color(0xff57C373), fontWeight: FontWeight.w900, fontSize: 12),
+                              )
+                            ],
+                          ),
+                        ),
+                      ),
+                      GestureDetector(
+                        onTap: () => bloc.add(GroceryCardCartButtonClickedEvent(cartClickedGrocery: groceryUiDataModel)),
+                        child: Container(
+                          width: getScreenWidth(context) * 0.1,
+                          height: getScreenWidth(context) * 0.1,
+                          margin: EdgeInsets.only(bottom: 10),
+                          decoration: const BoxDecoration(
+                            color: Color(0xffFF8615),
+                            borderRadius: BorderRadius.only(topLeft: Radius.circular(15), bottomLeft: Radius.circular(15)),
+                          ),
+                          child: const Center(
+                            child: Icon(
+                              Icons.shopping_bag,
+                              color: Colors.white,
+                            ),
+                          ),
+                        ),
+                      )
+                    ],
                   )
                 ],
-              )
-            ],
+              ),
+            ),
           ),
         ),
-      ),
+        if(discountPercentage != 0)
+        Positioned(
+          left: getScreenWidth(context) * 0.06,
+          top: 10,
+          child: Container(
+            decoration: BoxDecoration(
+              color: Colors.blue,
+              borderRadius: BorderRadius.vertical(
+                top: Radius.circular(0),
+                bottom: Radius.circular(12),
+              ),
+            ),
+            padding: EdgeInsets.all(5),
+            child: Text(
+              '$discountPercentage %\n  OFF',
+              style: GoogleFonts.poppins(
+                color: Colors.white,
+                fontSize: 8,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+          ),
+        )
+      ],
     );
   }
 }

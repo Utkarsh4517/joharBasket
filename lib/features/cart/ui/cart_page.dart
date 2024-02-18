@@ -45,6 +45,7 @@ class _CartPageState extends State<CartPage> {
   dynamic subTotal = 0;
   dynamic gst = 0;
   dynamic priceWithoutDiscount = 0;
+  double couponDiscount = 0;
   final billService = BillService();
   @override
   void initState() {
@@ -175,8 +176,9 @@ class _CartPageState extends State<CartPage> {
           if (state.couponModel.type == 'flat off on order above') {
             if (subTotal > state.couponModel.onOrderAbove) {
               setState(() {
-                subTotal = subTotal - state.couponModel.flatOff;
+                // subTotal = subTotal - state.couponModel.flatOff;
                 couponCodeApplied = true;
+                couponDiscount = state.couponModel.flatOff;
               });
               showGeneralDialog(
                 context: context,
@@ -266,8 +268,9 @@ class _CartPageState extends State<CartPage> {
             if (subTotal < state.couponModel.upto) {
               double discountedPrice = subTotal * (state.couponModel.discount / 100);
               setState(() {
-                subTotal = subTotal - discountedPrice;
+                // subTotal = subTotal - discountedPrice;
                 couponCodeApplied = true;
+                couponDiscount = discountedPrice;
               });
               showGeneralDialog(
                 context: context,
@@ -517,11 +520,19 @@ class _CartPageState extends State<CartPage> {
                                   SmallTextBody(text: subTotal < 999 ? '₹ 49' : '₹ 0'),
                                 ],
                               ),
+                              if (couponCodeApplied)
+                                Row(
+                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    const SmallTextBody(text: 'Additional Coupon discount', color: Colors.green),
+                                    SmallTextBody(text: '₹ ${couponDiscount.toString()}', color: Colors.green),
+                                  ],
+                                ),
                               Row(
                                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                 children: [
                                   const SmallTextBody(text: 'Grand Total'),
-                                  SmallTextBody(text: '₹ ${subTotal + (subTotal < 999 ? 49 : 0)}'),
+                                  SmallTextBody(text: '₹ ${subTotal + (subTotal < 999 ? 49 : 0) - couponDiscount}'),
                                 ],
                               ),
                             ],
@@ -562,6 +573,8 @@ class _CartPageState extends State<CartPage> {
                               ),
                             ),
                           ),
+
+                        SizedBox(height: 10),
 
                         // Delivery Details
                         Container(

@@ -5,7 +5,6 @@ import 'package:johar/constants/dimensions.dart';
 import 'package:johar/features/cart/bloc/cart_bloc.dart';
 import 'package:johar/features/profile/repo/profile_repo.dart';
 import 'package:johar/model/coupon_model.dart';
-import 'package:timeline_tile/timeline_tile.dart';
 
 class ApplyCouponsPage extends StatefulWidget {
   final CartBloc cartBloc;

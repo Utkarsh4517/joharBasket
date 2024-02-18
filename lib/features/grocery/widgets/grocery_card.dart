@@ -39,6 +39,7 @@ class GroceryCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final discountPercentage = ((price - discountedPrice) / 100);
     void clicked() {
       bloc.add(GroceryCardClickedEvent(clickedGrocery: groceryUiDataModel));
       Navigator.push(
@@ -49,111 +50,128 @@ class GroceryCard extends StatelessWidget {
                   )));
     }
 
-    return Container(
-      margin: EdgeInsets.symmetric(horizontal: getScreenWidth(context) * 0.05),
-      child: Card(
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
-        color: Colors.white,
-        surfaceTintColor: Colors.white,
-        elevation: 0,
-        child: Container(
-          decoration: BoxDecoration(borderRadius: BorderRadius.circular(20)),
-          width: getScreenWidth(context) * 0.5,
-          // height: getScreenWidth(context) * 0.72,
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              GestureDetector(
-                onTap: () {
-                  clicked();
-                },
-                child: ClipRRect(
-                  borderRadius: const BorderRadius.only(
-                      topLeft: Radius.circular(20),
-                      topRight: Radius.circular(20)),
-                  child: Container(
-                    alignment: Alignment.center,
-                    height: getScreenWidth(context) * 0.5,
-                    child: CachedNetworkImage(
-                      imageUrl: imageUrl,
-                      fit: BoxFit.cover,
-                      placeholder: (context, url) =>
-                          const CircularProgressIndicator(),
-                    ),
-                  ),
-                ),
-              ),
-              Row(
-                crossAxisAlignment: CrossAxisAlignment.end,
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+    return Stack(
+      children: [
+        Container(
+          margin: EdgeInsets.symmetric(horizontal: getScreenWidth(context) * 0.05),
+          child: Card(
+            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+            color: Colors.white,
+            surfaceTintColor: Colors.white,
+            elevation: 0,
+            child: Container(
+              decoration: BoxDecoration(borderRadius: BorderRadius.circular(20)),
+              width: getScreenWidth(context) * 0.5,
+              // height: getScreenWidth(context) * 0.72,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   GestureDetector(
                     onTap: () {
                       clicked();
                     },
-                    child: Container(
-                      width: getScreenWidth(context) * 0.3,
-                      margin: EdgeInsets.symmetric(
-                          horizontal: getScreenWidth(context) * 0.03),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            name,
-                            maxLines: 2,
-                            overflow: TextOverflow.ellipsis,
-                            style: GoogleFonts.publicSans(
-                                color: Colors.black,
-                                fontWeight: FontWeight.w900,
-                                fontSize: 12),
+                    child: ClipRRect(
+                      borderRadius: const BorderRadius.only(topLeft: Radius.circular(20), topRight: Radius.circular(20)),
+                      child: Container(
+                        alignment: Alignment.center,
+                        height: getScreenWidth(context) * 0.5,
+                        child: CachedNetworkImage(
+                          imageUrl: imageUrl,
+                          fit: BoxFit.cover,
+                          placeholder: (context, url) => SizedBox(
+                            width: getScreenWidth(context) * 0.1,
+                            height: getScreenWidth(context) * 0.1,
+                            child: const CircularProgressIndicator(
+                              color: Colors.black,
+                            ),
                           ),
-                          Text(
-                            size,
-                            maxLines: 2,
-                            overflow: TextOverflow.ellipsis,
-                            style: GoogleFonts.publicSans(
-                                color: Colors.black,
-                                fontWeight: FontWeight.w900,
-                                fontSize: 10),
-                          ),
-                          SizedBox(height: 10),
-                          Text(
-                            '₹ $discountedPrice',
-                            style: GoogleFonts.publicSans(
-                                color: const Color(0xff57C373),
-                                fontWeight: FontWeight.w900,
-                                fontSize: getScreenWidth(context) * 0.04),
-                          )
-                        ],
-                      ),
-                    ),
-                  ),
-                  GestureDetector(
-                    onTap: () => bloc.add(GroceryCardCartButtonClickedEvent(
-                        cartClickedGrocery: groceryUiDataModel)),
-                    child: Container(
-                      width: getScreenWidth(context) * 0.13,
-                      height: getScreenWidth(context) * 0.12,
-                      decoration: const BoxDecoration(
-                        color: Color(0xffFF8615),
-                        borderRadius: BorderRadius.only(
-                            topLeft: Radius.circular(15),
-                            bottomLeft: Radius.circular(15)),
-                      ),
-                      child: const Center(
-                        child: Icon(
-                          Icons.shopping_bag,
-                          color: Colors.white,
                         ),
                       ),
                     ),
+                  ),
+                  Row(
+                    crossAxisAlignment: CrossAxisAlignment.end,
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      GestureDetector(
+                        onTap: () {
+                          clicked();
+                        },
+                        child: Container(
+                          width: getScreenWidth(context) * 0.3,
+                          margin: EdgeInsets.symmetric(horizontal: getScreenWidth(context) * 0.03),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                name,
+                                maxLines: 2,
+                                overflow: TextOverflow.ellipsis,
+                                style: GoogleFonts.publicSans(color: Colors.black, fontWeight: FontWeight.w900, fontSize: 12),
+                              ),
+                              Text(
+                                size,
+                                maxLines: 2,
+                                overflow: TextOverflow.ellipsis,
+                                style: GoogleFonts.publicSans(color: Colors.black, fontWeight: FontWeight.w900, fontSize: 10),
+                              ),
+                              SizedBox(height: 10),
+                              Text(
+                                '₹ $discountedPrice',
+                                style: GoogleFonts.publicSans(color: const Color(0xff57C373), fontWeight: FontWeight.w900, fontSize: getScreenWidth(context) * 0.04),
+                              )
+                            ],
+                          ),
+                        ),
+                      ),
+                      GestureDetector(
+                        onTap: () => bloc.add(GroceryCardCartButtonClickedEvent(cartClickedGrocery: groceryUiDataModel)),
+                        child: Container(
+                          width: getScreenWidth(context) * 0.13,
+                          height: getScreenWidth(context) * 0.12,
+                          decoration: const BoxDecoration(
+                            color: Color(0xffFF8615),
+                            borderRadius: BorderRadius.only(topLeft: Radius.circular(15), bottomLeft: Radius.circular(15)),
+                          ),
+                          child: const Center(
+                            child: Icon(
+                              Icons.shopping_bag,
+                              color: Colors.white,
+                            ),
+                          ),
+                        ),
+                      )
+                    ],
                   )
                 ],
-              )
-            ],
+              ),
+            ),
           ),
         ),
-      ),
+        if(discountPercentage != 0)
+        Positioned(
+          left: getScreenWidth(context) * 0.06,
+          top: 5,
+          child: Container(
+            decoration: BoxDecoration(
+              color: Colors.blue,
+              borderRadius: BorderRadius.vertical(
+                top: Radius.circular(0),
+                bottom: Radius.circular(12),
+              ),
+            ),
+            padding: EdgeInsets.all(5),
+            child: Text(
+              '$discountPercentage %\n  OFF',
+              style: GoogleFonts.poppins(
+                color: Colors.white,
+                fontSize: 10,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+          ),
+        )
+      ],
     );
   }
 }
