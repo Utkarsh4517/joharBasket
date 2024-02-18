@@ -26,9 +26,7 @@ class _ProfileProductCardState extends State<ProfileProductCard> {
   final ProfileBloc profileBloc = ProfileBloc();
 
   // show bottom sheet to edit product details
-  showEditProductModelSheet(
-      {required ProductDataModel productDataModel,
-      required ProductEditButtonClickedState state}) {
+  showEditProductModelSheet({required ProductDataModel productDataModel, required ProductEditButtonClickedState state}) {
     final nameController = TextEditingController();
     final descriptionController = TextEditingController();
     final inStockController = TextEditingController();
@@ -40,8 +38,7 @@ class _ProfileProductCardState extends State<ProfileProductCard> {
     // String radioValue = 'grocery';
     nameController.text = productDataModel.name;
     sizeController.text = productDataModel.size!;
-    discountedPriceController.text =
-        productDataModel.discountedPrice.toString();
+    discountedPriceController.text = productDataModel.discountedPrice.toString();
     descriptionController.text = productDataModel.description;
     inStockController.text = productDataModel.inStock.toString();
     priceController.text = productDataModel.price.toString();
@@ -57,38 +54,23 @@ class _ProfileProductCardState extends State<ProfileProductCard> {
                 padding: const EdgeInsets.all(15.0),
                 child: Text(
                   'Edit Product Details',
-                  style: GoogleFonts.publicSans(
-                      color: Colors.black, fontWeight: FontWeight.bold),
+                  style: GoogleFonts.publicSans(color: Colors.black, fontWeight: FontWeight.bold),
                 ),
               ),
-              DetailsTextField(
-                  controller: nameController, label: 'Complete Product Name'),
-              DetailsTextField(
-                  controller: descriptionController,
-                  label: 'Product Description'),
-              DetailsTextField(
-                  controller: inStockController, label: 'Current stock'),
-              DetailsTextField(
-                  controller: priceController, label: 'Price including gst'),
-              DetailsTextField(
-                  controller: discountedPriceController,
-                  label: 'Price after discount'),
-              DetailsTextField(
-                  controller: gstController,
-                  label: 'GST in Rs on this product'),
+              DetailsTextField(controller: nameController, label: 'Complete Product Name'),
+              DetailsTextField(controller: descriptionController, label: 'Product Description'),
+              DetailsTextField(controller: inStockController, label: 'Current stock'),
+              DetailsTextField(controller: priceController, label: 'Price including gst'),
+              DetailsTextField(controller: discountedPriceController, label: 'Price after discount'),
+              DetailsTextField(controller: gstController, label: 'GST in Rs on this product'),
               Container(
-                margin: EdgeInsets.symmetric(
-                    horizontal: getScreenWidth(context) * 0.07,
-                    vertical: getScreenWidth(context) * 0.03),
+                margin: EdgeInsets.symmetric(horizontal: getScreenWidth(context) * 0.07, vertical: getScreenWidth(context) * 0.03),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Text(
                       'Featured Product?',
-                      style: GoogleFonts.publicSans(
-                          color: Colors.black,
-                          fontWeight: FontWeight.bold,
-                          fontSize: getScreenWidth(context) * 0.04),
+                      style: GoogleFonts.publicSans(color: Colors.black, fontWeight: FontWeight.bold, fontSize: getScreenWidth(context) * 0.04),
                     ),
                     Switch(
                       value: toggle,
@@ -149,8 +131,7 @@ class _ProfileProductCardState extends State<ProfileProductCard> {
                       isFeatred: toggle,
                       name: nameController.text,
                       price: double.parse(priceController.text),
-                      discountedPrice:
-                          double.parse(discountedPriceController.text),
+                      discountedPrice: double.parse(discountedPriceController.text),
                     ));
                   } else if (widget.type == 'stationary') {
                     profileBloc.add(StationaryUpdateDetailsClickedEvent(
@@ -162,8 +143,7 @@ class _ProfileProductCardState extends State<ProfileProductCard> {
                       isFeatred: toggle,
                       name: nameController.text,
                       price: double.parse(priceController.text),
-                      discountedPrice:
-                          double.parse(discountedPriceController.text),
+                      discountedPrice: double.parse(discountedPriceController.text),
                     ));
                   } else if (widget.type == 'cosmetics') {
                     profileBloc.add(CosmeticUpdateClickedEvent(
@@ -175,8 +155,19 @@ class _ProfileProductCardState extends State<ProfileProductCard> {
                       isFeatred: toggle,
                       name: nameController.text,
                       price: double.parse(priceController.text),
-                      discountedPrice:
-                          double.parse(discountedPriceController.text),
+                      discountedPrice: double.parse(discountedPriceController.text),
+                    ));
+                  } else if (widget.type == 'pooja') {
+                    profileBloc.add(PoojaUpdateClickedEvent(
+                      product: productDataModel,
+                      size: sizeController.text.toString(),
+                      description: descriptionController.text,
+                      gst: double.parse(gstController.text),
+                      inStock: double.parse(inStockController.text),
+                      isFeatred: toggle,
+                      name: nameController.text,
+                      price: double.parse(priceController.text),
+                      discountedPrice: double.parse(discountedPriceController.text),
                     ));
                   }
                 },
@@ -216,11 +207,8 @@ class _ProfileProductCardState extends State<ProfileProductCard> {
       },
       builder: (context, state) {
         return Container(
-          margin: EdgeInsets.symmetric(
-              horizontal: getScreenWidth(context) * 0.04,
-              vertical: getScreenWidth(context) * 0.02),
-          decoration: BoxDecoration(
-              color: Colors.white, borderRadius: BorderRadius.circular(15)),
+          margin: EdgeInsets.symmetric(horizontal: getScreenWidth(context) * 0.04, vertical: getScreenWidth(context) * 0.02),
+          decoration: BoxDecoration(color: Colors.white, borderRadius: BorderRadius.circular(15)),
           child: Row(
             crossAxisAlignment: CrossAxisAlignment.center,
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -240,24 +228,16 @@ class _ProfileProductCardState extends State<ProfileProductCard> {
                     child: Text(
                       widget.product.name,
                       maxLines: 2,
-                      style: const TextStyle(
-                          overflow: TextOverflow.ellipsis,
-                          fontWeight: FontWeight.bold),
+                      style: const TextStyle(overflow: TextOverflow.ellipsis, fontWeight: FontWeight.bold),
                     ),
                   ),
                   Text(
                     '₹ ${widget.product.price}',
-                    style: TextStyle(
-                        color: Colors.green,
-                        fontWeight: FontWeight.w900,
-                        fontSize: getScreenWidth(context) * 0.03),
+                    style: TextStyle(color: Colors.green, fontWeight: FontWeight.w900, fontSize: getScreenWidth(context) * 0.03),
                   ),
                   Text(
                     'Current Stock = ${widget.product.inStock}',
-                    style: TextStyle(
-                        color: Colors.black,
-                        fontWeight: FontWeight.w900,
-                        fontSize: getScreenWidth(context) * 0.03),
+                    style: TextStyle(color: Colors.black, fontWeight: FontWeight.w900, fontSize: getScreenWidth(context) * 0.03),
                   ),
                 ],
               ),
@@ -267,14 +247,12 @@ class _ProfileProductCardState extends State<ProfileProductCard> {
                   children: [
                     IconButton(
                         onPressed: () {
-                          profileBloc.add(ProductEditButtonClickedEvent(
-                              product: widget.product));
+                          profileBloc.add(ProductEditButtonClickedEvent(product: widget.product));
                         },
                         icon: const Icon(Icons.edit)),
                     IconButton(
                         onPressed: () {
-                          profileBloc.add(ProductDeleteButtonClickedEvent(
-                              product: widget.product));
+                          profileBloc.add(ProductDeleteButtonClickedEvent(product: widget.product));
                         },
                         icon: const Icon(Icons.delete_forever))
                   ],
@@ -315,14 +293,13 @@ class _ProfileProductCardState extends State<ProfileProductCard> {
                   TextButton(
                     onPressed: () {
                       if (widget.type == 'grocery') {
-                        profileBloc.add(RemoveProductClickedEvent(
-                            productDataModel: widget.product));
+                        profileBloc.add(RemoveProductClickedEvent(productDataModel: widget.product));
                       } else if (widget.type == 'stationary') {
-                        profileBloc.add(RemoveStationaryClickedEvent(
-                            productDataModel: widget.product));
+                        profileBloc.add(RemoveStationaryClickedEvent(productDataModel: widget.product));
                       } else if (widget.type == 'cosmetics') {
-                        profileBloc.add(RemoveCosmeticClickedEvent(
-                            productDataModel: widget.product));
+                        profileBloc.add(RemoveCosmeticClickedEvent(productDataModel: widget.product));
+                      } else if (widget.type == 'pooja') {
+                        profileBloc.add(RemovePoojaClickedEvent(productDataModel: widget.product));
                       }
                     },
                     child: const Text(

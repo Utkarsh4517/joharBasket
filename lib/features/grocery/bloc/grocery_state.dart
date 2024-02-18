@@ -14,6 +14,8 @@ class StationaryLoadingState extends GroceryState {}
 
 class CosmeticLoadingState extends GroceryState {}
 
+class PoojaLoadingState extends GroceryState {}
+
 class GroceryLoadedSuccessState extends GroceryState {
   final List<ProductDataModel> products;
   GroceryLoadedSuccessState({
@@ -31,6 +33,13 @@ class StationaryLoadedSuccessState extends GroceryState {
 class CosmeticLoadedSuccessState extends GroceryState {
   final List<ProductDataModel> products;
   CosmeticLoadedSuccessState({
+    required this.products,
+  });
+}
+
+class PoojaLoadedSuccessState extends GroceryState {
+  final List<ProductDataModel> products;
+  PoojaLoadedSuccessState({
     required this.products,
   });
 }

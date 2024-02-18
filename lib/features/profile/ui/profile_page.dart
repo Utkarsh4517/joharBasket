@@ -274,6 +274,21 @@ class _ProfilePageState extends State<ProfilePage> {
                                   title: const SmallTextBody(
                                       text: 'Cosmetic Product'),
                                 ),
+
+                                 RadioListTile(
+                                  controlAffinity:
+                                      ListTileControlAffinity.trailing,
+                                  activeColor: Colors.green,
+                                  value: 'pooja',
+                                  groupValue: radioValue,
+                                  onChanged: (value) {
+                                    setState(() {
+                                      radioValue = value.toString();
+                                    });
+                                  },
+                                  title: const SmallTextBody(
+                                      text: 'Pooja Product'),
+                                ),
                               ],
                             ),
                           ),

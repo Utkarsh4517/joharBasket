@@ -3,12 +3,13 @@ import 'package:http/http.dart' as http;
 import 'package:johar/constants/razorpay.dart';
 
 class RazorpayAPI {
-  static Future<String> createRazorpayOrder({required double amount}) async {
+  static Future<String> createRazorpayOrder({required dynamic amount}) async {
+
     String keyId = key;
     String keySecret = secret;
     String apiUrl = 'https://api.razorpay.com/v1/orders';
     Map<String, dynamic> payload = {
-      "amount": 1,
+      "amount": amount,
       "currency": "INR",
       "receipt": "rcptid_11"
     };

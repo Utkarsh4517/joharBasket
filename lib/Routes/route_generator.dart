@@ -7,6 +7,7 @@ import 'package:johar/features/auth/ui/user_details_page.dart';
 import 'package:johar/features/nav_bar/bloc/nav_bar_bloc.dart';
 import 'package:johar/features/nav_bar/ui/nav_bar.dart';
 import 'package:johar/features/on_boarding/ui/on_boarding_screen.dart';
+import 'package:upgrader/upgrader.dart';
 
 class RouteGenerator {
   final NavBarBloc navigationBloc = NavBarBloc();
@@ -17,7 +18,7 @@ class RouteGenerator {
         return MaterialPageRoute(
           builder: (_) => BlocProvider<NavBarBloc>.value(
             value: navigationBloc,
-            child: const NavBar(),
+            child: UpgradeAlert(child: const NavBar()),
           ),
         );
 

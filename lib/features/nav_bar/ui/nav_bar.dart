@@ -9,6 +9,7 @@ import 'package:johar/features/cosmetics/ui/cosmetics_page.dart';
 import 'package:johar/features/grocery/ui/grocery_page.dart';
 import 'package:johar/features/nav_bar/bloc/nav_bar_bloc.dart';
 import 'package:johar/features/order/ui/order_page.dart';
+import 'package:johar/features/pooja/ui/pooja_page.dart';
 import 'package:johar/features/stationary/ui/stationary_page.dart';
 
 class NavBar extends StatefulWidget {
@@ -40,12 +41,19 @@ class _NavBarState extends State<NavBar> {
           label: 'Cosmetics'),
       const BottomNavigationBarItem(
           icon: Icon(
+            Icons.sunny,
+          ),
+          label: 'Pooja'),
+      const BottomNavigationBarItem(
+          icon: Icon(
             FeatherIcons.shoppingCart,
+            color: Colors.green,
           ),
           label: 'Cart'),
       const BottomNavigationBarItem(
           icon: Icon(
             FeatherIcons.shoppingBag,
+            color: Colors.green,
           ),
           label: 'Orders'),
     ];
@@ -54,6 +62,7 @@ class _NavBarState extends State<NavBar> {
       GroceryPage(),
       StationaryPage(),
       CosmeticsPage(),
+      PoojaPage(),
       CartPage(),
       OrderPage(),
     ];
@@ -71,22 +80,21 @@ class _NavBarState extends State<NavBar> {
           ),
           bottomNavigationBar: Container(
             color: const Color.fromARGB(255, 248, 248, 248),
-            margin: const EdgeInsets.symmetric(horizontal: 20)
-                .copyWith(bottom: getScreenheight(context) * 0.02),
+            margin: const EdgeInsets.symmetric(horizontal: 10).copyWith(bottom: getScreenheight(context) * 0.02),
             child: ClipRRect(
               borderRadius: BorderRadius.circular(20),
               child: BottomNavigationBar(
-                backgroundColor: orangeColor,
+                backgroundColor: Colors.black,
                 items: bottomNavItems,
                 currentIndex: state.tabIndex,
-                selectedItemColor: Colors.white,
+                selectedItemColor: orangeColor,
                 // unselectedItemColor: Colors.white,
                 elevation: 10,
                 selectedFontSize: 12,
                 unselectedFontSize: 10,
                 type: BottomNavigationBarType.fixed,
                 // selectedItemColor: blackColor,
-                unselectedItemColor: Colors.black.withAlpha(95),
+                unselectedItemColor: Color.fromARGB(255, 199, 199, 199).withAlpha(95),
                 onTap: (index) {
                   _pageController.jumpToPage(index);
                 },

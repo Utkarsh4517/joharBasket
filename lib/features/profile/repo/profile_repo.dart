@@ -189,6 +189,28 @@ class ProfileRepo {
     });
   }
 
+    static Stream<List<ProductDataModel>> getPoojaProducts() {
+    final collection = FirebaseFirestore.instance.collection('pooja');
+    return collection.snapshots().map((snapshot) {
+      return snapshot.docs.map((doc) {
+        final data = doc.data();
+        return ProductDataModel(
+          gst: data['gst'],
+          imageUrl: data['imageUrl'],
+          name: data['name'],
+          isFeatured: data['isFeatured'],
+          price: data['price'],
+          productId: data['productId'],
+          nos: 0,
+          description: data['description'],
+          inStock: data['inStock'],
+          size: data['size'],
+          discountedPrice: data['discountedPrice'],
+        );
+      }).toList();
+    });
+  }
+
   // update product details
   static Future<void> updateProductDetails(
       {required ProductDataModel productDataModel,
@@ -270,6 +292,33 @@ class ProfileRepo {
     });
   }
 
+    // update pooja
+  static Future<void> updatePoojaDetails(
+      {required ProductDataModel productDataModel,
+      required double inStock,
+      required String name,
+      required bool isFeatured,
+      required String description,
+      required double price,
+      required double gst,
+      required String size,
+      required double discountedPrice}) async {
+    final document = FirebaseFirestore.instance
+        .collection('pooja')
+        .doc(productDataModel.productId);
+
+    await document.update({
+      'inStock': inStock,
+      'name': name,
+      'isFeatured': isFeatured,
+      'description': description,
+      'price': price,
+      'gst': gst,
+      'size': size,
+      'discountedPrice': discountedPrice
+    });
+  }
+
   // delete product ....
   static Future<void> deleteProduct(
       {required ProductDataModel productDataModel}) async {
@@ -304,6 +353,15 @@ class ProfileRepo {
       {required ProductDataModel productDataModel}) async {
     final document = FirebaseFirestore.instance
         .collection('cosmetics')
+        .doc(productDataModel.productId);
+
+    await document.delete();
+  }
+
+    static Future<void> deletePooja(
+      {required ProductDataModel productDataModel}) async {
+    final document = FirebaseFirestore.instance
+        .collection('pooja')
         .doc(productDataModel.productId);
 
     await document.delete();

@@ -118,6 +118,29 @@ class CosmeticUpdateClickedEvent extends ProfileEvent {
   });
 }
 
+class PoojaUpdateClickedEvent extends ProfileEvent {
+  final ProductDataModel product;
+  final double inStock;
+  final String name;
+  final bool isFeatred;
+  final String description;
+  final double price;
+  final double gst;
+  final String size;
+  final double discountedPrice;
+  PoojaUpdateClickedEvent({
+    required this.product,
+    required this.inStock,
+    required this.name,
+    required this.isFeatred,
+    required this.description,
+    required this.price,
+    required this.gst,
+    required this.size,
+    required this.discountedPrice,
+  });
+}
+
 class RemoveProductClickedEvent extends ProfileEvent {
   final ProductDataModel productDataModel;
   RemoveProductClickedEvent({
@@ -135,6 +158,13 @@ class RemoveStationaryClickedEvent extends ProfileEvent {
 class RemoveCosmeticClickedEvent extends ProfileEvent {
   final ProductDataModel productDataModel;
   RemoveCosmeticClickedEvent({
+    required this.productDataModel,
+  });
+}
+
+class RemovePoojaClickedEvent extends ProfileEvent {
+  final ProductDataModel productDataModel;
+  RemovePoojaClickedEvent({
     required this.productDataModel,
   });
 }

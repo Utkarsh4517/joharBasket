@@ -28,6 +28,7 @@ class ProfileBloc extends Bloc<ProfileEvent, ProfileState> {
     on<ConfirmCancelOrderEvent>(confirmCancelOrderEvent);
     on<RemoveCosmeticClickedEvent>(removeCosmeticClickedEvent);
     on<RemoveStationaryClickedEvent>(removeStationaryClickedEvent);
+    on<RemovePoojaClickedEvent>(removePoojaClickedEvent);
     on<NotificationButtonClickedEvent>(notificationButtonClickedEvent);
     on<SendNotification>(sendNotification);
     on<AddCouponClickedEvent>(addCouponClickedEvent);
@@ -89,7 +90,6 @@ class ProfileBloc extends Bloc<ProfileEvent, ProfileState> {
   }
 
   FutureOr<void> acceptOrderClickedEvent(AcceptOrderClickedEvent event, Emitter<ProfileState> emit) {
-    print('heelo aapka kya naam hai hamse kya kaam hai');
     emit(ProfilePageShowAcceptOrderDialog(orderId: event.orderId, userId: event.userId));
   }
 
@@ -153,6 +153,21 @@ class ProfileBloc extends Bloc<ProfileEvent, ProfileState> {
     emit(ProductDetailsUpdatedState());
   }
 
+  FutureOr<void> poojaUpdateClickedEvent(CosmeticUpdateClickedEvent event, Emitter<ProfileState> emit) async {
+    await ProfileRepo.updateCosmeticsDetails(
+      productDataModel: event.product,
+      inStock: event.inStock,
+      name: event.name,
+      isFeatured: event.isFeatred,
+      description: event.description,
+      price: event.price,
+      gst: event.gst,
+      size: event.size,
+      discountedPrice: event.discountedPrice,
+    );
+    emit(ProductDetailsUpdatedState());
+  }
+
   FutureOr<void> removeCosmeticClickedEvent(RemoveCosmeticClickedEvent event, Emitter<ProfileState> emit) async {
     await ProfileRepo.deleteCosmetic(productDataModel: event.productDataModel);
     emit(RemoveDialogState());
@@ -179,5 +194,10 @@ class ProfileBloc extends Bloc<ProfileEvent, ProfileState> {
 
   FutureOr<void> couponDeleteClickedEvent(CouponDeleteClickedEvent event, Emitter<ProfileState> emit) async {
     await ProfileRepo.deleteCoupon(couponModel: event.couponModel);
+  }
+
+  FutureOr<void> removePoojaClickedEvent(RemovePoojaClickedEvent event, Emitter<ProfileState> emit) async {
+    await ProfileRepo.deletePooja(productDataModel: event.productDataModel);
+    emit(RemoveDialogState());
   }
 }

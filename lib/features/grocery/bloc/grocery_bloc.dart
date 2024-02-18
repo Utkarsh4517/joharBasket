@@ -16,31 +16,27 @@ class GroceryBloc extends Bloc<GroceryEvent, GroceryState> {
     on<GroceryInitialEvent>(groceryInitialEvent);
     on<StationaryInitialEvent>(stationaryInitialEvent);
     on<CosmeticInitialEvent>(cosmeticInitialEvent);
+    on<PoojaInitialEvent>(poojaInitialEvent);
     on<GroceryCardClickedEvent>(groceryCardClickedEvent);
     on<GroceryCardCartButtonClickedEvent>(groceryCardCartButtonClickedEvent);
-    on<GroceryProductPageAddToCardClickedEvent>(
-        groceryProductPageAddToCartClickedEvent);
+    on<GroceryProductPageAddToCardClickedEvent>(groceryProductPageAddToCartClickedEvent);
     on<ProductOptionClickedEvent>(productOptionClickedEvent);
   }
 
-  FutureOr<void> groceryInitialEvent(
-      GroceryInitialEvent event, Emitter<GroceryState> emit) async {
+  FutureOr<void> groceryInitialEvent(GroceryInitialEvent event, Emitter<GroceryState> emit) async {
     emit(GroceryLoadingState());
     List<ProductDataModel> groceries = await GroceryRepo.fetchGroceries();
     emit(GroceryLoadedSuccessState(products: groceries));
   }
 
-  FutureOr<void> groceryCardClickedEvent(
-      GroceryCardClickedEvent event, Emitter<GroceryState> emit) {
+  FutureOr<void> groceryCardClickedEvent(GroceryCardClickedEvent event, Emitter<GroceryState> emit) {
     print('Grocery Card Clicked ${event.clickedGrocery.name}');
 
     // emit action state to navigate to grocery product page
     emit(GroceryCardClickedActionState(product: event.clickedGrocery));
   }
 
-  FutureOr<void> groceryCardCartButtonClickedEvent(
-      GroceryCardCartButtonClickedEvent event,
-      Emitter<GroceryState> emit) async {
+  FutureOr<void> groceryCardCartButtonClickedEvent(GroceryCardCartButtonClickedEvent event, Emitter<GroceryState> emit) async {
     print('Grocery Card cart button clicked ${event.cartClickedGrocery.name}');
 
     // write a function here to add this to cart
@@ -48,34 +44,32 @@ class GroceryBloc extends Bloc<GroceryEvent, GroceryState> {
     emit(GroceryAddToCartButtonClickedState());
   }
 
-  FutureOr<void> groceryProductPageAddToCartClickedEvent(
-      GroceryProductPageAddToCardClickedEvent event,
-      Emitter<GroceryState> emit) async {
-    print(
-        'Add to card button clicked for ${event.addToCartGrocery.name} with quantity = ${event.quantity}');
-    await GroceryRepo.addGroceryToCartFromGroceryProductPage(
-        event.addToCartGrocery, event.quantity);
+  FutureOr<void> groceryProductPageAddToCartClickedEvent(GroceryProductPageAddToCardClickedEvent event, Emitter<GroceryState> emit) async {
+    print('Add to card button clicked for ${event.addToCartGrocery.name} with quantity = ${event.quantity}');
+    await GroceryRepo.addGroceryToCartFromGroceryProductPage(event.addToCartGrocery, event.quantity);
     emit(GroceryAddToCartButtonClickedState());
   }
 
-  FutureOr<void> productOptionClickedEvent(
-      ProductOptionClickedEvent event, Emitter<GroceryState> emit) {
+  FutureOr<void> productOptionClickedEvent(ProductOptionClickedEvent event, Emitter<GroceryState> emit) {
     print('clicked option is of ${event.selectedProductOption.size}');
-    emit(ProductOptionChangedState(
-        productDataModel: event.selectedProductOption));
+    emit(ProductOptionChangedState(productDataModel: event.selectedProductOption));
   }
 
-  FutureOr<void> stationaryInitialEvent(
-      StationaryInitialEvent event, Emitter<GroceryState> emit) async {
+  FutureOr<void> stationaryInitialEvent(StationaryInitialEvent event, Emitter<GroceryState> emit) async {
     emit(StationaryLoadingState());
     List<ProductDataModel> stationaries = await GroceryRepo.fetchStationaries();
     emit(StationaryLoadedSuccessState(products: stationaries));
   }
 
-  FutureOr<void> cosmeticInitialEvent(
-      CosmeticInitialEvent event, Emitter<GroceryState> emit) async {
+  FutureOr<void> cosmeticInitialEvent(CosmeticInitialEvent event, Emitter<GroceryState> emit) async {
     emit(CosmeticLoadingState());
     List<ProductDataModel> cosmetics = await GroceryRepo.fetchCosmetics();
     emit(CosmeticLoadedSuccessState(products: cosmetics));
+  }
+
+  FutureOr<void> poojaInitialEvent(PoojaInitialEvent event, Emitter<GroceryState> emit) async {
+    emit(PoojaLoadingState());
+    List<ProductDataModel> p = await GroceryRepo.fetchPooja();
+    emit(PoojaLoadedSuccessState(products: p));
   }
 }

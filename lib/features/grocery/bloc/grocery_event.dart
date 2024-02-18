@@ -10,6 +10,8 @@ class StationaryInitialEvent extends GroceryEvent {}
 
 class CosmeticInitialEvent extends GroceryEvent {}
 
+class PoojaInitialEvent extends GroceryEvent {}
+
 class GroceryCardClickedEvent extends GroceryEvent {
   final ProductDataModel clickedGrocery;
   GroceryCardClickedEvent({

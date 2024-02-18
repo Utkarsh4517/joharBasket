@@ -745,17 +745,7 @@ class _CartPageState extends State<CartPage> {
                                 value: 'upi',
                                 groupValue: radioValue,
                                 onChanged: (value) {
-                                  // Open a dialog box to show that we will soon launch upi option soon
-                                  // StatusAlert.show(
-                                  //   context,
-                                  //   duration: Duration(seconds: 2),
-                                  //   title: 'Stay tuned',
-                                  //   subtitle:
-                                  //       'We are soon going to launch our other payment options!!',
-                                  //   configuration:
-                                  //       IconConfiguration(icon: Icons.payment),
-                                  //   maxWidth: 300,
-                                  // );
+                              
                                   setState(() {
                                     radioValue = value.toString();
                                   });

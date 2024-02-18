@@ -14,15 +14,24 @@ class ProfileProductPage extends StatefulWidget {
   State<ProfileProductPage> createState() => ProfileProductPageState();
 }
 
-class ProfileProductPageState extends State<ProfileProductPage> {
+class ProfileProductPageState extends State<ProfileProductPage> with SingleTickerProviderStateMixin {
   final ProfileBloc profileBloc = ProfileBloc();
+  late TabController _tabController;
+  @override
+  void initState() {
+    super.initState();
+    _tabController = TabController(length: 4, vsync: this);
+    _tabController.addListener(() {
+      setState(() {});
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     Stream<List<ProductDataModel>> productStream = ProfileRepo.getProducts();
-    Stream<List<ProductDataModel>> stationaryStream =
-        ProfileRepo.getStationaryProducts();
-    Stream<List<ProductDataModel>> cosmeticStream =
-        ProfileRepo.getCosmeticProducts();
+    Stream<List<ProductDataModel>> stationaryStream = ProfileRepo.getStationaryProducts();
+    Stream<List<ProductDataModel>> cosmeticStream = ProfileRepo.getCosmeticProducts();
+    Stream<List<ProductDataModel>> poojaStream = ProfileRepo.getPoojaProducts();
     return Scaffold(
         backgroundColor: const Color.fromARGB(255, 248, 248, 248),
         body: SafeArea(
@@ -31,8 +40,7 @@ class ProfileProductPageState extends State<ProfileProductPage> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Container(
-                margin: EdgeInsets.all(getScreenWidth(context) * 0.06)
-                    .copyWith(bottom: getScreenWidth(context) * 0.02),
+                margin: EdgeInsets.all(getScreenWidth(context) * 0.06).copyWith(bottom: getScreenWidth(context) * 0.02),
                 child: Text(
                   'Manage Products',
                   style: GoogleFonts.publicSans(
@@ -44,83 +52,128 @@ class ProfileProductPageState extends State<ProfileProductPage> {
               ),
               // const SearchTextField(),
               // product card
-              Padding(
-                padding: EdgeInsets.symmetric(
-                    horizontal: getScreenWidth(context) * 0.06),
-                child: const SmallTextBody(text: 'Groceries'),
+
+              Container(
+                alignment: Alignment.center,
+                height: getScreenheight(context) * 0.9,
+                margin: EdgeInsets.symmetric(horizontal: getScreenWidth(context) * 0.02),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    TabBar(
+                      dividerColor: const Color.fromRGBO(243, 245, 247, 1),
+                      dividerHeight: getScreenheight(context) * 0.06,
+                      controller: _tabController,
+                      indicatorSize: TabBarIndicatorSize.tab,
+                      splashBorderRadius: BorderRadius.circular(12),
+                      indicator: BoxDecoration(color: Colors.white, borderRadius: BorderRadius.circular(20)),
+                      indicatorPadding: const EdgeInsets.only(top: -8, bottom: -40),
+                      tabs: [
+                        Tab(text: 'Groceries'),
+                        Tab(text: 'Stationary'),
+                        Tab(text: 'Cosmetics'),
+                        Tab(text: 'Pooja'),
+                      ],
+                      labelColor: Colors.black,
+                    ),
+                    Expanded(
+                        child: Container(
+                      alignment: Alignment.center,
+                      decoration: BoxDecoration(borderRadius: BorderRadius.circular(30), color: Colors.white),
+                      child: TabBarView(
+                        clipBehavior: Clip.antiAlias,
+                        controller: _tabController,
+                        children: [
+                          SizedBox(
+                            height: getScreenheight(context) * 0.8,
+                            width: getScreenWidth(context) * 0.9,
+                            child: StreamBuilder(
+                                stream: productStream,
+                                builder: (context, snapshot) {
+                                  if (snapshot.hasData) {
+                                    List<ProductDataModel> products = snapshot.data!;
+                                    return ListView.builder(
+                                        itemCount: products.length,
+                                        itemBuilder: (context, index) {
+                                          ProductDataModel product = products[index];
+                                          return ProfileProductCard(
+                                            product: product,
+                                            type: 'grocery',
+                                          );
+                                        });
+                                  } else if (snapshot.hasError) {}
+                                  return Container();
+                                }),
+                          ),
+                          SizedBox(
+                            height: getScreenheight(context) * 0.8,
+                            width: getScreenWidth(context) * 0.9,
+                            child: StreamBuilder(
+                                stream: stationaryStream,
+                                builder: (context, snapshot) {
+                                  if (snapshot.hasData) {
+                                    List<ProductDataModel> products = snapshot.data!;
+                                    return ListView.builder(
+                                        itemCount: products.length,
+                                        itemBuilder: (context, index) {
+                                          ProductDataModel product = products[index];
+                                          return ProfileProductCard(
+                                            product: product,
+                                            type: 'stationary',
+                                          );
+                                        });
+                                  } else if (snapshot.hasError) {}
+                                  return Container();
+                                }),
+                          ),
+                          SizedBox(
+                            height: getScreenheight(context) * 0.8,
+                            width: getScreenWidth(context) * 0.9,
+                            child: StreamBuilder(
+                                stream: cosmeticStream,
+                                builder: (context, snapshot) {
+                                  if (snapshot.hasData) {
+                                    List<ProductDataModel> products = snapshot.data!;
+                                    return ListView.builder(
+                                        itemCount: products.length,
+                                        itemBuilder: (context, index) {
+                                          ProductDataModel product = products[index];
+                                          return ProfileProductCard(
+                                            product: product,
+                                            type: 'cosmetics',
+                                          );
+                                        });
+                                  } else if (snapshot.hasError) {}
+                                  return Container();
+                                }),
+                          ),
+                          SizedBox(
+                            height: getScreenheight(context) * 0.8,
+                            width: getScreenWidth(context) * 0.9,
+                            child: StreamBuilder(
+                                stream: poojaStream,
+                                builder: (context, snapshot) {
+                                  if (snapshot.hasData) {
+                                    List<ProductDataModel> products = snapshot.data!;
+                                    return ListView.builder(
+                                        itemCount: products.length,
+                                        itemBuilder: (context, index) {
+                                          ProductDataModel product = products[index];
+                                          return ProfileProductCard(
+                                            product: product,
+                                            type: 'pooja',
+                                          );
+                                        });
+                                  } else if (snapshot.hasError) {}
+                                  return Container();
+                                }),
+                          ),
+                        ],
+                      ),
+                    )),
+                  ],
+                ),
               ),
-              SizedBox(
-                height: getScreenheight(context) * 0.5,
-                child: StreamBuilder(
-                    stream: productStream,
-                    builder: (context, snapshot) {
-                      if (snapshot.hasData) {
-                        List<ProductDataModel> products = snapshot.data!;
-                        return ListView.builder(
-                            itemCount: products.length,
-                            itemBuilder: (context, index) {
-                              ProductDataModel product = products[index];
-                              return ProfileProductCard(
-                                product: product,
-                                type: 'grocery',
-                              );
-                            });
-                      } else if (snapshot.hasError) {}
-                      return Container();
-                    }),
-              ),
-              Padding(
-                padding: EdgeInsets.symmetric(
-                    horizontal: getScreenWidth(context) * 0.06,
-                    vertical: getScreenWidth(context) * 0.04),
-                child: const SmallTextBody(text: 'Stationery'),
-              ),
-              SizedBox(
-                height: getScreenheight(context) * 0.5,
-                child: StreamBuilder(
-                    stream: stationaryStream,
-                    builder: (context, snapshot) {
-                      if (snapshot.hasData) {
-                        List<ProductDataModel> products = snapshot.data!;
-                        return ListView.builder(
-                            itemCount: products.length,
-                            itemBuilder: (context, index) {
-                              ProductDataModel product = products[index];
-                              return ProfileProductCard(
-                                product: product,
-                                type: 'stationary',
-                              );
-                            });
-                      } else if (snapshot.hasError) {}
-                      return Container();
-                    }),
-              ),
-              Padding(
-                padding: EdgeInsets.symmetric(
-                    horizontal: getScreenWidth(context) * 0.06,
-                    vertical: getScreenWidth(context) * 0.04),
-                child: const SmallTextBody(text: 'Cosmetics'),
-              ),
-              SizedBox(
-                height: getScreenheight(context) * 0.5,
-                child: StreamBuilder(
-                    stream: cosmeticStream,
-                    builder: (context, snapshot) {
-                      if (snapshot.hasData) {
-                        List<ProductDataModel> products = snapshot.data!;
-                        return ListView.builder(
-                            itemCount: products.length,
-                            itemBuilder: (context, index) {
-                              ProductDataModel product = products[index];
-                              return ProfileProductCard(
-                                product: product,
-                                type: 'cosmetics',
-                              );
-                            });
-                      } else if (snapshot.hasError) {}
-                      return Container();
-                    }),
-              )
             ],
           ),
         )));
