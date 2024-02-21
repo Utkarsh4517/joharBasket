@@ -1,5 +1,6 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:johar/constants/dimensions.dart';
 import 'package:johar/features/grocery/bloc/grocery_bloc.dart';
@@ -7,7 +8,7 @@ import 'package:johar/model/grocery_model.dart';
 import 'package:johar/features/grocery/ui/grocery_product_page.dart';
 import 'package:shimmer/shimmer.dart';
 
-class GroceryCard extends StatelessWidget {
+class GroceryCard extends StatefulWidget {
   final GroceryBloc bloc;
   final String productId;
   final dynamic nos;
@@ -39,16 +40,22 @@ class GroceryCard extends StatelessWidget {
   });
 
   @override
+  State<GroceryCard> createState() => _GroceryCardState();
+}
+
+class _GroceryCardState extends State<GroceryCard> {
+  bool isCartButtonTapped = false;
+  @override
   Widget build(BuildContext context) {
-    dynamic discountPercentage = (((price - discountedPrice) / price) * 100);
+    dynamic discountPercentage = (((widget.price - widget.discountedPrice) / widget.price) * 100);
     discountPercentage = discountPercentage.round();
     void clicked() {
-      bloc.add(GroceryCardClickedEvent(clickedGrocery: groceryUiDataModel));
+      widget.bloc.add(GroceryCardClickedEvent(clickedGrocery: widget.groceryUiDataModel));
       Navigator.push(
           context,
           MaterialPageRoute(
               builder: (context) => GroceryProductPage(
-                    grocery: groceryUiDataModel,
+                    grocery: widget.groceryUiDataModel,
                   )));
     }
 
@@ -78,17 +85,14 @@ class GroceryCard extends StatelessWidget {
                         alignment: Alignment.center,
                         height: getScreenWidth(context) * 0.5,
                         child: CachedNetworkImage(
-                            imageUrl: imageUrl,
+                            imageUrl: widget.imageUrl,
                             fit: BoxFit.cover,
                             placeholder: (context, url) => Container(
                                 child: Shimmer.fromColors(
                                     baseColor: Colors.grey[300]!,
                                     highlightColor: Colors.grey[100]!,
                                     child: Container(
-                                      decoration: BoxDecoration(
-                                        color: Colors.white,
-                                        borderRadius: BorderRadius.vertical(top: Radius.circular(20))
-                                      ),
+                                      decoration: BoxDecoration(color: Colors.white, borderRadius: BorderRadius.vertical(top: Radius.circular(20))),
                                     )))),
                       ),
                     ),
@@ -108,20 +112,20 @@ class GroceryCard extends StatelessWidget {
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               Text(
-                                name,
+                                widget.name,
                                 maxLines: 2,
                                 overflow: TextOverflow.ellipsis,
                                 style: GoogleFonts.publicSans(color: Colors.black, fontWeight: FontWeight.w900, fontSize: 12),
                               ),
                               Text(
-                                size,
+                                widget.size,
                                 maxLines: 2,
                                 overflow: TextOverflow.ellipsis,
                                 style: GoogleFonts.publicSans(color: Colors.black, fontWeight: FontWeight.w900, fontSize: 10),
                               ),
                               SizedBox(height: 10),
                               Text(
-                                '₹ $discountedPrice',
+                                '₹ ${widget.discountedPrice}',
                                 style: GoogleFonts.publicSans(color: const Color(0xff57C373), fontWeight: FontWeight.w900, fontSize: getScreenWidth(context) * 0.04),
                               )
                             ],
@@ -129,12 +133,29 @@ class GroceryCard extends StatelessWidget {
                         ),
                       ),
                       GestureDetector(
-                        onTap: () => bloc.add(GroceryCardCartButtonClickedEvent(cartClickedGrocery: groceryUiDataModel)),
-                        child: Container(
+                         onTapDown: (_) {
+                          setState(() {
+                            isCartButtonTapped = true;
+                          });
+                          HapticFeedback.lightImpact();
+                          widget.bloc.add(GroceryCardCartButtonClickedEvent(cartClickedGrocery: widget.groceryUiDataModel));
+                        },
+                        onTapUp: (_) {
+                          setState(() {
+                            isCartButtonTapped = false;
+                          });
+                        },
+                        onTapCancel: () {
+                          setState(() {
+                            isCartButtonTapped = false;
+                          });
+                        },
+                        child: AnimatedContainer(
+                          duration: Duration(milliseconds: 150),
                           width: getScreenWidth(context) * 0.13,
                           height: getScreenWidth(context) * 0.12,
-                          decoration: const BoxDecoration(
-                            color: Color(0xffFF8615),
+                          decoration: BoxDecoration(
+                            color: !isCartButtonTapped ? Color(0xffFF8615) : Colors.white,
                             borderRadius: BorderRadius.only(topLeft: Radius.circular(15), bottomLeft: Radius.circular(15)),
                           ),
                           child: const Center(
