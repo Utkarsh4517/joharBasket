@@ -1,4 +1,7 @@
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_typeahead/flutter_typeahead.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -8,7 +11,9 @@ import 'package:johar/constants/dimensions.dart';
 import 'package:johar/features/grocery/ui/grocery_page.dart';
 import 'package:johar/features/grocery/ui/grocery_product_page.dart';
 import 'package:johar/features/home/repo/home_repo.dart';
+import 'package:johar/features/profile/ui/profile_page.dart';
 import 'package:johar/model/grocery_model.dart';
+import 'package:modular_ui/modular_ui.dart';
 import 'package:shimmer/shimmer.dart';
 
 class HomePage extends StatefulWidget {
@@ -20,11 +25,55 @@ class HomePage extends StatefulWidget {
 
 class HomePageState extends State<HomePage> {
   final controller = TextEditingController();
+  bool isAdmin = false;
+
+  // fetch admin user list
+  Future<void> fetchAdmins() async {
+    DocumentSnapshot docSnapshot = await FirebaseFirestore.instance.collection('admin').doc('adminEmails').get();
+    if (docSnapshot.exists) {
+      List<dynamic> admins = docSnapshot.get('list');
+      for (var admin in admins) {
+        if (FirebaseAuth.instance.currentUser!.email == admin) {
+          setState(() {
+            isAdmin = true;
+          });
+          if (mounted) {
+            setState(
+              () async {
+                // upload the admin device fcm token...
+                final firebaseMessaging = FirebaseMessaging.instance;
+                final token = await firebaseMessaging.getToken();
+
+                DocumentSnapshot adminFcmSnapshot = await FirebaseFirestore.instance.collection('admin').doc('adminFcm').get();
+                if (adminFcmSnapshot.exists) {
+                  List<dynamic> adminFcmList = adminFcmSnapshot.get('adminFcms');
+                  if (!adminFcmList.contains(token)) {
+                    adminFcmList.add(token);
+                  }
+                  await FirebaseFirestore.instance.collection('admin').doc('adminFcm').update({'adminFcms': adminFcmList});
+                } else {
+                  await FirebaseFirestore.instance.collection('admin').doc('adminFcm').set({
+                    'adminFcms': [token]
+                  });
+                }
+              },
+            );
+          }
+        }
+      }
+    }
+  }
 
   Widget shimmerCard() {
     return Container(
       decoration: BoxDecoration(color: Colors.white, borderRadius: BorderRadius.circular(12)),
     );
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    fetchAdmins();
   }
 
   @override
@@ -34,6 +83,23 @@ class HomePageState extends State<HomePage> {
         iconTheme: IconThemeData(color: Colors.white, weight: 60),
         backgroundColor: orangeColor,
         elevation: 0,
+        actions: [
+          if (isAdmin)
+            Container(
+              margin: EdgeInsets.only(right: getScreenWidth(context) * 0.05),
+              child: MUISecondaryButton(
+                  text: 'Admin',
+                  bgColor: orangeColor,
+                  onPressed: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => const ProfilePage(),
+                      ),
+                    );
+                  }),
+            )
+        ],
       ),
       drawer: Drawer(
         child: ListView(
@@ -137,7 +203,7 @@ class HomePageState extends State<HomePage> {
                             controller: controller,
                             style: GoogleFonts.poppins(color: const Color.fromRGBO(51, 51, 51, 1), fontWeight: FontWeight.w700, fontSize: 12),
                             focusNode: focusNode,
-                            autofocus: true,
+                            autofocus: false,
                             decoration: InputDecoration(
                               border: OutlineInputBorder(
                                 borderRadius: BorderRadius.circular(12),
