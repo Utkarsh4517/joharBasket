@@ -40,7 +40,8 @@ class GroceryCardSmall extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final discountPercentage = ((price - discountedPrice) / 100);
+    dynamic discountPercentage = (((price - discountedPrice) / price) * 100);
+    discountPercentage = discountPercentage.round();
     void clicked() {
       bloc.add(GroceryCardClickedEvent(clickedGrocery: groceryUiDataModel));
       Navigator.push(
@@ -82,7 +83,6 @@ class GroceryCardSmall extends StatelessWidget {
                               width: getScreenWidth(context) * 0.05,
                               height: getScreenWidth(context) * 0.05,
                               child: const CircularProgressIndicator(
-                              
                                 color: Colors.black,
                               ),
                             ),
@@ -152,29 +152,29 @@ class GroceryCardSmall extends StatelessWidget {
             ),
           ),
         ),
-        if(discountPercentage != 0)
-        Positioned(
-          left: getScreenWidth(context) * 0.06,
-          top: 10,
-          child: Container(
-            decoration: BoxDecoration(
-              color: Colors.blue,
-              borderRadius: BorderRadius.vertical(
-                top: Radius.circular(0),
-                bottom: Radius.circular(12),
+        if (discountPercentage != 0)
+          Positioned(
+            left: getScreenWidth(context) * 0.06,
+            top: 10,
+            child: Container(
+              decoration: BoxDecoration(
+                color: Colors.blue,
+                borderRadius: BorderRadius.vertical(
+                  top: Radius.circular(0),
+                  bottom: Radius.circular(12),
+                ),
+              ),
+              padding: EdgeInsets.all(5),
+              child: Text(
+                '$discountPercentage %\n  OFF',
+                style: GoogleFonts.poppins(
+                  color: Colors.white,
+                  fontSize: 8,
+                  fontWeight: FontWeight.bold,
+                ),
               ),
             ),
-            padding: EdgeInsets.all(5),
-            child: Text(
-              '$discountPercentage %\n  OFF',
-              style: GoogleFonts.poppins(
-                color: Colors.white,
-                fontSize: 8,
-                fontWeight: FontWeight.bold,
-              ),
-            ),
-          ),
-        )
+          )
       ],
     );
   }
