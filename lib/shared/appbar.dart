@@ -64,10 +64,10 @@ class _CustomAppbarState extends State<CustomAppbar> {
         child: Column(
           children: [
             SizedBox(height: getScreenWidth(context) * 0.05),
-            TopBar(
-              firstName: firstName,
-              lastName: lastName,
-            ),
+            // TopBar(
+            //   firstName: firstName,
+            //   lastName: lastName,
+            // ),
             SizedBox(height: getScreenWidth(context) * 0.05),
             GestureDetector(
                 onTap: () => Navigator.push(

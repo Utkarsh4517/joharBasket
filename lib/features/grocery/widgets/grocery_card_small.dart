@@ -2,10 +2,12 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:johar/constants/colors.dart';
 import 'package:johar/constants/dimensions.dart';
 import 'package:johar/features/grocery/bloc/grocery_bloc.dart';
 import 'package:johar/model/grocery_model.dart';
 import 'package:johar/features/grocery/ui/grocery_product_page.dart';
+import 'package:modular_ui/modular_ui.dart';
 import 'package:shimmer/shimmer.dart';
 
 class GroceryCardSmall extends StatefulWidget {
@@ -63,134 +65,103 @@ class _GroceryCardSmallState extends State<GroceryCardSmall> {
     return Stack(
       children: [
         Container(
-          margin: EdgeInsets.symmetric(horizontal: getScreenWidth(context) * 0.05, vertical: getScreenWidth(context) * 0.01),
-          child: Card(
-            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
-            color: Colors.white,
-            surfaceTintColor: Colors.white,
-            elevation: 0,
-            child: Container(
-              decoration: BoxDecoration(borderRadius: BorderRadius.circular(20)),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      GestureDetector(
-                        onTap: () {
-                          clicked();
-                        },
-                        child: ClipRRect(
-                          child: CachedNetworkImage(
-                              imageUrl: widget.imageUrl,
-                              width: getScreenWidth(context) * 0.18,
-                              height: 90,
-                              fit: BoxFit.fitHeight,
-                              placeholder: (context, url) => Container(
-                                  child: Shimmer.fromColors(
-                                      baseColor: Colors.grey[300]!,
-                                      highlightColor: Colors.grey[100]!,
-                                      child: Container(
-                                        decoration: BoxDecoration(color: Colors.white, borderRadius: BorderRadius.vertical(top: Radius.circular(20))),
-                                      )))),
-                        ),
-                      ),
-                    ],
-                  ),
-                  const SizedBox(height: 10),
-                  Row(
-                    crossAxisAlignment: CrossAxisAlignment.end,
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      GestureDetector(
-                        onTap: () {
-                          clicked();
-                        },
-                        child: Container(
-                          width: getScreenWidth(context) * 0.2,
-                          margin: EdgeInsets.symmetric(horizontal: getScreenWidth(context) * 0.03).copyWith(bottom: 10),
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text(
-                                widget.name,
-                                maxLines: 2,
-                                overflow: TextOverflow.ellipsis,
-                                style: GoogleFonts.publicSans(color: Colors.black, fontWeight: FontWeight.w900, fontSize: 10),
-                              ),
-                              Text(
-                                widget.size,
-                                maxLines: 2,
-                                overflow: TextOverflow.ellipsis,
-                                style: GoogleFonts.publicSans(color: Colors.black, fontWeight: FontWeight.w900, fontSize: 10),
-                              ),
-                              SizedBox(height: getScreenWidth(context) * 0.01),
-                              Text(
-                                '₹ ${widget.discountedPrice}',
-                                style: GoogleFonts.publicSans(color: const Color(0xff57C373), fontWeight: FontWeight.w900, fontSize: 12),
-                              )
-                            ],
+          margin: EdgeInsets.all(getScreenWidth(context) * 0.04),
+          decoration: BoxDecoration(borderRadius: BorderRadius.circular(10), color: Colors.white, boxShadow: [
+            BoxShadow(
+              color: Color.fromARGB(255, 187, 187, 187).withOpacity(1),
+              offset: Offset(0, 18),
+              blurRadius: 10,
+              spreadRadius: 3,
+            )
+          ]),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              GestureDetector(
+                onTap: clicked,
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    CachedNetworkImage(
+                      imageUrl: widget.imageUrl,
+                      width: getScreenWidth(context) * 0.2,
+                      height: 140,
+                      fit: BoxFit.fitHeight,
+                      placeholder: (context, url) => Container(
+                        child: Shimmer.fromColors(
+                          baseColor: Colors.grey[300]!,
+                          highlightColor: Colors.grey[100]!,
+                          child: Container(
+                            decoration: BoxDecoration(color: Colors.white, borderRadius: BorderRadius.vertical(top: Radius.circular(20))),
                           ),
                         ),
                       ),
-                      GestureDetector(
-                        onTapDown: (_) {
-                          setState(() {
-                            isCartButtonTapped = true;
-                          });
-                          HapticFeedback.lightImpact();
-                          widget.bloc.add(GroceryCardCartButtonClickedEvent(cartClickedGrocery: widget.groceryUiDataModel));
-                        },
-                        onTapUp: (_) {
-                          setState(() {
-                            isCartButtonTapped = false;
-                          });
-                        },
-                        onTapCancel: () {
-                          setState(() {
-                            isCartButtonTapped = false;
-                          });
-                        },
-                        child: AnimatedContainer(
-                          duration: Duration(milliseconds: 150),
-                          width: getScreenWidth(context) * 0.1,
-                          height: getScreenWidth(context) * 0.1,
-                          margin: EdgeInsets.only(bottom: 10),
-                          decoration: BoxDecoration(
-                            color: !isCartButtonTapped ? Color(0xffFF8615) : Colors.green,
-                            borderRadius: BorderRadius.only(topLeft: Radius.circular(15), bottomLeft: Radius.circular(15)),
-                          ),
-                          child: const Center(
-                            child: Icon(
-                              Icons.shopping_bag,
-                              color: Colors.white,
-                            ),
-                          ),
-                        ),
+                    ),
+                  ],
+                ),
+              ),
+              SizedBox(height: getScreenheight(context) * 0.01),
+              GestureDetector(
+                onTap: clicked,
+                child: Container(
+                  padding: EdgeInsets.symmetric(horizontal: getScreenWidth(context) * 0.02),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        widget.name,
+                        maxLines: 2,
+                        overflow: TextOverflow.ellipsis,
+                        style: GoogleFonts.publicSans(color: Colors.black, fontWeight: FontWeight.w900, fontSize: 10),
+                      ),
+                      Text(
+                        widget.size,
+                        maxLines: 2,
+                        overflow: TextOverflow.ellipsis,
+                        style: GoogleFonts.publicSans(color: Colors.black, fontWeight: FontWeight.w900, fontSize: 10),
+                      ),
+                      SizedBox(height: getScreenWidth(context) * 0.01),
+                      Text(
+                        '₹ ${widget.discountedPrice}',
+                        style: GoogleFonts.publicSans(color: const Color(0xff57C373), fontWeight: FontWeight.w900, fontSize: 12),
                       )
                     ],
-                  )
-                ],
+                  ),
+                ),
               ),
-            ),
+              const Spacer(),
+              Container(
+                margin: EdgeInsets.only(bottom: 5),
+                alignment: Alignment.bottomCenter,
+                child: MUISecondaryButton(
+                  hapticsEnabled: true,
+                    bgColor: Colors.green,
+                    tappedBgColor: Colors.green.shade800,
+                    animationDuration: 100,
+                    text: 'Add to cart',
+                    onPressed: () {
+                      widget.bloc.add(GroceryCardCartButtonClickedEvent(cartClickedGrocery: widget.groceryUiDataModel));
+                    }),
+              )
+            ],
           ),
         ),
+
         if (discountPercentage != 0)
           Positioned(
-            left: getScreenWidth(context) * 0.06,
-            top: 10,
+            left: getScreenWidth(context) * 0.04,
+            top: getScreenheight(context) * 0.02,
             child: Container(
               decoration: BoxDecoration(
                 color: Colors.blue,
                 borderRadius: BorderRadius.vertical(
                   top: Radius.circular(0),
                   bottom: Radius.circular(12),
-                ),
+                ).copyWith(topLeft: Radius.circular(10)),
               ),
-              padding: EdgeInsets.all(5),
+              padding: EdgeInsets.all(10),
               child: Text(
-                '$discountPercentage %\n  OFF',
+                ' $discountPercentage%\nOFF',
                 style: GoogleFonts.poppins(
                   color: Colors.white,
                   fontSize: 8,
