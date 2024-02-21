@@ -6,6 +6,7 @@ import 'package:johar/features/grocery/bloc/grocery_bloc.dart';
 import 'package:johar/features/grocery/widgets/grocery_card.dart';
 import 'package:johar/features/grocery/widgets/grocery_card_small.dart';
 import 'package:johar/shared/pooja_appbar.dart';
+import 'package:shimmer/shimmer.dart';
 
 class PoojaPage extends StatefulWidget {
   const PoojaPage({super.key});
@@ -14,8 +15,7 @@ class PoojaPage extends StatefulWidget {
   State<PoojaPage> createState() => _PoojaPageState();
 }
 
-class _PoojaPageState extends State<PoojaPage>
-    with AutomaticKeepAliveClientMixin {
+class _PoojaPageState extends State<PoojaPage> with AutomaticKeepAliveClientMixin {
   @override
   bool get wantKeepAlive => true;
 
@@ -38,8 +38,14 @@ class _PoojaPageState extends State<PoojaPage>
       builder: (context, state) {
         switch (state.runtimeType) {
           case PoojaLoadingState:
-            return const Center(
-              child: CircularProgressIndicator(),
+            return Scaffold(
+              body: Container(
+                  child: Shimmer.fromColors(
+                      baseColor: Colors.grey[300]!,
+                      highlightColor: Colors.grey[100]!,
+                      child: Container(
+                        decoration: BoxDecoration(color: Colors.white),
+                      ))),
             );
           case PoojaLoadedSuccessState:
             final successState = state as PoojaLoadedSuccessState;
@@ -66,13 +72,8 @@ class _PoojaPageState extends State<PoojaPage>
                         // const SearchTextField(),
 
                         Container(
-                          margin:
-                              EdgeInsets.all(getScreenWidth(context) * 0.06),
-                          child: Text('Featured Pooja Products',
-                              style: GoogleFonts.publicSans(
-                                  color: Colors.black,
-                                  fontWeight: FontWeight.w800,
-                                  fontSize: getScreenWidth(context) * 0.04)),
+                          margin: EdgeInsets.all(getScreenWidth(context) * 0.06),
+                          child: Text('Featured Pooja Products', style: GoogleFonts.publicSans(color: Colors.black, fontWeight: FontWeight.w800, fontSize: getScreenWidth(context) * 0.04)),
                         ),
 
                         SizedBox(
@@ -81,30 +82,21 @@ class _PoojaPageState extends State<PoojaPage>
                             scrollDirection: Axis.horizontal,
                             itemCount: successState.products.length,
                             itemBuilder: (context, index) {
-                              if (successState.products[index].isFeatured ==
-                                  true) {
-                                    setState(() {
-                                      
-                                    });
+                              if (successState.products[index].isFeatured == true) {
+                                setState(() {});
                                 return GroceryCard(
-                                  discountedPrice: successState
-                                      .products[index].discountedPrice,
+                                  discountedPrice: successState.products[index].discountedPrice,
                                   size: successState.products[index].size!,
                                   bloc: groceryBloc,
                                   gst: successState.products[index].gst,
                                   name: successState.products[index].name,
-                                  imageUrl:
-                                      successState.products[index].imageUrl,
+                                  imageUrl: successState.products[index].imageUrl,
                                   price: successState.products[index].price,
-                                  isFeatured:
-                                      successState.products[index].isFeatured,
+                                  isFeatured: successState.products[index].isFeatured,
                                   inStock: successState.products[index].inStock,
-                                  productId:
-                                      successState.products[index].productId,
-                                  groceryUiDataModel:
-                                      successState.products[index],
-                                  description:
-                                      successState.products[index].description,
+                                  productId: successState.products[index].productId,
+                                  groceryUiDataModel: successState.products[index],
+                                  description: successState.products[index].description,
                                 );
                               } else {
                                 return Container();
@@ -115,45 +107,30 @@ class _PoojaPageState extends State<PoojaPage>
                         // shop groceries
 
                         Container(
-                          margin:
-                              EdgeInsets.all(getScreenWidth(context) * 0.06),
-                          child: Text('Shop Pooja Products',
-                              style: GoogleFonts.publicSans(
-                                  color: Colors.black,
-                                  fontWeight: FontWeight.w800,
-                                  fontSize: getScreenWidth(context) * 0.04)),
+                          margin: EdgeInsets.all(getScreenWidth(context) * 0.06),
+                          child: Text('Shop Pooja Products', style: GoogleFonts.publicSans(color: Colors.black, fontWeight: FontWeight.w800, fontSize: getScreenWidth(context) * 0.04)),
                         ),
                         // gridview
                         SizedBox(
-                          height: (successState.products.length *
-                                  getScreenWidth(context) *
-                                  0.35)
-                              .toDouble(),
+                          height: (successState.products.length * getScreenWidth(context) * 0.35).toDouble(),
                           child: GridView.builder(
                             physics: const NeverScrollableScrollPhysics(),
-                            gridDelegate:
-                                const SliverGridDelegateWithFixedCrossAxisCount(
-                                    crossAxisCount: 2),
+                            gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 2),
                             itemCount: successState.products.length,
                             itemBuilder: (context, index) {
                               return GroceryCardSmall(
-                                discountedPrice: successState
-                                    .products[index].discountedPrice,
+                                discountedPrice: successState.products[index].discountedPrice,
                                 size: successState.products[index].size!,
                                 bloc: groceryBloc,
                                 gst: successState.products[index].gst,
                                 name: successState.products[index].name,
                                 imageUrl: successState.products[index].imageUrl,
                                 price: successState.products[index].price,
-                                isFeatured:
-                                    successState.products[index].isFeatured,
+                                isFeatured: successState.products[index].isFeatured,
                                 inStock: successState.products[index].inStock,
-                                productId:
-                                    successState.products[index].productId,
-                                groceryUiDataModel:
-                                    successState.products[index],
-                                description:
-                                    successState.products[index].description,
+                                productId: successState.products[index].productId,
+                                groceryUiDataModel: successState.products[index],
+                                description: successState.products[index].description,
                               );
                             },
                           ),

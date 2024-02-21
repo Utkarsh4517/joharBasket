@@ -6,6 +6,7 @@ import 'package:johar/features/grocery/bloc/grocery_bloc.dart';
 import 'package:johar/features/grocery/widgets/grocery_card.dart';
 import 'package:johar/features/grocery/widgets/grocery_card_small.dart';
 import 'package:johar/shared/cosmetic_appbar.dart';
+import 'package:shimmer/shimmer.dart';
 
 class CosmeticsPage extends StatefulWidget {
   const CosmeticsPage({super.key});
@@ -38,8 +39,14 @@ class _CosmeticsPageState extends State<CosmeticsPage>
       builder: (context, state) {
         switch (state.runtimeType) {
           case CosmeticLoadingState:
-            return const Center(
-              child: CircularProgressIndicator(),
+           return Scaffold(
+              body: Container(
+                  child: Shimmer.fromColors(
+                      baseColor: Colors.grey[300]!,
+                      highlightColor: Colors.grey[100]!,
+                      child: Container(
+                        decoration: BoxDecoration(color: Colors.white),
+                      ))),
             );
           case CosmeticLoadedSuccessState:
             final successState = state as CosmeticLoadedSuccessState;

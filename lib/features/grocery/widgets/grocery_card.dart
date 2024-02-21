@@ -5,6 +5,7 @@ import 'package:johar/constants/dimensions.dart';
 import 'package:johar/features/grocery/bloc/grocery_bloc.dart';
 import 'package:johar/model/grocery_model.dart';
 import 'package:johar/features/grocery/ui/grocery_product_page.dart';
+import 'package:shimmer/shimmer.dart';
 
 class GroceryCard extends StatelessWidget {
   final GroceryBloc bloc;
@@ -40,7 +41,7 @@ class GroceryCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     dynamic discountPercentage = (((price - discountedPrice) / price) * 100);
-    discountPercentage =  discountPercentage.round();
+    discountPercentage = discountPercentage.round();
     void clicked() {
       bloc.add(GroceryCardClickedEvent(clickedGrocery: groceryUiDataModel));
       Navigator.push(
@@ -77,16 +78,18 @@ class GroceryCard extends StatelessWidget {
                         alignment: Alignment.center,
                         height: getScreenWidth(context) * 0.5,
                         child: CachedNetworkImage(
-                          imageUrl: imageUrl,
-                          fit: BoxFit.cover,
-                          placeholder: (context, url) => SizedBox(
-                            width: getScreenWidth(context) * 0.1,
-                            height: getScreenWidth(context) * 0.1,
-                            child: const CircularProgressIndicator(
-                              color: Colors.black,
-                            ),
-                          ),
-                        ),
+                            imageUrl: imageUrl,
+                            fit: BoxFit.cover,
+                            placeholder: (context, url) => Container(
+                                child: Shimmer.fromColors(
+                                    baseColor: Colors.grey[300]!,
+                                    highlightColor: Colors.grey[100]!,
+                                    child: Container(
+                                      decoration: BoxDecoration(
+                                        color: Colors.white,
+                                        borderRadius: BorderRadius.vertical(top: Radius.circular(20))
+                                      ),
+                                    )))),
                       ),
                     ),
                   ),

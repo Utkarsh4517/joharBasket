@@ -8,6 +8,7 @@ import 'package:johar/features/grocery/bloc/grocery_bloc.dart';
 import 'package:johar/features/grocery/widgets/grocery_card.dart';
 import 'package:johar/features/grocery/widgets/grocery_card_small.dart';
 import 'package:johar/shared/appbar.dart';
+import 'package:shimmer/shimmer.dart';
 
 class GroceryPage extends StatefulWidget {
   const GroceryPage({super.key});
@@ -67,8 +68,14 @@ class _GroceryPageState extends State<GroceryPage> with AutomaticKeepAliveClient
       builder: (context, state) {
         switch (state.runtimeType) {
           case GroceryLoadingState:
-            return const Center(
-              child: CircularProgressIndicator(),
+            return Scaffold(
+              body: Container(
+                  child: Shimmer.fromColors(
+                      baseColor: Colors.grey[300]!,
+                      highlightColor: Colors.grey[100]!,
+                      child: Container(
+                        decoration: BoxDecoration(color: Colors.white),
+                      ))),
             );
           case GroceryLoadedSuccessState:
             final successState = state as GroceryLoadedSuccessState;

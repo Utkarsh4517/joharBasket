@@ -5,6 +5,7 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:johar/constants/colors.dart';
 import 'package:johar/constants/dimensions.dart';
+import 'package:johar/features/grocery/ui/grocery_page.dart';
 import 'package:johar/features/grocery/ui/grocery_product_page.dart';
 import 'package:johar/features/home/repo/home_repo.dart';
 import 'package:johar/model/grocery_model.dart';
@@ -49,7 +50,9 @@ class HomePageState extends State<HomePage> {
                 FontAwesomeIcons.bagShopping,
               ),
               title: Text('Groceries'),
-              onTap: () {},
+              onTap: () {
+                Navigator.push(context, MaterialPageRoute(builder: (context) => GroceryPage()));
+              },
             ),
             ListTile(
               leading: Icon(
@@ -208,7 +211,7 @@ class HomePageState extends State<HomePage> {
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
                                 Container(
-                                  margin: EdgeInsets.only(right: getScreenWidth(context) * 0.02,  bottom: 10),
+                                  margin: EdgeInsets.only(right: getScreenWidth(context) * 0.02, bottom: 10),
                                   child: ClipOval(
                                     child: Image.network(
                                       'https://t4.ftcdn.net/jpg/01/02/58/91/360_F_102589163_hk02O92vzEYP0rZbVyvDTbkje1GaUDk1.jpg',
@@ -218,7 +221,6 @@ class HomePageState extends State<HomePage> {
                                     ),
                                   ),
                                 ),
-                                
                                 Text(
                                   '   SPICES',
                                   style: GoogleFonts.poppins(

@@ -6,6 +6,7 @@ import 'package:johar/features/grocery/bloc/grocery_bloc.dart';
 import 'package:johar/features/grocery/widgets/grocery_card.dart';
 import 'package:johar/features/grocery/widgets/grocery_card_small.dart';
 import 'package:johar/shared/stationary_appbar.dart';
+import 'package:shimmer/shimmer.dart';
 
 class StationaryPage extends StatefulWidget {
   const StationaryPage({super.key});
@@ -42,8 +43,14 @@ class _StationaryPageState extends State<StationaryPage>
       builder: (context, state) {
         switch (state.runtimeType) {
           case StationaryLoadingState:
-            return const Center(
-              child: CircularProgressIndicator(),
+           return Scaffold(
+              body: Container(
+                  child: Shimmer.fromColors(
+                      baseColor: Colors.grey[300]!,
+                      highlightColor: Colors.grey[100]!,
+                      child: Container(
+                        decoration: BoxDecoration(color: Colors.white),
+                      ))),
             );
           case StationaryLoadedSuccessState:
             final successState = state as StationaryLoadedSuccessState;

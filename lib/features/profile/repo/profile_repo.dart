@@ -123,6 +123,7 @@ class ProfileRepo {
           inStock: data['inStock'],
           size: data['size'],
           discountedPrice: data['discountedPrice'],
+          subCategory: data['subCategory'] ?? '',
         );
       }).toList();
     });
@@ -162,6 +163,7 @@ class ProfileRepo {
           inStock: data['inStock'],
           size: data['size'],
           discountedPrice: data['discountedPrice'],
+          subCategory: data['subCategory'] ?? '',
         );
       }).toList();
     });
@@ -184,6 +186,7 @@ class ProfileRepo {
           inStock: data['inStock'],
           size: data['size'],
           discountedPrice: data['discountedPrice'],
+          subCategory: data['subCategory'] ?? '',
         );
       }).toList();
     });
@@ -206,6 +209,7 @@ class ProfileRepo {
           inStock: data['inStock'],
           size: data['size'],
           discountedPrice: data['discountedPrice'],
+          subCategory: data['subCategory'] ?? '',
         );
       }).toList();
     });

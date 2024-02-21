@@ -5,6 +5,7 @@ import 'package:johar/constants/dimensions.dart';
 import 'package:johar/features/grocery/bloc/grocery_bloc.dart';
 import 'package:johar/model/grocery_model.dart';
 import 'package:johar/features/grocery/ui/grocery_product_page.dart';
+import 'package:shimmer/shimmer.dart';
 
 class GroceryCardSmall extends StatelessWidget {
   final GroceryBloc bloc;
@@ -75,18 +76,20 @@ class GroceryCardSmall extends StatelessWidget {
                         },
                         child: ClipRRect(
                           child: CachedNetworkImage(
-                            imageUrl: imageUrl,
-                            width: getScreenWidth(context) * 0.18,
-                            height: getScreenheight(context) * 0.11,
-                            fit: BoxFit.fitHeight,
-                            placeholder: (context, url) => SizedBox(
-                              width: getScreenWidth(context) * 0.05,
-                              height: getScreenWidth(context) * 0.05,
-                              child: const CircularProgressIndicator(
-                                color: Colors.black,
-                              ),
-                            ),
-                          ),
+                              imageUrl: imageUrl,
+                              width: getScreenWidth(context) * 0.18,
+                              height: getScreenheight(context) * 0.11,
+                              fit: BoxFit.fitHeight,
+                              placeholder: (context, url) => Container(
+                                  child: Shimmer.fromColors(
+                                      baseColor: Colors.grey[300]!,
+                                      highlightColor: Colors.grey[100]!,
+                                      child: Container(
+                                        decoration: BoxDecoration(
+                                          color: Colors.white,
+                                          borderRadius: BorderRadius.vertical(top: Radius.circular(20))
+                                        ),
+                                      )))),
                         ),
                       ),
                     ],
