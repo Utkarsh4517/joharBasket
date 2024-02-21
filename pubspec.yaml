@@ -72,6 +72,7 @@ dependencies:
   pdf: ^3.10.7
   modular_ui: ^0.0.5
   upgrader: ^9.0.0
+  flutter_typeahead: ^5.2.0
 
 dev_dependencies:
   flutter_test:

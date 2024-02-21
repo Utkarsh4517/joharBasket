@@ -7,6 +7,7 @@ import 'package:johar/constants/dimensions.dart';
 import 'package:johar/features/cart/ui/cart_page.dart';
 import 'package:johar/features/cosmetics/ui/cosmetics_page.dart';
 import 'package:johar/features/grocery/ui/grocery_page.dart';
+import 'package:johar/features/home/ui/home_page.dart';
 import 'package:johar/features/nav_bar/bloc/nav_bar_bloc.dart';
 import 'package:johar/features/order/ui/order_page.dart';
 import 'package:johar/features/pooja/ui/pooja_page.dart';
@@ -28,28 +29,30 @@ class _NavBarState extends State<NavBar> {
           icon: Icon(
             FontAwesomeIcons.bagShopping,
           ),
-          label: 'Grocery'),
-      const BottomNavigationBarItem(
-          icon: Icon(
-            FontAwesomeIcons.book,
-          ),
-          label: 'Stationary'),
-      const BottomNavigationBarItem(
-          icon: Icon(
-            FontAwesomeIcons.gem,
-          ),
-          label: 'Cosmetics'),
-      const BottomNavigationBarItem(
-          icon: Icon(
-            Icons.sunny,
-          ),
-          label: 'Pooja'),
+          label: 'Shop'),
+      // const BottomNavigationBarItem(
+      //     icon: Icon(
+      //       FontAwesomeIcons.book,
+      //     ),
+      //     label: 'Stationary'),
+      // const BottomNavigationBarItem(
+      //     icon: Icon(
+      //       FontAwesomeIcons.gem,
+      //     ),
+      //     label: 'Cosmetics'),
+      // const BottomNavigationBarItem(
+      //     icon: Icon(
+      //       Icons.sunny,
+      //     ),
+      //     label: 'Pooja'),
       const BottomNavigationBarItem(
           icon: Icon(
             FeatherIcons.shoppingCart,
             color: Colors.green,
           ),
           label: 'Cart'),
+
+      // change orders to profile
       const BottomNavigationBarItem(
           icon: Icon(
             FeatherIcons.shoppingBag,
@@ -59,10 +62,10 @@ class _NavBarState extends State<NavBar> {
     ];
 
     const List<Widget> bottomNavScreen = <Widget>[
-      GroceryPage(),
-      StationaryPage(),
-      CosmeticsPage(),
-      PoojaPage(),
+      HomePage(),
+      // StationaryPage(),
+      // CosmeticsPage(),
+      // PoojaPage(),
       CartPage(),
       OrderPage(),
     ];

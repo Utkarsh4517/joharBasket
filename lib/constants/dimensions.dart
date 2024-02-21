@@ -9,3 +9,11 @@ double getScreenWidth(BuildContext context) {
 double getScreenheight(BuildContext context) {
   return MediaQuery.of(context).size.height;
 }
+
+double getScreenWidthPercentage(BuildContext context, double percentage) {
+  return MediaQuery.of(context).size.width * percentage ;
+}
+
+double getScreenHeightPercentage(BuildContext context, double percentage) {
+  return MediaQuery.of(context).size.height * percentage ;
+}
