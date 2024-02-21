@@ -22,10 +22,7 @@ class HomePageState extends State<HomePage> {
 
   Widget shimmerCard() {
     return Container(
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(12)
-      ),
+      decoration: BoxDecoration(color: Colors.white, borderRadius: BorderRadius.circular(12)),
     );
   }
 
@@ -123,8 +120,12 @@ class HomePageState extends State<HomePage> {
                             ),
                           );
                         },
-                        suggestionsCallback: (search) {
-                          return HomeRepo.fetchAllProducts();
+                        suggestionsCallback: (search) async {
+                          List<ProductDataModel> allProducts = await HomeRepo.fetchAllProducts();
+
+                          List<ProductDataModel> filteredProducts = allProducts.where((product) => product.name.toLowerCase().contains(search.toLowerCase())).toList();
+
+                          return filteredProducts;
                         },
                         builder: (context, controller, focusNode) {
                           return TextFormField(
