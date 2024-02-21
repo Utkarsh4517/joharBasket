@@ -13,6 +13,7 @@ import 'package:johar/model/grocery_model.dart';
 import 'package:johar/shared/product_page_bodytext.dart';
 import 'package:johar/shared/product_page_headtext.dart';
 import 'package:modular_ui/modular_ui.dart';
+import 'package:shimmer/shimmer.dart';
 
 class GroceryProductPage extends StatefulWidget {
   final ProductDataModel grocery;
@@ -57,6 +58,11 @@ class _GroceryProductPageState extends State<GroceryProductPage> {
   }
 
   final GroceryBloc groceryBloc = GroceryBloc();
+  Widget shimmerCard() {
+    return Container(
+      decoration: BoxDecoration(color: Colors.white, borderRadius: BorderRadius.circular(12)),
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -117,14 +123,13 @@ class _GroceryProductPageState extends State<GroceryProductPage> {
                   text: 'Add to cart',
                   bgGradient: linerGrd,
                   onPressed: () {
-                     if (widget.grocery.inStock > quantity) {
+                    if (widget.grocery.inStock > quantity) {
                       groceryBloc.add(GroceryProductPageAddToCardClickedEvent(
                         addToCartGrocery: widget.grocery,
                         quantity: quantity,
                       ));
                     } else {
-                      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-                          content: Text('Item is out of stock!')));
+                      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Item is out of stock!')));
                     }
                   },
                 ),
@@ -164,7 +169,7 @@ class _GroceryProductPageState extends State<GroceryProductPage> {
                           height: getScreenheight(context) * 0.4,
                           fit: BoxFit.fitHeight,
                           imageUrl: widget.grocery.imageUrl,
-                          placeholder: (context, url) => const CircularProgressIndicator(),
+                          placeholder: (context, url) => Container(child: Shimmer.fromColors(baseColor: Colors.grey[300]!, highlightColor: Colors.grey[100]!, child: shimmerCard())),
                         )),
                     Positioned(
                       child: Row(

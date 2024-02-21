@@ -1,9 +1,14 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_typeahead/flutter_typeahead.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:johar/constants/colors.dart';
 import 'package:johar/constants/dimensions.dart';
+import 'package:johar/features/grocery/ui/grocery_product_page.dart';
+import 'package:johar/features/home/repo/home_repo.dart';
+import 'package:johar/model/grocery_model.dart';
+import 'package:shimmer/shimmer.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -14,6 +19,16 @@ class HomePage extends StatefulWidget {
 
 class HomePageState extends State<HomePage> {
   final controller = TextEditingController();
+
+  Widget shimmerCard() {
+    return Container(
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(12)
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -76,17 +91,41 @@ class HomePageState extends State<HomePage> {
                     Container(
                       margin: EdgeInsets.symmetric(horizontal: getScreenWidth(context) * 0.05),
                       height: getScreenheight(context) * 0.07,
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(12)
-                      ),
-                      child: TypeAheadField(
-                        
+                      decoration: BoxDecoration(borderRadius: BorderRadius.circular(12)),
+                      child: TypeAheadField<ProductDataModel>(
                         controller: controller,
                         itemBuilder: (context, value) {
-                          return Container();
+                          return Container(
+                              padding: EdgeInsets.symmetric(vertical: getScreenWidth(context) * 0.02, horizontal: getScreenWidth(context) * 0.02),
+                              child: Row(
+                                children: [
+                                  CachedNetworkImage(
+                                    imageUrl: value.imageUrl,
+                                    width: getScreenWidth(context) * 0.1,
+                                    height: getScreenWidth(context) * 0.1,
+                                    placeholder: (context, url) => Container(child: Shimmer.fromColors(baseColor: Colors.grey[300]!, highlightColor: Colors.grey[100]!, child: shimmerCard())),
+                                  ),
+                                  Container(
+                                    padding: EdgeInsets.symmetric(horizontal: getScreenWidth(context) * 0.02),
+                                    width: getScreenWidth(context) * 0.5,
+                                    child: Text(value.name, style: GoogleFonts.poppins(fontWeight: FontWeight.w600, fontSize: 12)),
+                                  )
+                                ],
+                              ));
                         },
-                        onSelected: (value) {},
-                        suggestionsCallback: (search) {},
+                        onSelected: (value) {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => GroceryProductPage(
+                                grocery: value,
+                              ),
+                            ),
+                          );
+                        },
+                        suggestionsCallback: (search) {
+                          return HomeRepo.fetchAllProducts();
+                        },
                         builder: (context, controller, focusNode) {
                           return TextFormField(
                             cursorColor: Colors.black,
@@ -107,7 +146,7 @@ class HomePageState extends State<HomePage> {
                                           controller.text = '';
                                         });
                                       },
-                                      child: Icon(FontAwesomeIcons.cross))
+                                      child: Icon(FontAwesomeIcons.ban, color: Colors.grey))
                                   : Icon(FontAwesomeIcons.magnifyingGlass),
                               errorStyle: GoogleFonts.poppins(
                                 color: Colors.red,
@@ -120,11 +159,11 @@ class HomePageState extends State<HomePage> {
                               ),
                               enabledBorder: UnderlineInputBorder(
                                 borderSide: BorderSide(color: Color.fromRGBO(216, 216, 216, 1)),
-                                 borderRadius: BorderRadius.circular(12),
+                                borderRadius: BorderRadius.circular(12),
                               ),
-                              focusedBorder:UnderlineInputBorder(
+                              focusedBorder: UnderlineInputBorder(
                                 borderSide: BorderSide(color: Color.fromRGBO(216, 216, 216, 1)),
-                                 borderRadius: BorderRadius.circular(12),
+                                borderRadius: BorderRadius.circular(12),
                               ),
                             ),
                           );
