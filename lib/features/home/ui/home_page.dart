@@ -82,7 +82,7 @@ class HomePageState extends State<HomePage> {
               Container(
                 width: getScreenWidth(context),
                 height: getScreenheight(context) * 0.31,
-                decoration: BoxDecoration(color: orangeColor, borderRadius: BorderRadius.vertical(bottom: Radius.circular(20))),
+                decoration: BoxDecoration(color: orangeColor, borderRadius: BorderRadius.vertical(bottom: Radius.circular(30))),
                 child: Column(
                   children: [
                     Container(
