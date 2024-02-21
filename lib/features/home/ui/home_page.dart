@@ -81,7 +81,7 @@ class HomePageState extends State<HomePage> {
             children: [
               Container(
                 width: getScreenWidth(context),
-                height: getScreenheight(context) * 0.35,
+                height: getScreenheight(context) * 0.31,
                 decoration: BoxDecoration(color: orangeColor, borderRadius: BorderRadius.vertical(bottom: Radius.circular(20))),
                 child: Column(
                   children: [
@@ -93,22 +93,23 @@ class HomePageState extends State<HomePage> {
                         controller: controller,
                         itemBuilder: (context, value) {
                           return Container(
-                              padding: EdgeInsets.symmetric(vertical: getScreenWidth(context) * 0.02, horizontal: getScreenWidth(context) * 0.02),
-                              child: Row(
-                                children: [
-                                  CachedNetworkImage(
-                                    imageUrl: value.imageUrl,
-                                    width: getScreenWidth(context) * 0.1,
-                                    height: getScreenWidth(context) * 0.1,
-                                    placeholder: (context, url) => Container(child: Shimmer.fromColors(baseColor: Colors.grey[300]!, highlightColor: Colors.grey[100]!, child: shimmerCard())),
-                                  ),
-                                  Container(
-                                    padding: EdgeInsets.symmetric(horizontal: getScreenWidth(context) * 0.02),
-                                    width: getScreenWidth(context) * 0.5,
-                                    child: Text(value.name, style: GoogleFonts.poppins(fontWeight: FontWeight.w600, fontSize: 12)),
-                                  )
-                                ],
-                              ));
+                            padding: EdgeInsets.symmetric(vertical: getScreenWidth(context) * 0.02, horizontal: getScreenWidth(context) * 0.02),
+                            child: Row(
+                              children: [
+                                CachedNetworkImage(
+                                  imageUrl: value.imageUrl,
+                                  width: getScreenWidth(context) * 0.1,
+                                  height: getScreenWidth(context) * 0.1,
+                                  placeholder: (context, url) => Container(child: Shimmer.fromColors(baseColor: Colors.grey[300]!, highlightColor: Colors.grey[100]!, child: shimmerCard())),
+                                ),
+                                Container(
+                                  padding: EdgeInsets.symmetric(horizontal: getScreenWidth(context) * 0.02),
+                                  width: getScreenWidth(context) * 0.5,
+                                  child: Text(value.name, style: GoogleFonts.poppins(fontWeight: FontWeight.w600, fontSize: 12)),
+                                )
+                              ],
+                            ),
+                          );
                         },
                         onSelected: (value) {
                           Navigator.push(
@@ -171,6 +172,67 @@ class HomePageState extends State<HomePage> {
                         },
                       ),
                     ),
+                    SizedBox(height: getScreenheight(context) * 0.02),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Container(
+                          width: getScreenWidth(context) * 0.23,
+                          height: 2,
+                          decoration: BoxDecoration(color: Colors.white),
+                        ),
+                        Text(
+                          '  EXPLORE  ',
+                          style: GoogleFonts.poppins(
+                            color: Colors.white,
+                            fontWeight: FontWeight.w600,
+                            fontSize: getScreenWidth(context) * 0.05,
+                          ),
+                        ),
+                        Container(
+                          width: getScreenWidth(context) * 0.23,
+                          height: 2,
+                          decoration: BoxDecoration(color: Colors.white),
+                        ),
+                      ],
+                    ),
+                    Container(
+                      height: getScreenheight(context) * 0.15,
+                      margin: EdgeInsets.only(left: getScreenWidth(context) * 0.05, top: getScreenheight(context) * 0.02),
+                      child: ListView.builder(
+                        itemCount: 10,
+                        scrollDirection: Axis.horizontal,
+                        itemBuilder: (context, index) {
+                          return Container(
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Container(
+                                  margin: EdgeInsets.only(right: getScreenWidth(context) * 0.02,  bottom: 10),
+                                  child: ClipOval(
+                                    child: Image.network(
+                                      'https://t4.ftcdn.net/jpg/01/02/58/91/360_F_102589163_hk02O92vzEYP0rZbVyvDTbkje1GaUDk1.jpg',
+                                      width: getScreenWidth(context) * 0.16,
+                                      height: getScreenWidth(context) * 0.16,
+                                      fit: BoxFit.cover,
+                                    ),
+                                  ),
+                                ),
+                                
+                                Text(
+                                  '   SPICES',
+                                  style: GoogleFonts.poppins(
+                                    color: Colors.white,
+                                    fontWeight: FontWeight.w600,
+                                    fontSize: getScreenWidth(context) * 0.03,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          );
+                        },
+                      ),
+                    )
                   ],
                 ),
               ),
