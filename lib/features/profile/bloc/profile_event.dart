@@ -20,6 +20,7 @@ class AddProductClickedEvent extends ProfileEvent {
   final bool isFeatured;
   final String size;
   final dynamic discountedPrice;
+  final String subCategory;
   AddProductClickedEvent({
     required this.name,
     required this.description,
@@ -32,6 +33,7 @@ class AddProductClickedEvent extends ProfileEvent {
     required this.isFeatured,
     required this.size,
     required this.discountedPrice,
+    required this.subCategory,
   });
 }
 
@@ -59,6 +61,7 @@ class ProductUpdateDetailsClickedEvent extends ProfileEvent {
   final double gst;
   final String size;
   final double discountedPrice;
+  final String subCategory;
   ProductUpdateDetailsClickedEvent({
     required this.product,
     required this.inStock,
@@ -69,6 +72,7 @@ class ProductUpdateDetailsClickedEvent extends ProfileEvent {
     required this.gst,
     required this.size,
     required this.discountedPrice,
+    required this.subCategory,
   });
 }
 
@@ -82,6 +86,7 @@ class StationaryUpdateDetailsClickedEvent extends ProfileEvent {
   final double gst;
   final String size;
   final double discountedPrice;
+  final String subCategory;
   StationaryUpdateDetailsClickedEvent({
     required this.product,
     required this.inStock,
@@ -92,6 +97,7 @@ class StationaryUpdateDetailsClickedEvent extends ProfileEvent {
     required this.gst,
     required this.size,
     required this.discountedPrice,
+    required this.subCategory,
   });
 }
 
@@ -105,6 +111,7 @@ class CosmeticUpdateClickedEvent extends ProfileEvent {
   final double gst;
   final String size;
   final double discountedPrice;
+  final String subCategory;
   CosmeticUpdateClickedEvent({
     required this.product,
     required this.inStock,
@@ -115,6 +122,7 @@ class CosmeticUpdateClickedEvent extends ProfileEvent {
     required this.gst,
     required this.size,
     required this.discountedPrice,
+    required this.subCategory,
   });
 }
 
@@ -128,6 +136,7 @@ class PoojaUpdateClickedEvent extends ProfileEvent {
   final double gst;
   final String size;
   final double discountedPrice;
+  final String subCategory;
   PoojaUpdateClickedEvent({
     required this.product,
     required this.inStock,
@@ -138,6 +147,7 @@ class PoojaUpdateClickedEvent extends ProfileEvent {
     required this.gst,
     required this.size,
     required this.discountedPrice,
+    required this.subCategory,
   });
 }
 

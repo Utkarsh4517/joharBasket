@@ -1,4 +1,3 @@
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_typeahead/flutter_typeahead.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -8,7 +7,6 @@ import 'package:johar/features/grocery/ui/grocery_product_page.dart';
 import 'package:johar/features/home/repo/home_repo.dart';
 import 'package:johar/features/profile/widgets/profile_product_card.dart';
 import 'package:johar/model/grocery_model.dart';
-import 'package:shimmer/shimmer.dart';
 
 class CategoryPage extends StatefulWidget {
   final String category;
@@ -44,7 +42,7 @@ class _CategoryPageState extends State<CategoryPage> {
                 itemBuilder: (context, value) {
                   return ProfileProductCard(
                     product: value,
-                    type: 'grocery',
+                    type: widget.category,
                   );
                 },
                 onSelected: (value) {

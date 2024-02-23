@@ -17,6 +17,7 @@ class ProfileBloc extends Bloc<ProfileEvent, ProfileState> {
     on<ProductUpdateDetailsClickedEvent>(productUpdateDetailsClickedEvent);
     on<StationaryUpdateDetailsClickedEvent>(stationaryUpdateDetailsClickedEvent);
     on<CosmeticUpdateClickedEvent>(cosmeticUpdateClickedEvent);
+    on<PoojaUpdateClickedEvent>(poojaUpdateClickedEvent);
     on<ProductDeleteButtonClickedEvent>(productDeleteButtonClickedEvent);
     on<RemoveProductClickedEvent>(removeProductClickedEvent);
     on<AcceptOrderClickedEvent>(acceptOrderClickedEvent);
@@ -48,17 +49,19 @@ class ProfileBloc extends Bloc<ProfileEvent, ProfileState> {
 
   FutureOr<void> addProductClickedEvent(AddProductClickedEvent event, Emitter<ProfileState> emit) async {
     await ProfileRepo.addNewProduct(
-        collectionName: event.category,
-        name: event.name,
-        description: event.description,
-        imageUrl: event.imageUrl,
-        inStock: event.inStock,
-        price: event.price,
-        gst: event.gst,
-        isFeatured: event.isFeatured,
-        productId: event.productId,
-        size: event.size,
-        discountedPrice: event.discountedPrice);
+      collectionName: event.category,
+      name: event.name,
+      description: event.description,
+      imageUrl: event.imageUrl,
+      inStock: event.inStock,
+      price: event.price,
+      gst: event.gst,
+      isFeatured: event.isFeatured,
+      productId: event.productId,
+      size: event.size,
+      discountedPrice: event.discountedPrice,
+      subCategory: event.subCategory,
+    );
   }
 
   FutureOr<void> productEditButtonClickedEvent(ProductEditButtonClickedEvent event, Emitter<ProfileState> emit) {
@@ -76,6 +79,7 @@ class ProfileBloc extends Bloc<ProfileEvent, ProfileState> {
       gst: event.gst,
       size: event.size,
       discountedPrice: event.discountedPrice,
+      subCategory: event.subCategory,
     );
     emit(ProductDetailsUpdatedState());
   }
@@ -86,6 +90,7 @@ class ProfileBloc extends Bloc<ProfileEvent, ProfileState> {
 
   FutureOr<void> removeProductClickedEvent(RemoveProductClickedEvent event, Emitter<ProfileState> emit) async {
     await ProfileRepo.deleteProduct(productDataModel: event.productDataModel);
+    print('product deleted');
     emit(RemoveDialogState());
   }
 
@@ -134,6 +139,7 @@ class ProfileBloc extends Bloc<ProfileEvent, ProfileState> {
       gst: event.gst,
       size: event.size,
       discountedPrice: event.discountedPrice,
+      subCategory: event.subCategory,
     );
     emit(ProductDetailsUpdatedState());
   }
@@ -149,12 +155,13 @@ class ProfileBloc extends Bloc<ProfileEvent, ProfileState> {
       gst: event.gst,
       size: event.size,
       discountedPrice: event.discountedPrice,
+      subCategory: event.subCategory,
     );
     emit(ProductDetailsUpdatedState());
   }
 
-  FutureOr<void> poojaUpdateClickedEvent(CosmeticUpdateClickedEvent event, Emitter<ProfileState> emit) async {
-    await ProfileRepo.updateCosmeticsDetails(
+  FutureOr<void> poojaUpdateClickedEvent(PoojaUpdateClickedEvent event, Emitter<ProfileState> emit) async {
+    await ProfileRepo.updatePoojaDetails(
       productDataModel: event.product,
       inStock: event.inStock,
       name: event.name,
@@ -164,6 +171,7 @@ class ProfileBloc extends Bloc<ProfileEvent, ProfileState> {
       gst: event.gst,
       size: event.size,
       discountedPrice: event.discountedPrice,
+      subCategory: event.subCategory,
     );
     emit(ProductDetailsUpdatedState());
   }

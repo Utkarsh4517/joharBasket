@@ -58,7 +58,6 @@ class _ProfileDeliveredOrderCardLargeState
     }
   }
 
-  final ProfileBloc profileBloc = ProfileBloc();
   @override
   Widget build(BuildContext context) {
     return Container(

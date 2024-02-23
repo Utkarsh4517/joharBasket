@@ -1,5 +1,7 @@
 // ignore_for_file: avoid_print
 
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -42,6 +44,8 @@ class _ProfilePageState extends State<ProfilePage> {
   final ProfileBloc profileBloc = ProfileBloc();
   int _selectedIndex = 0;
 
+  String? subCategory;
+
   @override
   void dispose() {
     nameController.dispose();
@@ -83,20 +87,13 @@ class _ProfilePageState extends State<ProfilePage> {
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        DetailsTextField(
-                            controller: _titleController,
-                            label: 'Notification title'),
-                        DetailsTextField(
-                            controller: _descriptionController,
-                            label: 'Description'),
+                        DetailsTextField(controller: _titleController, label: 'Notification title'),
+                        DetailsTextField(controller: _descriptionController, label: 'Description'),
                         GestureDetector(
                             onTap: () {
-                              profileBloc.add(SendNotification(
-                                  notfTitle: _titleController.text,
-                                  notfDesc: _descriptionController.text));
+                              profileBloc.add(SendNotification(notfTitle: _titleController.text, notfDesc: _descriptionController.text));
                             },
-                            child:
-                                Button(radius: 10, text: 'Send Notification'))
+                            child: Button(radius: 10, text: 'Send Notification'))
                       ],
                     ),
                   ),
@@ -143,7 +140,7 @@ class _ProfilePageState extends State<ProfilePage> {
                   icon: Icons.shopping_cart_checkout,
                   text: 'Orders',
                 ),
-                 GButton(
+                GButton(
                   icon: Icons.discount,
                   text: 'Coupons',
                 ),
@@ -168,49 +165,79 @@ class _ProfilePageState extends State<ProfilePage> {
                             padding: const EdgeInsets.all(15.0),
                             child: Text(
                               'Add a new product',
-                              style: GoogleFonts.publicSans(
-                                  color: Colors.black,
-                                  fontWeight: FontWeight.bold),
+                              style: GoogleFonts.publicSans(color: Colors.black, fontWeight: FontWeight.bold),
                             ),
                           ),
 
-                          DetailsTextField(
-                              controller: nameController,
-                              label: 'Complete Product Name'),
+                          DetailsTextField(controller: nameController, label: 'Complete Product Name'),
 
-                          DetailsTextField(
-                              controller: sizeController,
-                              label: 'Product Size,'),
-                          DetailsTextField(
-                              controller: descriptionController,
-                              label: 'Product Description'),
-                          DetailsTextField(
-                              controller: inStockController,
-                              label: 'Current stock'),
-                          DetailsTextField(
-                              controller: priceController,
-                              label: 'Price including gst'),
-                          DetailsTextField(
-                              controller: discountedPriceController,
-                              label: 'Price after discount'),
-                          DetailsTextField(
-                              controller: gstController,
-                              label: 'GST in Rs on this product'),
+                          DetailsTextField(controller: sizeController, label: 'Product Size'),
+                          DetailsTextField(controller: descriptionController, label: 'Product Description'),
+                          DetailsTextField(controller: inStockController, label: 'Current stock'),
+                          DetailsTextField(controller: priceController, label: 'Price including gst'),
+                          DetailsTextField(controller: discountedPriceController, label: 'Price after discount'),
+                          DetailsTextField(controller: gstController, label: 'GST in Rs on this product'),
+                          Container(
+                            height: getScreenheight(context) * 0.07,
+                            width: getScreenWidth(context),
+                            margin: EdgeInsets.symmetric(horizontal: getScreenWidth(context) * 0.07),
+                            child: StreamBuilder(
+                              stream: FirebaseFirestore.instance.collection('subcategories').snapshots(),
+                              builder: (context, AsyncSnapshot<QuerySnapshot> snapshot) {
+                                if (!snapshot.hasData) {
+                                  return Center(
+                                    child: CircularProgressIndicator(),
+                                  );
+                                }
 
+                                List<DocumentSnapshot> documents = snapshot.data!.docs;
+
+                                List<String> docNames = documents.map((doc) => doc.id).toList();
+
+                                return DropdownButton2(
+                                  hint: Text('Select a category'),
+                                  value: subCategory,
+                                  dropdownStyleData: DropdownStyleData(
+                                    maxHeight: 200,
+                                    width: getScreenWidth(context) * 0.4,
+                                    decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(14),
+                                    ),
+                                    offset: const Offset(0, 0),
+                                    scrollbarTheme: ScrollbarThemeData(
+                                      radius: const Radius.circular(40),
+                                      thickness: MaterialStateProperty.all<double>(6),
+                                      thumbVisibility: MaterialStateProperty.all<bool>(true),
+                                    ),
+                                  ),
+                                  menuItemStyleData: const MenuItemStyleData(
+                                    height: 40,
+                                    padding: EdgeInsets.only(left: 14, right: 14),
+                                  ),
+                                  items: docNames.map((String docName) {
+                                    return DropdownMenuItem(
+                                      value: docName,
+                                      child: Text(docName),
+                                    );
+                                  }).toList(),
+                                  onChanged: (selectedDoc) {
+                                    setState(() {
+                                      subCategory = selectedDoc;
+                                    });
+                                  },
+                                );
+                              },
+                            ),
+                          ),
                           // is featured product??
                           Container(
-                            margin: EdgeInsets.symmetric(
-                                horizontal: getScreenWidth(context) * 0.07,
-                                vertical: getScreenWidth(context) * 0.03),
+                            margin: EdgeInsets.symmetric(horizontal: getScreenWidth(context) * 0.07, vertical: getScreenWidth(context) * 0.03),
                             child: Row(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
                                 Text(
                                   'Featured Product?',
-                                  style: GoogleFonts.publicSans(
-                                      color: Colors.black,
-                                      fontWeight: FontWeight.bold,
-                                      fontSize: getScreenWidth(context) * 0.04),
+                                  style: GoogleFonts.publicSans(color: Colors.black, fontWeight: FontWeight.bold, fontSize: getScreenWidth(context) * 0.04),
                                 ),
                                 Switch(
                                   value: toggle,
@@ -225,18 +252,13 @@ class _ProfilePageState extends State<ProfilePage> {
                             ),
                           ),
                           Container(
-                            decoration: BoxDecoration(
-                                color: Colors.white,
-                                borderRadius: BorderRadius.circular(15)),
-                            margin:
-                                EdgeInsets.all(getScreenWidth(context) * 0.06),
-                            padding:
-                                EdgeInsets.all(getScreenWidth(context) * 0.02),
+                            decoration: BoxDecoration(color: Colors.white, borderRadius: BorderRadius.circular(15)),
+                            margin: EdgeInsets.all(getScreenWidth(context) * 0.06),
+                            padding: EdgeInsets.all(getScreenWidth(context) * 0.02),
                             child: Column(
                               children: [
                                 RadioListTile(
-                                  controlAffinity:
-                                      ListTileControlAffinity.trailing,
+                                  controlAffinity: ListTileControlAffinity.trailing,
                                   activeColor: Colors.green,
                                   value: 'grocery',
                                   groupValue: radioValue,
@@ -245,12 +267,10 @@ class _ProfilePageState extends State<ProfilePage> {
                                       radioValue = value.toString();
                                     });
                                   },
-                                  title: const SmallTextBody(
-                                      text: 'Grocery Product'),
+                                  title: const SmallTextBody(text: 'Grocery Product'),
                                 ),
                                 RadioListTile(
-                                  controlAffinity:
-                                      ListTileControlAffinity.trailing,
+                                  controlAffinity: ListTileControlAffinity.trailing,
                                   activeColor: Colors.green,
                                   value: 'stationary',
                                   groupValue: radioValue,
@@ -259,12 +279,10 @@ class _ProfilePageState extends State<ProfilePage> {
                                       radioValue = value.toString();
                                     });
                                   },
-                                  title: const SmallTextBody(
-                                      text: 'Stationary Product'),
+                                  title: const SmallTextBody(text: 'Stationary Product'),
                                 ),
                                 RadioListTile(
-                                  controlAffinity:
-                                      ListTileControlAffinity.trailing,
+                                  controlAffinity: ListTileControlAffinity.trailing,
                                   activeColor: Colors.green,
                                   value: 'cosmetics',
                                   groupValue: radioValue,
@@ -273,13 +291,10 @@ class _ProfilePageState extends State<ProfilePage> {
                                       radioValue = value.toString();
                                     });
                                   },
-                                  title: const SmallTextBody(
-                                      text: 'Cosmetic Product'),
+                                  title: const SmallTextBody(text: 'Cosmetic Product'),
                                 ),
-
-                                 RadioListTile(
-                                  controlAffinity:
-                                      ListTileControlAffinity.trailing,
+                                RadioListTile(
+                                  controlAffinity: ListTileControlAffinity.trailing,
                                   activeColor: Colors.green,
                                   value: 'pooja',
                                   groupValue: radioValue,
@@ -288,8 +303,7 @@ class _ProfilePageState extends State<ProfilePage> {
                                       radioValue = value.toString();
                                     });
                                   },
-                                  title: const SmallTextBody(
-                                      text: 'Pooja Product'),
+                                  title: const SmallTextBody(text: 'Pooja Product'),
                                 ),
                               ],
                             ),
@@ -311,16 +325,15 @@ class _ProfilePageState extends State<ProfilePage> {
                                       name: nameController.text,
                                       description: descriptionController.text,
                                       imageUrl: imageU,
-                                      inStock:
-                                          double.parse(inStockController.text),
+                                      inStock: double.parse(inStockController.text),
                                       price: double.parse(priceController.text),
                                       gst: double.parse(gstController.text),
-                                      discountedPrice: double.parse(
-                                          discountedPriceController.text),
+                                      discountedPrice: double.parse(discountedPriceController.text),
                                       category: radioValue,
                                       isFeatured: toggle,
                                       productId: productid,
                                       size: sizeController.text.toString(),
+                                      subCategory: subCategory!
                                     ));
                                     showSuccessMessage();
                                     Navigator.pop(context);
@@ -337,16 +350,15 @@ class _ProfilePageState extends State<ProfilePage> {
                                       name: nameController.text,
                                       description: descriptionController.text,
                                       imageUrl: imageU,
-                                      inStock:
-                                          double.parse(inStockController.text),
+                                      inStock: double.parse(inStockController.text),
                                       price: double.parse(priceController.text),
                                       gst: double.parse(gstController.text),
-                                      discountedPrice: double.parse(
-                                          discountedPriceController.text),
+                                      discountedPrice: double.parse(discountedPriceController.text),
                                       category: radioValue,
                                       isFeatured: toggle,
                                       productId: productid,
                                       size: sizeController.text.toString(),
+                                      subCategory: subCategory!
                                     ));
                                     showSuccessMessage();
                                     Navigator.pop(context);

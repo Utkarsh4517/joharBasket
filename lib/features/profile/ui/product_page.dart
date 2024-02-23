@@ -7,7 +7,6 @@ import 'package:johar/features/profile/repo/profile_repo.dart';
 import 'package:johar/features/profile/ui/category_page.dart';
 import 'package:johar/features/profile/widgets/stats_card.dart';
 import 'package:johar/model/grocery_model.dart';
-import 'package:lottie/lottie.dart';
 import 'package:modular_ui/modular_ui.dart';
 
 class ProfileProductPage extends StatefulWidget {
