@@ -6,6 +6,8 @@ import 'package:johar/features/auth/widgets/details_text_field.dart';
 import 'package:johar/features/cart/bloc/cart_bloc.dart';
 import 'package:johar/features/cart/repo/cart_repo.dart';
 import 'package:johar/features/cart/widgets/small_text_body.dart';
+import 'package:johar/features/order/ui/order_page.dart';
+import 'package:johar/features/order/ui/past_order_page.dart';
 import 'package:johar/shared/button.dart';
 
 class UserProfilePage extends StatefulWidget {
@@ -73,6 +75,35 @@ class _UserProfilePageState extends State<UserProfilePage> {
       listener: (context, state) {},
       builder: (context, state) {
         return Scaffold(
+          bottomNavigationBar: Container(
+            padding: EdgeInsets.all(getScreenWidth(context) * 0.015),
+            decoration: BoxDecoration(color: Colors.white, borderRadius: BorderRadius.circular(12)),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: [
+                GestureDetector(
+                  onTap: () {
+                    Navigator.push(context, MaterialPageRoute(builder: (context) => OrderPage()));
+                  },
+                  child: Container(
+                    decoration: BoxDecoration(color: Colors.grey.shade300, borderRadius: BorderRadius.circular(12)),
+                    padding: EdgeInsets.all(getScreenWidth(context) * 0.03),
+                    child: Text('My Orders'),
+                  ),
+                ),
+                GestureDetector(
+                  onTap: () {
+                    Navigator.push(context, MaterialPageRoute(builder: (context) => PastOrderPage()));
+                  },
+                  child: Container(
+                    decoration: BoxDecoration(color: Colors.grey.shade300, borderRadius: BorderRadius.circular(12)),
+                    padding: EdgeInsets.all(getScreenWidth(context) * 0.03),
+                    child: Text('Buy Again'),
+                  ),
+                ),
+              ],
+            ),
+          ),
           body: SafeArea(
               child: SingleChildScrollView(
             child: Column(
@@ -176,12 +207,7 @@ class _UserProfilePageState extends State<UserProfilePage> {
                   onTap: () {
                     cartBloc.add(
                       CartPageUpdateUserAddressClickedEvent(
-                        address: areaController.text,
-                        city: cityController.text,
-                        houseNo: houseNoController.text,
-                        landmark: landmarkController.text,
-                        pincode: pincodeController.text
-                      ),
+                          address: areaController.text, city: cityController.text, houseNo: houseNoController.text, landmark: landmarkController.text, pincode: pincodeController.text),
                     );
                   },
                   child: Container(

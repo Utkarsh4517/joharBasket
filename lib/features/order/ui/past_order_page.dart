@@ -40,8 +40,10 @@ class _PastOrderPageState extends State<PastOrderPage> {
       builder: (context, state) {
         switch (state.runtimeType) {
           case PastOrderFetchingState:
-            return const Center(
-              child: CircularProgressIndicator(),
+            return Scaffold(
+              body: const Center(
+                child: CircularProgressIndicator(),
+              ),
             );
 
           case PastOrderLoadedSuccessState:

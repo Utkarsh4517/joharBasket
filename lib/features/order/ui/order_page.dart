@@ -102,8 +102,10 @@ class _OrderPageState extends State<OrderPage> {
       builder: (context, state) {
         switch (state.runtimeType) {
           case OrderFetchingState:
-            return const Center(
-              child: CircularProgressIndicator(),
+            return Scaffold(
+              body: const Center(
+                child: CircularProgressIndicator(),
+              ),
             );
 
           case OrderIsEmptyState:

@@ -90,7 +90,7 @@ class _ProfileOrderCardLargeState extends State<ProfileOrderCardLarge> {
         otp = otpGen;
         houseNo = h;
         landmark = land;
-        city = city;
+        city = ct;
       });
     }
   }

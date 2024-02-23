@@ -6,7 +6,6 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:johar/constants/colors.dart';
 import 'package:johar/constants/dimensions.dart';
 import 'package:johar/constants/razorpay.dart';
-import 'package:johar/features/auth/widgets/details_text_field.dart';
 import 'package:johar/features/bill/service/bill_service.dart';
 import 'package:johar/features/cart/bloc/cart_bloc.dart';
 import 'package:johar/features/cart/repo/cart_repo.dart';
@@ -18,6 +17,7 @@ import 'package:johar/shared/button.dart';
 import 'package:lottie/lottie.dart';
 import 'package:modular_ui/modular_ui.dart';
 import 'package:razorpay_flutter/razorpay_flutter.dart';
+import 'package:shimmer/shimmer.dart';
 import 'package:top_snackbar_flutter/custom_snack_bar.dart';
 import 'package:top_snackbar_flutter/top_snack_bar.dart';
 
@@ -433,8 +433,14 @@ class _CartPageState extends State<CartPage> {
       builder: (context, state) {
         switch (state.runtimeType) {
           case CartLoadingState:
-            return const Center(
-              child: CircularProgressIndicator(),
+            return Scaffold(
+              body: Container(
+                  child: Shimmer.fromColors(
+                      baseColor: Colors.grey[300]!,
+                      highlightColor: Colors.grey[100]!,
+                      child: Container(
+                        decoration: BoxDecoration(color: const Color.fromARGB(255, 88, 88, 88)),
+                      ))),
             );
 
           case CartIsEmptyState:
@@ -462,6 +468,7 @@ class _CartPageState extends State<CartPage> {
 
           case CartLoadedSuccessState:
             final successState = state as CartLoadedSuccessState;
+
             return Scaffold(
                 backgroundColor: const Color.fromARGB(255, 248, 248, 248),
                 body: SafeArea(
@@ -641,85 +648,7 @@ class _CartPageState extends State<CartPage> {
                         SizedBox(height: 10),
 
                         // Delivery Details
-                        Container(
-                          margin: EdgeInsets.symmetric(horizontal: getScreenWidth(context) * 0.06),
-                          child: Text(
-                            'Delivery Details',
-                            style: GoogleFonts.publicSans(
-                              color: Colors.black,
-                              fontWeight: FontWeight.w800,
-                              fontSize: getScreenWidth(context) * 0.04,
-                            ),
-                          ),
-                        ),
-                        Container(
-                          decoration: BoxDecoration(
-                            color: Colors.white,
-                            borderRadius: BorderRadius.circular(15),
-                          ),
-                          margin: EdgeInsets.all(getScreenWidth(context) * 0.06),
-                          padding: EdgeInsets.all(getScreenWidth(context) * 0.04),
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              const SmallTextBody(text: 'Deliver For'),
-                              DetailsTextField(controller: firstNameController, label: 'First name', hMargin: 0, vMargin: 0.02),
-                              DetailsTextField(controller: lastNameController, label: 'Last name', hMargin: 0, vMargin: 0.02),
-                              const SmallTextBody(text: 'Contact'),
-                              DetailsTextField(controller: mobileController, label: 'Contact number', hMargin: 0, vMargin: 0.02),
-                              Row(
-                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                children: [
-                                  const SmallTextBody(text: 'Pincode'),
-                                  if (isDeliver != null && isDeliver == true)
-                                    Text(
-                                      'We deliver at this location',
-                                      style: GoogleFonts.publicSans(
-                                        color: Colors.green,
-                                        fontWeight: FontWeight.bold,
-                                        fontSize: getScreenWidth(context) * 0.03,
-                                      ),
-                                    ),
-                                  if (isDeliver != null && isDeliver == false)
-                                    Text(
-                                      'Sorry! We do not deliver to this location yet',
-                                      style: GoogleFonts.publicSans(
-                                        color: Colors.red,
-                                        fontWeight: FontWeight.bold,
-                                        fontSize: getScreenWidth(context) * 0.025,
-                                      ),
-                                    ),
-                                ],
-                              ),
-                              DetailsTextField(controller: pincodeController, label: 'Pincode', hMargin: 0, vMargin: 0.02),
-                              const SmallTextBody(text: 'Delivery Address'),
-                              DetailsTextField(controller: addressController, label: 'Address', hMargin: 0, vMargin: 0.02),
-                            ],
-                          ),
-                        ),
-                        //update details button
-                        GestureDetector(
-                          onTap: () {
-                            // cartBloc.add(
-                            //   CartPageUpdateDetailsClickedEvent(
-                            //     firstName: firstNameController.text,
-                            //     lastName: lastNameController.text,
-                            //     mobileNumber: mobileController.text,
-                            //     pincode: pincodeController.text,
-                            //     address: addressController.text,
-                            //   ),
-                            // );
-                          },
-                          child: Container(
-                            alignment: Alignment.center,
-                            child: const Button(
-                              radius: 10,
-                              text: 'Update Details',
-                              paddingH: 0.3,
-                              paddingV: 0.035,
-                            ),
-                          ),
-                        ),
+
                         Container(
                           margin: EdgeInsets.symmetric(horizontal: getScreenWidth(context) * 0.06).copyWith(
                             top: getScreenWidth(context) * 0.05,
@@ -745,7 +674,6 @@ class _CartPageState extends State<CartPage> {
                                 value: 'upi',
                                 groupValue: radioValue,
                                 onChanged: (value) {
-                              
                                   setState(() {
                                     radioValue = value.toString();
                                   });

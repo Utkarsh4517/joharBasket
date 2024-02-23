@@ -29,6 +29,7 @@ class _NavBarState extends State<NavBar> {
       const BottomNavigationBarItem(
           icon: Icon(
             FontAwesomeIcons.bagShopping,
+            color: Colors.green,
           ),
           label: 'Shop'),
       // const BottomNavigationBarItem(
@@ -54,12 +55,12 @@ class _NavBarState extends State<NavBar> {
           label: 'Cart'),
 
       // change orders to profile
-      const BottomNavigationBarItem(
-          icon: Icon(
-            FeatherIcons.shoppingBag,
-            color: Colors.green,
-          ),
-          label: 'Orders'),
+      // const BottomNavigationBarItem(
+      //     icon: Icon(
+      //       FeatherIcons.shoppingBag,
+      //       color: Colors.green,
+      //     ),
+      //     label: 'Orders'),
 
       const BottomNavigationBarItem(
           icon: Icon(
@@ -75,7 +76,7 @@ class _NavBarState extends State<NavBar> {
       // CosmeticsPage(),
       // PoojaPage(),
       CartPage(),
-      OrderPage(),
+      // OrderPage(),
       UserProfilePage()
     ];
     return BlocConsumer<NavBarBloc, NavBarState>(
