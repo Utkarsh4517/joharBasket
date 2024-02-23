@@ -3,11 +3,13 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:flutter_typeahead/flutter_typeahead.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:johar/constants/colors.dart';
 import 'package:johar/constants/dimensions.dart';
+import 'package:johar/features/auth/ui/google_login_page.dart';
 import 'package:johar/features/cosmetics/ui/cosmetics_page.dart';
 import 'package:johar/features/grocery/bloc/grocery_bloc.dart';
 import 'package:johar/features/grocery/ui/grocery_page.dart';
@@ -119,39 +121,41 @@ class HomePageState extends State<HomePage> {
               child: Text('Johar Basket'),
             ),
             ListTile(
-              leading: Icon(
-                FontAwesomeIcons.bagShopping,
-              ),
+              leading: SvgPicture.asset('assets/svgs/grocery.svg', width: 30, height: 30),
               title: Text('Groceries'),
               onTap: () {
                 Navigator.push(context, MaterialPageRoute(builder: (context) => GroceryPage()));
               },
             ),
             ListTile(
-              leading: Icon(
-                FontAwesomeIcons.bagShopping,
-              ),
+               leading: SvgPicture.asset('assets/svgs/cosmetic.svg', width: 30, height: 30),
               title: Text('Cosmetics'),
               onTap: () {
                 Navigator.push(context, MaterialPageRoute(builder: (context) => CosmeticsPage()));
               },
             ),
             ListTile(
-              leading: Icon(
-                FontAwesomeIcons.bagShopping,
-              ),
+              leading: SvgPicture.asset('assets/svgs/stationary.svg',  width: 30, height: 30),
               title: Text('Stationaries'),
               onTap: () {
                 Navigator.push(context, MaterialPageRoute(builder: (context) => StationaryPage()));
               },
             ),
             ListTile(
-              leading: Icon(
-                FontAwesomeIcons.bagShopping,
-              ),
+              leading: SvgPicture.asset('assets/svgs/pooja.svg',  width: 30, height: 30),
               title: Text('Pooja Products'),
               onTap: () {
                 Navigator.push(context, MaterialPageRoute(builder: (context) => PoojaPage()));
+              },
+            ),
+            ListTile(
+              leading: Icon(
+                FontAwesomeIcons.arrowRightFromBracket,
+              ),
+              title: Text('Sign out'),
+              onTap: () async {
+                await FirebaseAuth.instance.signOut();
+                Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => GoogleLoginPage()));
               },
             ),
           ],
