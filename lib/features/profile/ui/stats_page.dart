@@ -54,7 +54,6 @@ class _ProfileStatsPageState extends State<ProfileStatsPage> {
     }
   }
 
-
   @override
   Widget build(BuildContext context) {
     return BlocConsumer<ProfileBloc, ProfileState>(
@@ -81,38 +80,16 @@ class _ProfileStatsPageState extends State<ProfileStatsPage> {
                       children: [
                         Wrap(
                           children: [
-                            StatsCard(
-                                text: 'Total Orders Deliverd!',
-                                color: Colors.blueAccent,
-                                data: '$deliveredOrders'),
-                            StatsCard(
-                                text: 'Total Sales',
-                                color: Colors.cyan,
-                                data: '₹$totalAmount',
-                                sizeFactor: 0.06),
-                            StatsCard(
-                                text: 'Total Pending Orders!',
-                                color: Colors.orange,
-                                data: '$pendingOrders'),
-                            StatsCard(
-                                text: 'Total Cancelled Orders!',
-                                color: Colors.red,
-                                data: '$cancelledOrders'),
-                                StatsCard(
-                                text: 'Total Orders!',
-                                color: Colors.green,
-                                data: '${pendingOrders + cancelledOrders + deliveredOrders}'),
-                                StatsCard(
-                                text: 'Total GST',
-                                color: Colors.blue,
-                                data: '₹${gstCollected.toString()}',
-                                sizeFactor: 0.06),
+                            StatsCard(text: 'Total Orders Deliverd!', color: Colors.blueAccent, data: '$deliveredOrders'),
+                            StatsCard(text: 'Total Sales', color: Colors.cyan, data: '₹$totalAmount', sizeFactor: 0.06),
+                            StatsCard(text: 'Total Pending Orders!', color: Colors.orange, data: '$pendingOrders'),
+                            StatsCard(text: 'Total Cancelled Orders!', color: Colors.red, data: '$cancelledOrders'),
+                            StatsCard(text: 'Total Orders!', color: Colors.green, data: '${pendingOrders + cancelledOrders + deliveredOrders}'),
+                            StatsCard(text: 'Total GST', color: Colors.blue, data: '₹${gstCollected.toString()}', sizeFactor: 0.06),
                           ],
                         ),
                         Container(
-                          margin: EdgeInsets.symmetric(
-                              vertical: getScreenWidth(context) * 0.04,
-                              horizontal: getScreenWidth(context) * 0.07),
+                          margin: EdgeInsets.symmetric(vertical: getScreenWidth(context) * 0.04, horizontal: getScreenWidth(context) * 0.07),
                           alignment: Alignment.centerLeft,
                           child: Text(
                             'Delivered Orders',

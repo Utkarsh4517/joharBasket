@@ -1128,4 +1128,21 @@ class ProfileRepo {
     };
     documentReference.set(coupon);
   }
+
+  static Future<void> addSubcategory(String documentName) async {
+    try {
+      await FirebaseFirestore.instance.collection('subcategories').doc(documentName).set({});
+    } catch (e) {
+      print('Error adding document: $e');
+    }
+  }
+
+    static Future<void> deleteSubcategory(
+      {required String name}) async {
+    final document = FirebaseFirestore.instance
+        .collection('subcategories')
+        .doc(name);
+
+    await document.delete();
+  }
 }

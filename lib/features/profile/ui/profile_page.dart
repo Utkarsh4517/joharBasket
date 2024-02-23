@@ -157,6 +157,8 @@ class _ProfilePageState extends State<ProfilePage> {
               showModalBottomSheet(
                 backgroundColor: const Color.fromARGB(255, 248, 248, 248),
                 context: context,
+                isScrollControlled: true,
+                enableDrag: true,
                 builder: (context) => StatefulBuilder(
                   builder: (context, setState) {
                     return SingleChildScrollView(

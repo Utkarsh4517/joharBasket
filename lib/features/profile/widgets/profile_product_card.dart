@@ -84,41 +84,7 @@ class _ProfileProductCardState extends State<ProfileProductCard> {
                   ],
                 ),
               ),
-              // Container(
-              //   decoration: BoxDecoration(
-              //       color: Colors.white,
-              //       borderRadius: BorderRadius.circular(15)),
-              //   margin: EdgeInsets.all(getScreenWidth(context) * 0.06),
-              //   padding: EdgeInsets.all(getScreenWidth(context) * 0.02),
-              //   child: Column(
-              //     children: [
-              //       RadioListTile(
-              //         controlAffinity: ListTileControlAffinity.trailing,
-              //         activeColor: Colors.green,
-              //         value: 'grocery',
-              //         groupValue: radioValue,
-              //         onChanged: (value) {
-              //           setState(() {
-              //             radioValue = value.toString();
-              //           });
-              //         },
-              //         title: const SmallTextBody(text: 'Grocery Product'),
-              //       ),
-              //       RadioListTile(
-              //         controlAffinity: ListTileControlAffinity.trailing,
-              //         activeColor: Colors.green,
-              //         value: 'stationary',
-              //         groupValue: radioValue,
-              //         onChanged: (value) {
-              //           setState(() {
-              //             radioValue = value.toString();
-              //           });
-              //         },
-              //         title: const SmallTextBody(text: 'Stationary Product'),
-              //       )
-              //     ],
-              //   ),
-              // ),
+            
               GestureDetector(
                 onTap: () {
                   if (widget.type == 'grocery') {
@@ -216,6 +182,7 @@ class _ProfileProductCardState extends State<ProfileProductCard> {
               Container(
                 margin: EdgeInsets.all(getScreenWidth(context) * 0.02),
                 width: getScreenWidth(context) * 0.15,
+                height: getScreenWidth(context) * 0.15,
                 child: CachedNetworkImage(
                   imageUrl: widget.product.imageUrl,
                 ),
@@ -228,11 +195,15 @@ class _ProfileProductCardState extends State<ProfileProductCard> {
                     child: Text(
                       widget.product.name,
                       maxLines: 2,
-                      style: const TextStyle(overflow: TextOverflow.ellipsis, fontWeight: FontWeight.bold),
+                      style:  TextStyle(overflow: TextOverflow.ellipsis, fontWeight: FontWeight.bold, fontSize: getScreenWidth(context) * 0.02),
                     ),
                   ),
                   Text(
                     '₹ ${widget.product.price}',
+                    style: TextStyle(color: Colors.black, fontWeight: FontWeight.w500, fontSize: getScreenWidth(context) * 0.03, decoration: TextDecoration.lineThrough),
+                  ),
+                  Text(
+                    '₹ ${widget.product.discountedPrice}',
                     style: TextStyle(color: Colors.green, fontWeight: FontWeight.w900, fontSize: getScreenWidth(context) * 0.03),
                   ),
                   Text(
