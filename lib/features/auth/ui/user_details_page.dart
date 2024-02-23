@@ -69,7 +69,7 @@ class UserDetailsPageState extends State<UserDetailsPage> {
               label: 'Mobile Number',
               keyboardType: TextInputType.number,
             ),
-            DetailsTextField(controller: addressController, label: 'Address'),
+            // DetailsTextField(controller: addressController, label: 'Address'),
             DetailsTextField(
               controller: pinController,
               label: 'Pin code',
@@ -83,7 +83,10 @@ class UserDetailsPageState extends State<UserDetailsPage> {
                   firstName: firstNameController.text,
                   lastName: lastNameController.text,
                   mobileNumber: mobileController.text,
-                  address: addressController.text,
+                  address: '',
+                  city: '',
+                  houseNo: '',
+                  landmark: '',
                   pinCode: pinController.text,
                 );
                 Navigator.pushReplacementNamed(context, '/');

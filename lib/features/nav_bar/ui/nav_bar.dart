@@ -12,6 +12,7 @@ import 'package:johar/features/nav_bar/bloc/nav_bar_bloc.dart';
 import 'package:johar/features/order/ui/order_page.dart';
 import 'package:johar/features/pooja/ui/pooja_page.dart';
 import 'package:johar/features/stationary/ui/stationary_page.dart';
+import 'package:johar/features/user_profile/ui/user_profile.dart';
 
 class NavBar extends StatefulWidget {
   const NavBar({super.key});
@@ -59,6 +60,13 @@ class _NavBarState extends State<NavBar> {
             color: Colors.green,
           ),
           label: 'Orders'),
+
+      const BottomNavigationBarItem(
+          icon: Icon(
+            FeatherIcons.user,
+            color: Colors.green,
+          ),
+          label: 'Profile'),
     ];
 
     const List<Widget> bottomNavScreen = <Widget>[
@@ -68,6 +76,7 @@ class _NavBarState extends State<NavBar> {
       // PoojaPage(),
       CartPage(),
       OrderPage(),
+      UserProfilePage()
     ];
     return BlocConsumer<NavBarBloc, NavBarState>(
       listener: (context, state) {},

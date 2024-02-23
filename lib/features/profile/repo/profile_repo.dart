@@ -450,6 +450,24 @@ class ProfileRepo {
     return address;
   }
 
+  static Future<String> fetchHouseNo(String orderId) async {
+    DocumentSnapshot documentSnapshot = await FirebaseFirestore.instance.collection('orders').doc('newOrders').collection(orderId).doc('orderDetails').get();
+    String houseNo = documentSnapshot['houseNo'];
+    return houseNo;
+  }
+
+  static Future<String> fetchCity(String orderId) async {
+    DocumentSnapshot documentSnapshot = await FirebaseFirestore.instance.collection('orders').doc('newOrders').collection(orderId).doc('orderDetails').get();
+    String city = documentSnapshot['city'];
+    return city;
+  }
+
+  static Future<String> fetchLandmark(String orderId) async {
+    DocumentSnapshot documentSnapshot = await FirebaseFirestore.instance.collection('orders').doc('newOrders').collection(orderId).doc('orderDetails').get();
+    String landmark = documentSnapshot['landmark'];
+    return landmark;
+  }
+
   static Future<String> fetchPincode(String orderId) async {
     DocumentSnapshot documentSnapshot = await FirebaseFirestore.instance.collection('orders').doc('newOrders').collection(orderId).doc('orderDetails').get();
     String address = documentSnapshot['pincode'];

@@ -700,15 +700,15 @@ class _CartPageState extends State<CartPage> {
                         //update details button
                         GestureDetector(
                           onTap: () {
-                            cartBloc.add(
-                              CartPageUpdateDetailsClickedEvent(
-                                firstName: firstNameController.text,
-                                lastName: lastNameController.text,
-                                mobileNumber: mobileController.text,
-                                pincode: pincodeController.text,
-                                address: addressController.text,
-                              ),
-                            );
+                            // cartBloc.add(
+                            //   CartPageUpdateDetailsClickedEvent(
+                            //     firstName: firstNameController.text,
+                            //     lastName: lastNameController.text,
+                            //     mobileNumber: mobileController.text,
+                            //     pincode: pincodeController.text,
+                            //     address: addressController.text,
+                            //   ),
+                            // );
                           },
                           child: Container(
                             alignment: Alignment.center,

@@ -58,6 +58,9 @@ class AuthService {
     required String mobileNumber,
     required String address,
     required String pinCode,
+    required String houseNo,
+    required String landmark,
+    required String city,
   }) async {
 
     // get fcm token
@@ -71,6 +74,9 @@ class AuthService {
       'lastName': lastName,
       'mobileNumber': mobileNumber,
       'address': address,
+      'landmark': landmark,
+      'city': city,
+      'houseNo': houseNo,
       'pincode': pinCode,
       'userExists': true,
       'fcm': fcmToken,

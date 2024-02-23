@@ -43,6 +43,9 @@ class _ProfileOrderCardLargeState extends State<ProfileOrderCardLarge> {
   String userMobile = '';
   String userName = '';
   String address = '';
+  String houseNo = '';
+  String city = '';
+  String landmark = '';
   String pincode = '';
   String userId = '';
   String otp = '';
@@ -65,7 +68,9 @@ class _ProfileOrderCardLargeState extends State<ProfileOrderCardLarge> {
     final amount = await ProfileRepo.fetchAmountOfOrder(widget.orderIdList[widget.indexU]);
     final mobileNo = await ProfileRepo.orderedByMobileNumber(widget.orderIdList[widget.indexU]);
     final name = await ProfileRepo.orderedBy(widget.orderIdList[widget.indexU]);
-
+    final h = await ProfileRepo.fetchHouseNo(widget.orderIdList[widget.indexU]);
+    final land = await ProfileRepo.fetchLandmark(widget.orderIdList[widget.indexU]);
+    final ct = await ProfileRepo.fetchCity(widget.orderIdList[widget.indexU]);
     final addr = await ProfileRepo.fetchAddress(widget.orderIdList[widget.indexU]);
     final pin = await ProfileRepo.fetchPincode(widget.orderIdList[widget.indexU]);
     final id = await ProfileRepo.fetchUserid(widget.orderIdList[widget.indexU]);
@@ -83,6 +88,9 @@ class _ProfileOrderCardLargeState extends State<ProfileOrderCardLarge> {
         pincode = pin;
         userId = id;
         otp = otpGen;
+        houseNo = h;
+        landmark = land;
+        city = city;
       });
     }
   }
@@ -374,6 +382,7 @@ class _ProfileOrderCardLargeState extends State<ProfileOrderCardLarge> {
                     ],
                   ),
                 ),
+                // address
                 Container(
                   margin: EdgeInsets.symmetric(
                     horizontal: getScreenWidth(context) * 0.04,
@@ -388,6 +397,66 @@ class _ProfileOrderCardLargeState extends State<ProfileOrderCardLarge> {
                         width: getScreenWidth(context) * 0.5,
                         child: Text(
                           address,
+                          style: TextStyle(color: Colors.black, fontSize: getScreenWidth(context) * 0.03, fontWeight: FontWeight.normal),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                 Container(
+                  margin: EdgeInsets.symmetric(
+                    horizontal: getScreenWidth(context) * 0.04,
+                    vertical: getScreenWidth(context) * 0.01,
+                  ),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      const SmallTextBody(text: 'Houseno'),
+                      Container(
+                        alignment: Alignment.centerRight,
+                        width: getScreenWidth(context) * 0.5,
+                        child: Text(
+                          houseNo,
+                          style: TextStyle(color: Colors.black, fontSize: getScreenWidth(context) * 0.03, fontWeight: FontWeight.normal),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                 Container(
+                  margin: EdgeInsets.symmetric(
+                    horizontal: getScreenWidth(context) * 0.04,
+                    vertical: getScreenWidth(context) * 0.01,
+                  ),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      const SmallTextBody(text: 'City'),
+                      Container(
+                        alignment: Alignment.centerRight,
+                        width: getScreenWidth(context) * 0.5,
+                        child: Text(
+                          city,
+                          style: TextStyle(color: Colors.black, fontSize: getScreenWidth(context) * 0.03, fontWeight: FontWeight.normal),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                 Container(
+                  margin: EdgeInsets.symmetric(
+                    horizontal: getScreenWidth(context) * 0.04,
+                    vertical: getScreenWidth(context) * 0.01,
+                  ),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      const SmallTextBody(text: 'Landmark'),
+                      Container(
+                        alignment: Alignment.centerRight,
+                        width: getScreenWidth(context) * 0.5,
+                        child: Text(
+                          landmark,
                           style: TextStyle(color: Colors.black, fontSize: getScreenWidth(context) * 0.03, fontWeight: FontWeight.normal),
                         ),
                       ),

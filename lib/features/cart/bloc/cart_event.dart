@@ -49,18 +49,39 @@ class CartPagePlaceOrderClickedEvent extends CartEvent {
   });
 }
 
-class CartPageUpdateDetailsClickedEvent extends CartEvent {
+class CartPageUpdateUserDetailsClickedEvent extends CartEvent {
   final String firstName;
   final String lastName;
   final String mobileNumber;
-  final String pincode;
-  final String address;
-  CartPageUpdateDetailsClickedEvent({
+  // final String pincode;
+  // final String address; // area, street, sector, village
+  // final String landmark; // any landmark
+  // final String city; // town city name
+  // final String houseNo; // apartment, flat, house no
+  CartPageUpdateUserDetailsClickedEvent({
     required this.firstName,
     required this.lastName,
     required this.mobileNumber,
+    // required this.pincode,
+    // required this.address,
+    // required this.city,
+    // required this.houseNo,
+    // required this.landmark,
+  });
+}
+
+class CartPageUpdateUserAddressClickedEvent extends CartEvent {
+  final String pincode;
+  final String address; // area, street, sector, village
+  final String landmark; // any landmark
+  final String city; // town city name
+  final String houseNo; // apartment, flat, house no
+  CartPageUpdateUserAddressClickedEvent({
     required this.pincode,
     required this.address,
+    required this.city,
+    required this.houseNo,
+    required this.landmark,
   });
 }
 
