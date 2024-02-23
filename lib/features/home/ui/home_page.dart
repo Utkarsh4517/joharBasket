@@ -9,12 +9,14 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:johar/constants/colors.dart';
 import 'package:johar/constants/dimensions.dart';
 import 'package:johar/features/cosmetics/ui/cosmetics_page.dart';
+import 'package:johar/features/grocery/bloc/grocery_bloc.dart';
 import 'package:johar/features/grocery/ui/grocery_page.dart';
 import 'package:johar/features/grocery/ui/grocery_product_page.dart';
 import 'package:johar/features/home/repo/home_repo.dart';
 import 'package:johar/features/pooja/ui/pooja_page.dart';
 import 'package:johar/features/profile/ui/profile_page.dart';
 import 'package:johar/features/stationary/ui/stationary_page.dart';
+import 'package:johar/features/sub-category/ui/subcategory_page.dart';
 import 'package:johar/model/grocery_model.dart';
 import 'package:modular_ui/modular_ui.dart';
 import 'package:shimmer/shimmer.dart';
@@ -78,6 +80,8 @@ class HomePageState extends State<HomePage> {
     super.initState();
     fetchAdmins();
   }
+
+  final GroceryBloc groceryBloc = GroceryBloc();
 
   @override
   Widget build(BuildContext context) {
@@ -295,7 +299,9 @@ class HomePageState extends State<HomePage> {
                             itemBuilder: (context, index) {
                               String documentName = documents[index].id;
                               return GestureDetector(
-                                onTap: () {},
+                                onTap: () {
+                                  Navigator.push(context, MaterialPageRoute(builder: (context) => SubCategoryPage(subCategory: documentName, groceryBloc: groceryBloc)));
+                                },
                                 child: Container(
                                   alignment: Alignment.center,
                                   width: getScreenWidth(context) * 0.25,
