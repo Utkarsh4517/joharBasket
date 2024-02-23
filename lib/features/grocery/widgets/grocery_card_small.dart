@@ -110,20 +110,29 @@ class _GroceryCardSmallState extends State<GroceryCardSmall> {
                     children: [
                       Text(
                         widget.name,
-                        maxLines: 2,
+                        maxLines: 1,
                         overflow: TextOverflow.ellipsis,
                         style: GoogleFonts.publicSans(color: Colors.black, fontWeight: FontWeight.w900, fontSize: 10),
                       ),
                       Text(
                         widget.size,
-                        maxLines: 2,
+                        maxLines: 1,
                         overflow: TextOverflow.ellipsis,
                         style: GoogleFonts.publicSans(color: Colors.black, fontWeight: FontWeight.w900, fontSize: 10),
                       ),
                       SizedBox(height: getScreenWidth(context) * 0.01),
                       Text(
+                        '₹ ${widget.price}',
+                        style: GoogleFonts.publicSans(
+                          color: Colors.black,
+                          fontWeight: FontWeight.w500,
+                          fontSize: 12,
+                          decoration: TextDecoration.lineThrough,
+                        ),
+                      ),
+                      Text(
                         '₹ ${widget.discountedPrice}',
-                        style: GoogleFonts.publicSans(color: const Color(0xff57C373), fontWeight: FontWeight.w900, fontSize: 12),
+                        style: GoogleFonts.publicSans(color: const Color(0xff57C373), fontWeight: FontWeight.w900, fontSize: 14),
                       )
                     ],
                   ),
@@ -133,10 +142,14 @@ class _GroceryCardSmallState extends State<GroceryCardSmall> {
               Container(
                 margin: EdgeInsets.only(bottom: 5),
                 alignment: Alignment.bottomCenter,
-                child: MUISecondaryButton(
-                  hapticsEnabled: true,
-                    bgColor: Colors.green,
-                    tappedBgColor: Colors.green.shade800,
+                child: MUISecondaryOutlinedButton(
+                    hapticsEnabled: true,
+                    bgColor:Colors.orange,
+                    textColor: Colors.white,
+                    
+                    // tappedBgColor: Colors.green.shade800,
+                    borderColor: blackColor,
+                    
                     animationDuration: 100,
                     text: 'Add to cart',
                     onPressed: () {
@@ -146,7 +159,6 @@ class _GroceryCardSmallState extends State<GroceryCardSmall> {
             ],
           ),
         ),
-
         if (discountPercentage != 0)
           Positioned(
             left: getScreenWidth(context) * 0.04,
