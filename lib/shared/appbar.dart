@@ -5,7 +5,6 @@ import 'package:flutter/material.dart';
 import 'package:johar/constants/colors.dart';
 import 'package:johar/constants/dimensions.dart';
 import 'package:johar/features/grocery/bloc/grocery_bloc.dart';
-import 'package:johar/features/grocery/widgets/topbar.dart';
 import 'package:johar/features/search/ui/grocery_search_page.dart';
 
 class CustomAppbar extends StatefulWidget implements PreferredSizeWidget {

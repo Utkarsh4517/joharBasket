@@ -1,6 +1,7 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:johar/constants/colors.dart';
 import 'package:johar/constants/dimensions.dart';
@@ -77,6 +78,7 @@ class _GroceryCardSmallState extends State<GroceryCardSmall> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
+              
               GestureDetector(
                 onTap: clicked,
                 child: Row(
@@ -146,8 +148,8 @@ class _GroceryCardSmallState extends State<GroceryCardSmall> {
                     hapticsEnabled: true,
                     bgColor:Colors.orange,
                     textColor: Colors.white,
-                    
-                    // tappedBgColor: Colors.green.shade800,
+                    actionIcon: FontAwesomeIcons.bagShopping,
+                    iconColor: Colors.white,
                     borderColor: blackColor,
                     
                     animationDuration: 100,

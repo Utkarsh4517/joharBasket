@@ -36,10 +36,7 @@ class _SearchTextFieldState extends State<SearchTextField> {
   String lastName = '';
 
   void getUserName() async {
-    DocumentSnapshot snapshot = await FirebaseFirestore.instance
-        .collection('users')
-        .doc(FirebaseAuth.instance.currentUser!.uid)
-        .get();
+    DocumentSnapshot snapshot = await FirebaseFirestore.instance.collection('users').doc(FirebaseAuth.instance.currentUser!.uid).get();
 
     if (snapshot.exists) {
       String name1 = snapshot.get('firstName');
@@ -86,9 +83,7 @@ class _SearchTextFieldState extends State<SearchTextField> {
                 FeatherIcons.search,
                 color: greyColor,
               ),
-              enabledBorder: OutlineInputBorder(
-                  borderSide: const BorderSide(color: Colors.white),
-                  borderRadius: BorderRadius.circular(14)),
+              enabledBorder: OutlineInputBorder(borderSide: const BorderSide(color: Colors.white), borderRadius: BorderRadius.circular(14)),
               filled: true,
               labelText: 'Search Products',
               labelStyle: const TextStyle(color: greyColor),

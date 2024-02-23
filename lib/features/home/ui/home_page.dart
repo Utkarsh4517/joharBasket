@@ -8,10 +8,13 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:johar/constants/colors.dart';
 import 'package:johar/constants/dimensions.dart';
+import 'package:johar/features/cosmetics/ui/cosmetics_page.dart';
 import 'package:johar/features/grocery/ui/grocery_page.dart';
 import 'package:johar/features/grocery/ui/grocery_product_page.dart';
 import 'package:johar/features/home/repo/home_repo.dart';
+import 'package:johar/features/pooja/ui/pooja_page.dart';
 import 'package:johar/features/profile/ui/profile_page.dart';
+import 'package:johar/features/stationary/ui/stationary_page.dart';
 import 'package:johar/model/grocery_model.dart';
 import 'package:modular_ui/modular_ui.dart';
 import 'package:shimmer/shimmer.dart';
@@ -125,21 +128,27 @@ class HomePageState extends State<HomePage> {
                 FontAwesomeIcons.bagShopping,
               ),
               title: Text('Cosmetics'),
-              onTap: () {},
+              onTap: () {
+                Navigator.push(context, MaterialPageRoute(builder: (context) => CosmeticsPage()));
+              },
             ),
             ListTile(
               leading: Icon(
                 FontAwesomeIcons.bagShopping,
               ),
               title: Text('Stationaries'),
-              onTap: () {},
+              onTap: () {
+                Navigator.push(context, MaterialPageRoute(builder: (context) => StationaryPage()));
+              },
             ),
             ListTile(
               leading: Icon(
                 FontAwesomeIcons.bagShopping,
               ),
               title: Text('Pooja Products'),
-              onTap: () {},
+            onTap: () {
+                Navigator.push(context, MaterialPageRoute(builder: (context) => PoojaPage()));
+              },
             ),
           ],
         ),

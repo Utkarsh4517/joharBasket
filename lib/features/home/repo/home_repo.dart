@@ -29,7 +29,7 @@ class HomeRepo {
         ProductDataModel stationary = ProductDataModel.fromMap(data);
         products.add(stationary);
       }
-      QuerySnapshot poojaSnapshot = await FirebaseFirestore.instance.collection('stationary').get();
+      QuerySnapshot poojaSnapshot = await FirebaseFirestore.instance.collection('pooja').get();
 
       for (QueryDocumentSnapshot documentSnapshot in poojaSnapshot.docs) {
         Map<String, dynamic> data = documentSnapshot.data() as Map<String, dynamic>;
@@ -37,6 +37,74 @@ class HomeRepo {
         products.add(pooja);
       }
 
+      return products;
+    } catch (e) {
+      return [];
+    }
+  }
+
+  static Future<List<ProductDataModel>> fetchGroceries() async {
+    List<ProductDataModel> products = [];
+
+    try {
+      QuerySnapshot grocerySnapshot = await FirebaseFirestore.instance.collection('grocery').get();
+
+      for (QueryDocumentSnapshot documentSnapshot in grocerySnapshot.docs) {
+        Map<String, dynamic> data = documentSnapshot.data() as Map<String, dynamic>;
+        ProductDataModel grocery = ProductDataModel.fromMap(data);
+        products.add(grocery);
+      }
+      return products;
+    } catch (e) {
+      return [];
+    }
+  }
+
+  static Future<List<ProductDataModel>> fetchCosmetics() async {
+    List<ProductDataModel> products = [];
+
+    try {
+      QuerySnapshot grocerySnapshot = await FirebaseFirestore.instance.collection('cosmetics').get();
+
+      for (QueryDocumentSnapshot documentSnapshot in grocerySnapshot.docs) {
+        Map<String, dynamic> data = documentSnapshot.data() as Map<String, dynamic>;
+        ProductDataModel grocery = ProductDataModel.fromMap(data);
+        products.add(grocery);
+      }
+      return products;
+    } catch (e) {
+      return [];
+    }
+  }
+
+  static Future<List<ProductDataModel>> fetchStationary() async {
+    List<ProductDataModel> products = [];
+
+    try {
+      QuerySnapshot grocerySnapshot = await FirebaseFirestore.instance.collection('stationary').get();
+
+      for (QueryDocumentSnapshot documentSnapshot in grocerySnapshot.docs) {
+        Map<String, dynamic> data = documentSnapshot.data() as Map<String, dynamic>;
+        ProductDataModel grocery = ProductDataModel.fromMap(data);
+        products.add(grocery);
+      }
+      return products;
+    } catch (e) {
+      return [];
+    }
+  }
+
+  static Future<List<ProductDataModel>> fetchPooja() async {
+    List<ProductDataModel> products = [];
+
+    try {
+      QuerySnapshot grocerySnapshot = await FirebaseFirestore.instance.collection('pooja').get();
+
+      for (QueryDocumentSnapshot documentSnapshot in grocerySnapshot.docs) {
+        Map<String, dynamic> data = documentSnapshot.data() as Map<String, dynamic>;
+        ProductDataModel grocery = ProductDataModel.fromMap(data);
+        products.add(grocery);
+      }
       return products;
     } catch (e) {
       return [];
