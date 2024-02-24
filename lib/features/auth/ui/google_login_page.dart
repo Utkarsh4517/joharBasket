@@ -112,7 +112,11 @@ class _GoogleLoginPageState extends State<GoogleLoginPage> {
     await FirebaseAuth.instance.verifyPhoneNumber(
       phoneNumber: '+91$phoneNumber',
       verificationCompleted: (PhoneAuthCredential credential) async {
-        await FirebaseAuth.instance.signInWithCredential(credential);
+        final UserCredential userCredential = await FirebaseAuth.instance.signInWithCredential(credential);
+        final User? user = userCredential.user;
+        if (user != null) {
+          Navigator.pushReplacementNamed(context, 'authLoadingPage');
+        }
       },
       verificationFailed: (FirebaseAuthException e) {
         print(e.message);

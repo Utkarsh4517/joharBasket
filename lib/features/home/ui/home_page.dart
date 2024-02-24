@@ -131,7 +131,16 @@ class HomePageState extends State<HomePage> {
               decoration: BoxDecoration(
                 color: orangeColor,
               ),
-              child: Text('Johar Basket'),
+              child: Container(
+                child: Text(
+                  'Johar\nBasket',
+                  style: GoogleFonts.leagueSpartan(
+                    color: Colors.white,
+                    fontWeight: FontWeight.w800,
+                    fontSize: getScreenWidth(context) * 0.1,
+                  ),
+                ),
+              ),
             ),
             ListTile(
               leading: SvgPicture.asset('assets/svgs/grocery.svg', width: 30, height: 30),
@@ -174,185 +183,212 @@ class HomePageState extends State<HomePage> {
           ],
         ),
       ),
-      body: Stack(
+      body: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Column(
-            children: [
-              Container(
-                width: getScreenWidth(context),
-                height: getScreenheight(context) * 0.27,
-                decoration: BoxDecoration(color: orangeColor, borderRadius: BorderRadius.vertical(bottom: Radius.circular(30))),
-                child: Column(
-                  children: [
-                    Container(
-                      margin: EdgeInsets.symmetric(horizontal: getScreenWidth(context) * 0.05),
-                      height: getScreenheight(context) * 0.07,
-                      decoration: BoxDecoration(borderRadius: BorderRadius.circular(12)),
-                      child: TypeAheadField<ProductDataModel>(
-                        controller: controller,
-                        itemBuilder: (context, value) {
-                          return Container(
-                            padding: EdgeInsets.symmetric(vertical: getScreenWidth(context) * 0.02, horizontal: getScreenWidth(context) * 0.02),
-                            child: Row(
-                              children: [
-                                CachedNetworkImage(
-                                  imageUrl: value.imageUrl,
-                                  width: getScreenWidth(context) * 0.1,
-                                  height: getScreenWidth(context) * 0.1,
-                                  placeholder: (context, url) => Container(child: Shimmer.fromColors(baseColor: Colors.grey[300]!, highlightColor: Colors.grey[100]!, child: shimmerCard())),
-                                ),
-                                Container(
-                                  padding: EdgeInsets.symmetric(horizontal: getScreenWidth(context) * 0.02),
-                                  width: getScreenWidth(context) * 0.5,
-                                  child: Text(value.name, style: GoogleFonts.poppins(fontWeight: FontWeight.w600, fontSize: 12)),
-                                )
-                              ],
+          Container(
+            width: getScreenWidth(context),
+            height: getScreenheight(context) * 0.27,
+            decoration: BoxDecoration(color: orangeColor, borderRadius: BorderRadius.vertical(bottom: Radius.circular(30))),
+            child: Column(
+              children: [
+                Container(
+                  margin: EdgeInsets.symmetric(horizontal: getScreenWidth(context) * 0.05),
+                  height: getScreenheight(context) * 0.07,
+                  decoration: BoxDecoration(borderRadius: BorderRadius.circular(12)),
+                  child: TypeAheadField<ProductDataModel>(
+                    controller: controller,
+                    itemBuilder: (context, value) {
+                      return Container(
+                        padding: EdgeInsets.symmetric(vertical: getScreenWidth(context) * 0.02, horizontal: getScreenWidth(context) * 0.02),
+                        child: Row(
+                          children: [
+                            CachedNetworkImage(
+                              imageUrl: value.imageUrl,
+                              width: getScreenWidth(context) * 0.1,
+                              height: getScreenWidth(context) * 0.1,
+                              placeholder: (context, url) => Container(child: Shimmer.fromColors(baseColor: Colors.grey[300]!, highlightColor: Colors.grey[100]!, child: shimmerCard())),
                             ),
-                          );
-                        },
-                        onSelected: (value) {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => GroceryProductPage(
-                                grocery: value,
-                              ),
-                            ),
-                          );
-                        },
-                        suggestionsCallback: (search) async {
-                          List<ProductDataModel> allProducts = await HomeRepo.fetchAllProducts();
-
-                          List<ProductDataModel> filteredProducts = allProducts.where((product) => product.name.toLowerCase().contains(search.toLowerCase())).toList();
-
-                          return filteredProducts;
-                        },
-                        builder: (context, controller, focusNode) {
-                          return TextFormField(
-                            cursorColor: Colors.black,
-                            controller: controller,
-                            style: GoogleFonts.poppins(color: const Color.fromRGBO(51, 51, 51, 1), fontWeight: FontWeight.w700, fontSize: 12),
-                            focusNode: focusNode,
-                            autofocus: false,
-                            decoration: InputDecoration(
-                              border: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(12),
-                              ),
-                              fillColor: Colors.white,
-                              filled: true,
-                              suffix: (controller.text.isNotEmpty)
-                                  ? GestureDetector(
-                                      onTap: () {
-                                        setState(() {
-                                          controller.text = '';
-                                        });
-                                      },
-                                      child: Icon(FontAwesomeIcons.ban, color: Colors.grey))
-                                  : Icon(FontAwesomeIcons.magnifyingGlass),
-                              errorStyle: GoogleFonts.poppins(
-                                color: Colors.red,
-                              ),
-                              labelText: 'Search Products',
-                              labelStyle: GoogleFonts.poppins(
-                                color: const Color.fromRGBO(51, 51, 51, 1),
-                                fontWeight: FontWeight.w600,
-                                fontSize: getScreenWidth(context) * 0.035,
-                              ),
-                              enabledBorder: UnderlineInputBorder(
-                                borderSide: BorderSide(color: Color.fromRGBO(216, 216, 216, 1)),
-                                borderRadius: BorderRadius.circular(12),
-                              ),
-                              focusedBorder: UnderlineInputBorder(
-                                borderSide: BorderSide(color: Color.fromRGBO(216, 216, 216, 1)),
-                                borderRadius: BorderRadius.circular(12),
-                              ),
-                            ),
-                          );
-                        },
-                      ),
-                    ),
-                    SizedBox(height: getScreenheight(context) * 0.02),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Container(
-                          width: getScreenWidth(context) * 0.23,
-                          height: 2,
-                          decoration: BoxDecoration(color: Colors.white),
+                            Container(
+                              padding: EdgeInsets.symmetric(horizontal: getScreenWidth(context) * 0.02),
+                              width: getScreenWidth(context) * 0.5,
+                              child: Text(value.name, style: GoogleFonts.poppins(fontWeight: FontWeight.w600, fontSize: 12)),
+                            )
+                          ],
                         ),
-                        Text(
-                          '  EXPLORE  ',
-                          style: GoogleFonts.poppins(
-                            color: Colors.white,
-                            fontWeight: FontWeight.w600,
-                            fontSize: getScreenWidth(context) * 0.05,
+                      );
+                    },
+                    onSelected: (value) {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => GroceryProductPage(
+                            grocery: value,
                           ),
                         ),
-                        Container(
-                          width: getScreenWidth(context) * 0.23,
-                          height: 2,
-                          decoration: BoxDecoration(color: Colors.white),
+                      );
+                    },
+                    suggestionsCallback: (search) async {
+                      List<ProductDataModel> allProducts = await HomeRepo.fetchAllProducts();
+
+                      List<ProductDataModel> filteredProducts = allProducts.where((product) => product.name.toLowerCase().contains(search.toLowerCase())).toList();
+
+                      return filteredProducts;
+                    },
+                    builder: (context, controller, focusNode) {
+                      return TextFormField(
+                        cursorColor: Colors.black,
+                        controller: controller,
+                        style: GoogleFonts.poppins(color: const Color.fromRGBO(51, 51, 51, 1), fontWeight: FontWeight.w700, fontSize: 12),
+                        focusNode: focusNode,
+                        autofocus: false,
+                        decoration: InputDecoration(
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(12),
+                          ),
+                          fillColor: Colors.white,
+                          filled: true,
+                          suffix: (controller.text.isNotEmpty)
+                              ? GestureDetector(
+                                  onTap: () {
+                                    setState(() {
+                                      controller.text = '';
+                                    });
+                                  },
+                                  child: Icon(FontAwesomeIcons.ban, color: Colors.grey))
+                              : Icon(FontAwesomeIcons.magnifyingGlass),
+                          errorStyle: GoogleFonts.poppins(
+                            color: Colors.red,
+                          ),
+                          labelText: 'Search All Products',
+                          labelStyle: GoogleFonts.poppins(
+                            color: const Color.fromRGBO(51, 51, 51, 1),
+                            fontWeight: FontWeight.w600,
+                            fontSize: getScreenWidth(context) * 0.035,
+                          ),
+                          enabledBorder: UnderlineInputBorder(
+                            borderSide: BorderSide(color: Color.fromRGBO(216, 216, 216, 1)),
+                            borderRadius: BorderRadius.circular(12),
+                          ),
+                          focusedBorder: UnderlineInputBorder(
+                            borderSide: BorderSide(color: Color.fromRGBO(216, 216, 216, 1)),
+                            borderRadius: BorderRadius.circular(12),
+                          ),
                         ),
-                      ],
+                      );
+                    },
+                  ),
+                ),
+                SizedBox(height: getScreenheight(context) * 0.02),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Container(
+                      width: getScreenWidth(context) * 0.23,
+                      height: 2,
+                      decoration: BoxDecoration(color: Colors.white),
+                    ),
+                    Text(
+                      '  EXPLORE  ',
+                      style: GoogleFonts.poppins(
+                        color: Colors.white,
+                        fontWeight: FontWeight.w600,
+                        fontSize: getScreenWidth(context) * 0.05,
+                      ),
                     ),
                     Container(
-                      height: getScreenheight(context) * 0.05,
-                      width: getScreenWidth(context) * 0.9,
-                      margin: EdgeInsets.only(left: getScreenWidth(context) * 0.05, top: getScreenheight(context) * 0.02),
-                      child: StreamBuilder(
-                        stream: FirebaseFirestore.instance.collection('subcategories').snapshots(),
-                        builder: (context, AsyncSnapshot<QuerySnapshot> snapshot) {
-                          if (!snapshot.hasData) {
-                            return Center(
-                              child: CircularProgressIndicator(),
-                            );
-                          }
-
-                          List<DocumentSnapshot> documents = snapshot.data!.docs;
-
-                          return ListView.builder(
-                            scrollDirection: Axis.horizontal,
-                            itemCount: documents.length,
-                            itemBuilder: (context, index) {
-                              String documentName = documents[index].id;
-                              return GestureDetector(
-                                onTap: () {
-                                  Navigator.push(context, MaterialPageRoute(builder: (context) => SubCategoryPage(subCategory: documentName, groceryBloc: groceryBloc)));
-                                },
-                                child: Container(
-                                  alignment: Alignment.center,
-                                  width: getScreenWidth(context) * 0.25,
-                                  decoration: BoxDecoration(color: Colors.black, borderRadius: BorderRadius.circular(12)),
-                                  margin: EdgeInsets.only(right: 10),
-                                  padding: EdgeInsets.all(10),
-                                  child: Text(
-                                    documentName,
-                                    style: GoogleFonts.poppins(color: Colors.green, fontWeight: FontWeight.bold, fontSize: getScreenWidth(context) * 0.028),
-                                  ),
-                                ),
-                              );
-                            },
-                          );
-                        },
-                      ),
-                    )
+                      width: getScreenWidth(context) * 0.23,
+                      height: 2,
+                      decoration: BoxDecoration(color: Colors.white),
+                    ),
                   ],
                 ),
-              ),
-            ],
-          ),
-          Positioned(
-            top: getScreenheight(context) * 0.31,
-            left: getScreenWidth(context) * 0.028,
-            child: _imageUrls.isEmpty
-                ? CircularProgressIndicator()
-                : Container(
-                    width: getScreenWidth(context) * 0.95,
-                    alignment: Alignment.centerLeft,
-                    child: MUICarousel(
-                      images: _imageUrls,
+                Container(
+                  alignment: Alignment.centerLeft,
+                  margin: EdgeInsets.only(left: getScreenWidth(context) * 0.072),
+                  child: Text(
+                    'Categories',
+                    style: GoogleFonts.poppins(
+                      color: Colors.black,
+                      fontWeight: FontWeight.w800,
+                      fontSize: getScreenWidth(context) * 0.035,
                     ),
                   ),
+                ),
+                Container(
+                  height: getScreenheight(context) * 0.05,
+                  width: getScreenWidth(context) * 0.9,
+                  margin: EdgeInsets.only(left: getScreenWidth(context) * 0.05, top: getScreenheight(context) * 0.02),
+                  child: StreamBuilder(
+                    stream: FirebaseFirestore.instance.collection('subcategories').snapshots(),
+                    builder: (context, AsyncSnapshot<QuerySnapshot> snapshot) {
+                      if (!snapshot.hasData) {
+                        return Center(
+                          child: CircularProgressIndicator(),
+                        );
+                      }
+
+                      List<DocumentSnapshot> documents = snapshot.data!.docs;
+
+                      return ListView.builder(
+                        scrollDirection: Axis.horizontal,
+                        itemCount: documents.length,
+                        itemBuilder: (context, index) {
+                          String documentName = documents[index].id;
+                          return GestureDetector(
+                            onTap: () {
+                              Navigator.push(context, MaterialPageRoute(builder: (context) => SubCategoryPage(subCategory: documentName, groceryBloc: groceryBloc)));
+                            },
+                            child: Container(
+                              alignment: Alignment.center,
+                              width: getScreenWidth(context) * 0.25,
+                              decoration: BoxDecoration(color: Colors.white, borderRadius: BorderRadius.circular(12)),
+                              margin: EdgeInsets.only(right: 10),
+                              padding: EdgeInsets.all(10),
+                              child: Text(
+                                documentName,
+                                style: GoogleFonts.poppins(color: Colors.green, fontWeight: FontWeight.bold, fontSize: getScreenWidth(context) * 0.028),
+                              ),
+                            ),
+                          );
+                        },
+                      );
+                    },
+                  ),
+                )
+              ],
+            ),
+          ),
+          Container(
+            margin: EdgeInsets.only(left: getScreenWidth(context) * 0.04, top: getScreenWidth(context) * 0.02),
+            child: Text(
+              'Deals & Offers',
+              style: GoogleFonts.poppins(
+                color: Colors.black,
+                fontWeight: FontWeight.w600,
+                fontSize: getScreenWidth(context) * 0.05,
+              ),
+            ),
+          ),
+          _imageUrls.isEmpty
+              ? CircularProgressIndicator()
+              : Container(
+                  width: getScreenWidth(context),
+                  alignment: Alignment.center,
+                  child: MUICarousel(
+                    images: _imageUrls,
+                  ),
+                ),
+          Container(
+            margin: EdgeInsets.only(left: getScreenWidth(context) * 0.04, top: getScreenWidth(context) * 0.02),
+            child: Text(
+              'Heavy Discounts',
+              style: GoogleFonts.poppins(
+                color: Colors.black,
+                fontWeight: FontWeight.w600,
+                fontSize: getScreenWidth(context) * 0.05,
+              ),
+            ),
           ),
         ],
       ),

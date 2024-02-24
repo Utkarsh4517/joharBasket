@@ -97,7 +97,7 @@ class _NavBarState extends State<NavBar> {
             child: ClipRRect(
               borderRadius: BorderRadius.circular(20),
               child: BottomNavigationBar(
-                backgroundColor: Colors.black,
+                backgroundColor: Colors.white,
                 items: bottomNavItems,
                 currentIndex: state.tabIndex,
                 selectedItemColor: orangeColor,
@@ -107,7 +107,7 @@ class _NavBarState extends State<NavBar> {
                 unselectedFontSize: 10,
                 type: BottomNavigationBarType.fixed,
                 // selectedItemColor: blackColor,
-                unselectedItemColor: Color.fromARGB(255, 199, 199, 199).withAlpha(95),
+                unselectedItemColor: Color.fromARGB(255, 36, 36, 36).withAlpha(95),
                 onTap: (index) {
                   _pageController.jumpToPage(index);
                 },

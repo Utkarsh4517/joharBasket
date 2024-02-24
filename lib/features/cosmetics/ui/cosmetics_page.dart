@@ -7,6 +7,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:johar/constants/dimensions.dart';
 import 'package:johar/features/grocery/bloc/grocery_bloc.dart';
 import 'package:johar/features/grocery/ui/grocery_product_page.dart';
+import 'package:johar/features/grocery/widgets/grocery_card.dart';
 import 'package:johar/features/grocery/widgets/grocery_card_small.dart';
 import 'package:johar/features/home/repo/home_repo.dart';
 import 'package:johar/model/grocery_model.dart';
@@ -156,32 +157,65 @@ class _CosmeticsPageState extends State<CosmeticsPage> {
                           margin: EdgeInsets.all(getScreenWidth(context) * 0.06),
                           child: Text('Featured Cosmetic Products', style: GoogleFonts.publicSans(color: Colors.black, fontWeight: FontWeight.w800, fontSize: getScreenWidth(context) * 0.04)),
                         ),
-                        // gridview
+
                         SizedBox(
-                          height: (successState.products.where((product) => product.isFeatured).length * getScreenWidth(context) * 0.53).toDouble(),
-                          child: GridView.builder(
-                            physics: const NeverScrollableScrollPhysics(),
-                            gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 2, childAspectRatio: 0.65),
-                            itemCount: successState.products.where((product) => product.isFeatured).length,
+                          height: getScreenWidth(context) * 0.75,
+                          child: ListView.builder(
+                            scrollDirection: Axis.horizontal,
+                            itemCount: successState.products.length,
                             itemBuilder: (context, index) {
-                              final featuredProducts = successState.products.where((product) => product.isFeatured).toList();
-                              return GroceryCardSmall(
-                                discountedPrice: featuredProducts[index].discountedPrice,
-                                size: featuredProducts[index].size!,
-                                bloc: groceryBloc,
-                                gst: featuredProducts[index].gst,
-                                name: featuredProducts[index].name,
-                                imageUrl: featuredProducts[index].imageUrl,
-                                price: featuredProducts[index].price,
-                                isFeatured: featuredProducts[index].isFeatured,
-                                inStock: featuredProducts[index].inStock,
-                                productId: featuredProducts[index].productId,
-                                groceryUiDataModel: featuredProducts[index],
-                                description: featuredProducts[index].description,
-                              );
+                              if (successState.products[index].isFeatured == true) {
+                                return GroceryCard(
+                                  discountedPrice: successState.products[index].discountedPrice,
+                                  size: successState.products[index].size!,
+                                  bloc: groceryBloc,
+                                  gst: successState.products[index].gst,
+                                  name: successState.products[index].name,
+                                  imageUrl: successState.products[index].imageUrl,
+                                  price: successState.products[index].price,
+                                  isFeatured: successState.products[index].isFeatured,
+                                  inStock: successState.products[index].inStock,
+                                  productId: successState.products[index].productId,
+                                  groceryUiDataModel: successState.products[index],
+                                  description: successState.products[index].description,
+                                );
+                              } else {
+                                return Container();
+                              }
                             },
                           ),
                         ),
+                        // shop groceries
+
+                        Container(
+                          margin: EdgeInsets.all(getScreenWidth(context) * 0.06),
+                          child: Text('Shop Cosmetics', style: GoogleFonts.publicSans(color: Colors.black, fontWeight: FontWeight.w800, fontSize: getScreenWidth(context) * 0.04)),
+                        ),
+                        // gridview
+                        SizedBox(
+                          height: (12 * getScreenWidth(context) * 0.35).toDouble(),
+                          child: GridView.builder(
+                            physics: const NeverScrollableScrollPhysics(),
+                            gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 2, childAspectRatio: 0.65),
+                            itemCount: 10,
+                            itemBuilder: (context, index) {
+                              return GroceryCardSmall(
+                                discountedPrice: successState.products[index].discountedPrice,
+                                size: successState.products[index].size!,
+                                bloc: groceryBloc,
+                                gst: successState.products[index].gst,
+                                name: successState.products[index].name,
+                                imageUrl: successState.products[index].imageUrl,
+                                price: successState.products[index].price,
+                                isFeatured: successState.products[index].isFeatured,
+                                inStock: successState.products[index].inStock,
+                                productId: successState.products[index].productId,
+                                groceryUiDataModel: successState.products[index],
+                                description: successState.products[index].description,
+                              );
+                            },
+                          ),
+                        )
                       ],
                     ),
                   ),
