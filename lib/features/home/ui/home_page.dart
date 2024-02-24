@@ -36,11 +36,11 @@ class HomePageState extends State<HomePage> {
 
   // fetch admin user list
   Future<void> fetchAdmins() async {
-    DocumentSnapshot docSnapshot = await FirebaseFirestore.instance.collection('admin').doc('adminEmails').get();
+    DocumentSnapshot docSnapshot = await FirebaseFirestore.instance.collection('admin').doc('adminNumbers').get();
     if (docSnapshot.exists) {
       List<dynamic> admins = docSnapshot.get('list');
       for (var admin in admins) {
-        if (FirebaseAuth.instance.currentUser!.email == admin) {
+        if (FirebaseAuth.instance.currentUser!.phoneNumber == admin) {
           setState(() {
             isAdmin = true;
           });
@@ -71,6 +71,18 @@ class HomePageState extends State<HomePage> {
     }
   }
 
+  List<String> _imageUrls = [];
+
+  void fetchImageUrls() async {
+    DocumentSnapshot documentSnapshot = await FirebaseFirestore.instance.collection('img').doc('img').get();
+
+    List<dynamic> urls = documentSnapshot.get('img_array');
+
+    setState(() {
+      _imageUrls = List<String>.from(urls);
+    });
+  }
+
   Widget shimmerCard() {
     return Container(
       decoration: BoxDecoration(color: Colors.white, borderRadius: BorderRadius.circular(12)),
@@ -81,6 +93,7 @@ class HomePageState extends State<HomePage> {
   void initState() {
     super.initState();
     fetchAdmins();
+    fetchImageUrls();
   }
 
   final GroceryBloc groceryBloc = GroceryBloc();
@@ -128,21 +141,21 @@ class HomePageState extends State<HomePage> {
               },
             ),
             ListTile(
-               leading: SvgPicture.asset('assets/svgs/cosmetic.svg', width: 30, height: 30),
+              leading: SvgPicture.asset('assets/svgs/cosmetic.svg', width: 30, height: 30),
               title: Text('Cosmetics'),
               onTap: () {
                 Navigator.push(context, MaterialPageRoute(builder: (context) => CosmeticsPage()));
               },
             ),
             ListTile(
-              leading: SvgPicture.asset('assets/svgs/stationary.svg',  width: 30, height: 30),
+              leading: SvgPicture.asset('assets/svgs/stationary.svg', width: 30, height: 30),
               title: Text('Stationaries'),
               onTap: () {
                 Navigator.push(context, MaterialPageRoute(builder: (context) => StationaryPage()));
               },
             ),
             ListTile(
-              leading: SvgPicture.asset('assets/svgs/pooja.svg',  width: 30, height: 30),
+              leading: SvgPicture.asset('assets/svgs/pooja.svg', width: 30, height: 30),
               title: Text('Pooja Products'),
               onTap: () {
                 Navigator.push(context, MaterialPageRoute(builder: (context) => PoojaPage()));
@@ -327,7 +340,20 @@ class HomePageState extends State<HomePage> {
                 ),
               ),
             ],
-          )
+          ),
+          Positioned(
+            top: getScreenheight(context) * 0.31,
+            left: getScreenWidth(context) * 0.028,
+            child: _imageUrls.isEmpty
+                ? CircularProgressIndicator()
+                : Container(
+                    width: getScreenWidth(context) * 0.95,
+                    alignment: Alignment.centerLeft,
+                    child: MUICarousel(
+                      images: _imageUrls,
+                    ),
+                  ),
+          ),
         ],
       ),
     );
